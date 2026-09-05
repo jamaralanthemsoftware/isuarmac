@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Reusable Django foundation</p>
+  <h1>{{ site_settings.tagline|default:"Replace this starter content with the client’s story." }}</h1>
+  <p>Content, leads, downloads, search metadata, and site settings are managed through Django admin.</p>
+  <a class="button" href="{% url 'contact' %}">Contact us</a>
+</section>
+{% if services %}
+<section>
+  <h2>Services</h2>
+  <div class="grid">
+    {% for service in services %}
+      <article>
+        <h3><a href="{{ service.get_absolute_url }}">{{ service.title }}</a></h3>
+        <p>{{ service.summary }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
