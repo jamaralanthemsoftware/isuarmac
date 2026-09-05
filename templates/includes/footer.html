@@ -1,0 +1,13 @@
+<footer class="site-footer">
+  <div>
+    <strong>{{ site_settings.site_name|default:"Client Website" }}</strong>
+    {% if site_settings.tagline %}<p>{{ site_settings.tagline }}</p>{% endif %}
+  </div>
+  <nav aria-label="Footer navigation">
+    <a href="{% url 'about' %}">About us</a>
+    <a href="{% url 'services' %}">Services</a>
+    <a href="{% url 'faq' %}">FAQ</a>
+    <a href="{% url 'contact' %}">Contact us</a>
+  </nav>
+  {% if site_settings.footer_disclaimer %}<p>{{ site_settings.footer_disclaimer }}</p>{% endif %}
+</footer>
