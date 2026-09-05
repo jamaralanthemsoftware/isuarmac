@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 
 class TimeStampedModel(models.Model):
@@ -18,6 +20,12 @@ class SiteSettings(TimeStampedModel):
     contact_phone = models.CharField(max_length=40, blank=True)
     address = models.TextField(blank=True)
     default_meta_description = models.CharField(max_length=300, blank=True)
+    default_open_graph_title = models.CharField(max_length=70, blank=True)
+    default_open_graph_description = models.CharField(max_length=200, blank=True)
+    default_open_graph_image = models.FileField(
+        upload_to="open-graph/%Y/%m/",
+        blank=True,
+    )
     footer_disclaimer = models.TextField(blank=True)
     analytics_measurement_id = models.CharField(max_length=50, blank=True)
 
@@ -39,6 +47,12 @@ class PublishableModel(TimeStampedModel):
     body = models.TextField(blank=True)
     meta_title = models.CharField(max_length=70, blank=True)
     meta_description = models.CharField(max_length=160, blank=True)
+    open_graph_title = models.CharField(max_length=70, blank=True)
+    open_graph_description = models.CharField(max_length=200, blank=True)
+    open_graph_image = models.FileField(
+        upload_to="open-graph/%Y/%m/",
+        blank=True,
+    )
     is_published = models.BooleanField(default=False, db_index=True)
     published_at = models.DateTimeField(blank=True, null=True)
 
@@ -52,6 +66,47 @@ class PublishableModel(TimeStampedModel):
     @property
     def seo_description(self):
         return self.meta_description or self.summary
+
+    @property
+    def resolved_open_graph_title(self):
+        return self.open_graph_title or self.seo_title
+
+    @property
+    def resolved_open_graph_description(self):
+        return self.open_graph_description or self.seo_description
+
+    @property
+    def word_count(self):
+        return len(strip_tags(self.body).split())
+
+    def _populate_metadata_defaults(self):
+        plain_body = " ".join(strip_tags(self.body).split())
+        description_source = self.summary or plain_body
+        if not self.meta_title:
+            self.meta_title = Truncator(self.title).chars(70)
+        if not self.meta_description and description_source:
+            self.meta_description = Truncator(description_source).chars(160)
+        if not self.open_graph_title:
+            self.open_graph_title = self.meta_title
+        if not self.open_graph_description and description_source:
+            self.open_graph_description = Truncator(description_source).chars(200)
+
+    def clean(self):
+        super().clean()
+        self._populate_metadata_defaults()
+        if self.is_published and not 650 <= self.word_count <= 900:
+            raise ValidationError(
+                {
+                    "body": (
+                        "Published content pages should be approximately 750 words. "
+                        f"This page currently has {self.word_count} words; use 650–900."
+                    )
+                }
+            )
+
+    def save(self, *args, **kwargs):
+        self._populate_metadata_defaults()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
