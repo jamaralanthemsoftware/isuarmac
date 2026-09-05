@@ -12,12 +12,15 @@
 * { box-sizing: border-box; }
 body { margin: 0; color: var(--ink); background: var(--paper); line-height: 1.6; }
 a { color: inherit; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; z-index: 10; background: var(--ink); color: white; padding: .75rem 1rem; }
+.skip-link:focus { top: 1rem; }
 .site-header, main, footer { width: min(1100px, calc(100% - 2rem)); margin-inline: auto; }
 .site-header { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
 .brand { font-weight: 800; text-decoration: none; }
 nav { display: flex; flex-wrap: wrap; gap: 1rem; }
 nav a { color: var(--muted); text-decoration: none; }
 main { min-height: 70vh; }
+.page-heading { padding: clamp(3rem, 8vw, 6rem) 0 2rem; max-width: 760px; }
 .hero { padding: clamp(4rem, 10vw, 8rem) 0; max-width: 760px; }
 h1 { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 1.02; letter-spacing: -.04em; margin: .2em 0; }
 h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
@@ -30,5 +33,11 @@ h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
 label { display: block; font-weight: 700; }
 input:not([type=checkbox]), textarea { width: 100%; padding: .75rem; border: 1px solid var(--line); border-radius: .25rem; font: inherit; }
 .messages { width: min(1100px, calc(100% - 2rem)); margin: 0 auto; padding: .5rem 1rem; background: #dcefe8; }
-footer { padding: 4rem 0 2rem; color: var(--muted); font-size: .9rem; }
+.faq-list { display: grid; gap: 1rem; max-width: 850px; padding-bottom: 4rem; }
+.faq-list details, .empty-state { background: var(--surface); border: 1px solid var(--line); padding: 1.25rem; }
+.faq-list summary { cursor: pointer; font-weight: 800; }
+.site-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; padding: 4rem 0 2rem; color: var(--muted); font-size: .9rem; }
+.site-footer > p { grid-column: 1 / -1; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 @media (max-width: 650px) { .site-header { align-items: flex-start; flex-direction: column; padding: 1rem 0; } }
+@media (max-width: 650px) { .site-footer { grid-template-columns: 1fr; } .site-footer > p { grid-column: auto; } }
