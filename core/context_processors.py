@@ -2,7 +2,7 @@ from .models import Page, SiteSettings
 
 
 def site_settings(request):
-    settings_record = SiteSettings.objects.first()
+    settings_record = SiteSettings.objects.first() or SiteSettings()
     navigation_pages = Page.objects.filter(
         is_published=True,
         show_in_navigation=True,
