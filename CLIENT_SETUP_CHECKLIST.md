@@ -83,6 +83,8 @@ For every added provider:
 
 - [ ] Complete `FRONTEND_IMPLEMENTATION_GUIDE.md` and its frontend completion checklist.
 - [ ] Replace all neutral templates, metadata, legal copy, contact details, and assets.
+- [ ] Publish the About us page, every offered Service, and the client's FAQ entries.
+- [ ] Confirm the universal header and footer link to Home, About us, Services, FAQ, and Contact us.
 - [ ] Populate Site Settings in Django admin.
 - [ ] Confirm analytics and consent behavior matches the client's requirements.
 - [ ] Run `python manage.py check --deploy` using production settings.
