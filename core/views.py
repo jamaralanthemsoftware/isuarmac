@@ -5,7 +5,7 @@ from django.views.decorators.http import require_GET
 from django.views.generic import DetailView
 
 from .forms import LeadForm
-from .models import Page, Service
+from .models import FAQ, Page, Service
 
 
 @require_GET
@@ -24,6 +24,27 @@ def home(request):
         request,
         "home.html",
         {"services": Service.objects.filter(is_published=True)[:6]},
+    )
+
+
+def about(request):
+    page = Page.objects.filter(slug="about", is_published=True).first()
+    return render(request, "about.html", {"page": page})
+
+
+def services(request):
+    return render(
+        request,
+        "services.html",
+        {"services": Service.objects.filter(is_published=True)},
+    )
+
+
+def faq(request):
+    return render(
+        request,
+        "faq.html",
+        {"faqs": FAQ.objects.filter(is_published=True)},
     )
 
 
