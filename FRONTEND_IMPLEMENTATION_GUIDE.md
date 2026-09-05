@@ -21,9 +21,14 @@ fonts, images, copy, analytics tags, contact information, or legal language.
 
 - `templates/base.html` — document shell, metadata defaults, header, navigation, messages,
   footer, global scripts, and stylesheet links
+- `templates/includes/header.html` and `templates/includes/footer.html` — universal site
+  navigation and footer shared by every public page
 - `templates/home.html` — homepage
+- `templates/about.html` — required About us page, managed by the published `about` Page
+- `templates/services.html` — required listing of all published services
 - `templates/page_detail.html` — admin-managed general pages
 - `templates/service_detail.html` — admin-managed service pages
+- `templates/faq.html` — required listing of published admin-managed FAQs
 - `templates/contact.html` — contact form and validation output
 - `templates/security/locked_out.html` — login-throttling message
 - `static/css/site.css` — neutral starter styles and design tokens
@@ -43,6 +48,8 @@ Frontend replacements must continue to use the existing Django context and URL h
 - `Page` and `Service` expose `seo_title`, `seo_description`, and `get_absolute_url`.
 - Contact forms must render Django validation errors, include `{% csrf_token %}`, and retain
   the honeypot field.
+- The universal header and footer must retain links to Home, About us, Services, FAQ, and
+  Contact us. Additional published navigation pages may be added around those required links.
 - Internal links should use `{% url %}` or model `get_absolute_url`; static assets should use
   `{% static %}`.
 
