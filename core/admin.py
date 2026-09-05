@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import DownloadableAsset, Lead, Page, Service, SiteSettings
+from .models import DownloadableAsset, FAQ, Lead, Page, Service, SiteSettings
 
 
 @admin.register(SiteSettings)
@@ -33,6 +33,14 @@ class ServiceAdmin(admin.ModelAdmin):
     list_filter = ["is_published"]
     search_fields = ["title", "summary", "body"]
     prepopulated_fields = {"slug": ("title",)}
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ["question", "is_published", "display_order", "updated_at"]
+    list_filter = ["is_published"]
+    list_editable = ["is_published", "display_order"]
+    search_fields = ["question", "answer"]
 
 
 @admin.register(Lead)
