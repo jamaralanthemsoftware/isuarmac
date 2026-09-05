@@ -80,6 +80,21 @@ class Service(PublishableModel):
         return reverse("service-detail", kwargs={"slug": self.slug})
 
 
+class FAQ(TimeStampedModel):
+    question = models.CharField(max_length=240)
+    answer = models.TextField()
+    is_published = models.BooleanField(default=False, db_index=True)
+    display_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["display_order", "question"]
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"
+
+    def __str__(self):
+        return self.question
+
+
 class Lead(TimeStampedModel):
     class Status(models.TextChoices):
         NEW = "new", "New"
