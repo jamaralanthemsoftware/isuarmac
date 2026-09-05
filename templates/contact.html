@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Contact | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
+{% block content %}
+<section class="prose">
+  <p class="eyebrow">Contact</p>
+  <h1>Start a conversation</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="button" type="submit">Send message</button>
+  </form>
+</section>
+{% endblock %}
