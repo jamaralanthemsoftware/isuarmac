@@ -50,7 +50,8 @@ Then create one **Site settings** record at the configured admin URL.
 1. Keep this repository free of client branding and mark it as a **Template repository**
    in GitHub settings.
 2. Select **Use this template** and create a new private repository for the client.
-3. Replace the README title and neutral front-end files in `templates/` and `static/`.
+3. Follow `FRONTEND_IMPLEMENTATION_GUIDE.md` to replace the README title and neutral
+   front-end files in `templates/` and `static/`.
 4. Copy `.env.example` to `.env` locally. Never commit `.env`.
 5. Run migrations and create the first admin.
 6. Enter identity, contact, legal, analytics, pages, and services in Django admin.
@@ -60,6 +61,13 @@ Then create one **Site settings** record at the configured admin URL.
 10. Import the repository into DigitalOcean App Platform and verify the first deployment
     before enabling normal deploy-on-push.
 11. Complete `CLIENT_SETUP_CHECKLIST.md` before launch.
+
+## Frontend implementation
+
+`FRONTEND_IMPLEMENTATION_GUIDE.md` is the frontend handoff for each client build. It maps the
+Django templates and context variables, defines responsive and accessibility expectations,
+covers SEO, assets, performance, and third-party scripts, and includes a frontend completion
+checklist. Use it before replacing the neutral starter design.
 
 ## Production variables
 
