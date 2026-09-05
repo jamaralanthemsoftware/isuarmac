@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site_settings.site_name|default:"Client Website" }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site_settings.default_meta_description|default:"" }}{% endblock %}">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">{{ site_settings.site_name|default:"Client Website" }}</a>
+    <nav aria-label="Main navigation">
+      {% for page in navigation_pages %}
+        <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+      {% endfor %}
+      <a href="{% url 'contact' %}">Contact</a>
+    </nav>
+  </header>
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+    </div>
+  {% endif %}
+  <main>{% block content %}{% endblock %}</main>
+  <footer>
+    <strong>{{ site_settings.site_name|default:"Client Website" }}</strong>
+    {% if site_settings.footer_disclaimer %}<p>{{ site_settings.footer_disclaimer }}</p>{% endif %}
+  </footer>
+</body>
+</html>
