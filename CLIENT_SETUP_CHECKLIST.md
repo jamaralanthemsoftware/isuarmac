@@ -81,6 +81,7 @@ For every added provider:
 
 ## 7. Content and launch
 
+- [ ] Complete `FRONTEND_IMPLEMENTATION_GUIDE.md` and its frontend completion checklist.
 - [ ] Replace all neutral templates, metadata, legal copy, contact details, and assets.
 - [ ] Populate Site Settings in Django admin.
 - [ ] Confirm analytics and consent behavior matches the client's requirements.
