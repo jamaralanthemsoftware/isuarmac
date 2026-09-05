@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
 {% block meta_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
+{% block open_graph_title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
+{% block open_graph_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
+{% block twitter_title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
+{% block twitter_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
 {% block content %}
 <section class="page-heading">
   <p class="eyebrow">What we offer</p>
