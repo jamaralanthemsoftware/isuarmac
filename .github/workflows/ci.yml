@@ -23,7 +23,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: config.settings.development
       - run: python manage.py test
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
+          DJANGO_SETTINGS_MODULE: config.settings.test
       - run: python manage.py collectstatic --noinput
         env:
           DJANGO_SETTINGS_MODULE: config.settings.build
