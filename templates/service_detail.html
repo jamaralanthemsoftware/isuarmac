@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ object.seo_title }}{% endblock %}
+{% block meta_description %}{{ object.seo_description }}{% endblock %}
+{% block content %}
+<article class="prose">
+  <p class="eyebrow">Service</p>
+  <h1>{{ object.title }}</h1>
+  {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
+  {{ object.body|linebreaks }}
+  {% if object.call_to_action_url %}
+    <a class="button" href="{{ object.call_to_action_url }}">{{ object.call_to_action_label|default:"Learn more" }}</a>
+  {% endif %}
+</article>
+{% endblock %}
