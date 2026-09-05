@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ object.seo_title }}{% endblock %}
+{% block meta_description %}{{ object.seo_description }}{% endblock %}
+{% block content %}
+<article class="prose">
+  <h1>{{ object.title }}</h1>
+  {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
+  {{ object.body|linebreaks }}
+</article>
+{% endblock %}
