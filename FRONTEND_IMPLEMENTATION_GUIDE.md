@@ -116,6 +116,14 @@ Preserve the existing sitemap and robots routes. Do not insert analytics, verifi
 or third-party scripts directly into the master template. Configure fresh client-specific
 identifiers and load scripts only when the client's consent requirements allow them.
 
+Page and Service records automatically generate a search title, meta description, Open Graph
+title, and Open Graph description from their title, summary, and body when an editor leaves
+those fields blank. Editors should review and refine the generated text before publishing.
+Each record can also receive its own Open Graph image; otherwise the site-wide image is used.
+
+Published Page and Service bodies are validated at 650–900 words, targeting approximately
+750 words of useful, original content. Do not add filler merely to satisfy the word count.
+
 ## 8. Images, fonts, and uploaded media
 
 - Keep source design assets outside the public static directory unless they are intended to
