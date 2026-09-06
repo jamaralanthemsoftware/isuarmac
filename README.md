@@ -10,7 +10,7 @@ credentials, analytics identifiers, and service configuration must never be copi
 
 ## What is included
 
-- Environment-specific settings for local development, builds, and production
+- Environment-specific settings for local development, client review, builds, and production
 - Django admin-managed site identity, pages, services, leads, and downloadable files
 - SEO fields, sitemap, robots.txt, and a production health endpoint
 - PostgreSQL support through `DATABASE_URL`
@@ -55,12 +55,25 @@ Then create one **Site settings** record at the configured admin URL.
 4. Copy `.env.example` to `.env` locally. Never commit `.env`.
 5. Run migrations and create the first admin.
 6. Enter identity, contact, legal, analytics, pages, and services in Django admin.
-7. Copy `.do/app.yaml.example` to `.do/app.yaml`, replace every placeholder, and commit it.
-8. Create a DigitalOcean PostgreSQL database and inject its private `DATABASE_URL`.
-9. If editors upload files, create a Spaces bucket and configure the `AWS_*` variables.
-10. Import the repository into DigitalOcean App Platform and verify the first deployment
+7. Follow `PREVIEW_SETUP.md` to share and revise the site before launch integrations exist.
+8. When preparing to go live, copy `.do/app.yaml.example` to `.do/app.yaml`, replace every
+   placeholder, and commit it.
+9. Create a DigitalOcean PostgreSQL database and inject its private `DATABASE_URL`.
+10. If editors upload files, create a Spaces bucket and configure the `AWS_*` variables.
+11. Import the repository into DigitalOcean App Platform and verify the first deployment
     before enabling normal deploy-on-push.
-11. Complete `CLIENT_SETUP_CHECKLIST.md` before launch.
+12. Complete `CLIENT_SETUP_CHECKLIST.md` before launch.
+
+## Pre-launch client review
+
+Use `config.settings.preview` while collaborating with the client before the final domain
+and integrated services are ready. Preview mode supports local admin access, database-backed
+contact leads, and local media without requiring SMTP, Google OAuth, Spaces, analytics,
+webhooks, or PostgreSQL.
+
+See `PREVIEW_SETUP.md` for the Replit settings, run command, persistence limitations, and
+the exact transition to production. Do not use the strict production settings for this
+stage: their missing-integration failures are intentional launch safeguards.
 
 ## Frontend implementation
 
@@ -86,6 +99,9 @@ Recommended:
 - SMTP email variables
 - DigitalOcean Spaces variables when uploads are enabled
 - `SECURE_HSTS_SECONDS=3600` initially; raise after HTTPS is confirmed
+
+The console email backend is preview-only. Contact submissions are always saved as Leads,
+but production email delivery must be configured and tested before launch.
 
 ## External services
 

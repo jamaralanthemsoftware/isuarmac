@@ -22,7 +22,21 @@ rg -n "postmark|server[_-]?token|api[_-]?key|client[_-]?secret|webhook[_-]?secre
 
 Review every result. Example variable names are acceptable; real values are not.
 
-## 2. Core infrastructure
+## 2. Pre-launch client review
+
+- [ ] Follow `PREVIEW_SETUP.md` and use `config.settings.preview`.
+- [ ] Set a new `SECRET_KEY` for the review environment.
+- [ ] Set the exact temporary hostname in `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, and `SITE_URL`.
+- [ ] Keep Google SSO, Spaces, analytics, webhooks, and real email delivery disabled until needed.
+- [ ] Run migrations and create a local administrator.
+- [ ] Confirm the client can view all public pages over the temporary HTTPS URL.
+- [ ] Submit the contact form and confirm the new Lead appears in Django admin.
+- [ ] Confirm local uploads render, or provision persistent storage before relying on them.
+- [ ] If review content must survive deployment rebuilds, provision PostgreSQL before data entry.
+
+SQLite, local media, and console email are preview conveniences, not production services.
+
+## 3. Core production infrastructure
 
 - [ ] Create a new DigitalOcean App connected to the new client repository.
 - [ ] Create a new PostgreSQL database and use its private connection URL.
@@ -31,7 +45,7 @@ Review every result. Example variable names are acceptable; real values are not.
 - [ ] Create a new Spaces bucket and scoped access key if the site accepts uploads.
 - [ ] Create a new admin account; remove the provisioning password after use.
 
-## 3. Email
+## 4. Email
 
 - [ ] Create a new Postmark server, or a separate equivalent provider connection.
 - [ ] Verify the client's sending domain.
@@ -42,7 +56,7 @@ Review every result. Example variable names are acceptable; real values are not.
 Never reuse another client's Postmark server token, message stream, webhook secret, or
 sender signature.
 
-## 4. Administrator access
+## 5. Administrator access
 
 - [ ] Create a new Google OAuth web application for this client.
 - [ ] Register the exact production `/accounts/google/login/callback/` redirect URI.
@@ -54,7 +68,7 @@ sender signature.
 - [ ] Confirm an unapproved Google account cannot sign in.
 - [ ] Confirm the emergency account locks after repeated failures.
 
-## 5. Google services
+## 6. Google services
 
 Create only the services the site needs, with new client-owned identifiers:
 
@@ -68,7 +82,7 @@ Create only the services the site needs, with new client-owned identifiers:
 Give the client access to the appropriate Google property rather than hiding ownership in
 another client's account.
 
-## 6. Other integrations
+## 7. Other integrations
 
 For every added provider:
 
@@ -79,7 +93,7 @@ For every added provider:
 - [ ] Record renewal, billing, quota, and offboarding responsibility outside the codebase.
 - [ ] Test failure handling without exposing credentials in logs.
 
-## 7. Content and launch
+## 8. Content and launch
 
 - [ ] Complete `FRONTEND_IMPLEMENTATION_GUIDE.md` and its frontend completion checklist.
 - [ ] Replace all neutral templates, metadata, legal copy, contact details, and assets.

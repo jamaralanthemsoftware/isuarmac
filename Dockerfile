@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 RUN DJANGO_SETTINGS_MODULE=config.settings.build python manage.py collectstatic --noinput
+RUN chown -R appuser:appuser /app
 
 USER appuser
 EXPOSE 8080
