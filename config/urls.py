@@ -5,11 +5,12 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
 from core.admin_auth import admin_sso_login, emergency_admin_login
-from core.sitemaps import PageSitemap, ServiceSitemap
+from core.sitemaps import BlogPostSitemap, PageSitemap, ServiceSitemap
 
 sitemaps = {
     "pages": PageSitemap,
     "services": ServiceSitemap,
+    "blog": BlogPostSitemap,
 }
 
 urlpatterns = [

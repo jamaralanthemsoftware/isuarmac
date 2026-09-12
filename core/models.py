@@ -544,7 +544,15 @@ class DownloadableAsset(TimeStampedModel):
     def __str__(self):
         return self.title
 
+class BlogTopic(TimeStampedModel):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
 
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
 class BlogPost(TimeStampedModel):
     """Reusable imported/editorial article record.
 
@@ -566,9 +574,21 @@ class BlogPost(TimeStampedModel):
     original_modified_at = models.DateTimeField(null=True, blank=True)
     featured_image = models.FileField(upload_to="blog-posts/%Y/%m/", blank=True)
     is_published = models.BooleanField(default=False, db_index=True)
+    topics = models.ManyToManyField(
+        BlogTopic,
+        blank=True,
+        related_name="blog_posts",
+        help_text="Topics used to recommend related published articles.",
+    )
 
     class Meta:
         ordering = ["-original_published_at", "-created_at"]
+        indexes = [
+            models.Index(
+                fields=["is_published", "-original_published_at", "-created_at"],
+                name="blogpost_pub_recent_idx",
+            ),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["source_url"],
@@ -584,6 +604,71 @@ class BlogPost(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("blog-detail", kwargs={"slug": self.slug})
+
+    @property
+    def publication_date(self):
+        return self.original_published_at or self.created_at
+
+    @property
+    def seo_title(self):
+        return self.meta_title or self.title
+
+    @property
+    def seo_description(self):
+        return self.meta_description or self.summary
+
+
+class BlogPostRelatedSelection(models.Model):
+    source_post = models.ForeignKey(
+        BlogPost,
+        on_delete=models.CASCADE,
+        related_name="related_selections",
+    )
+    related_post = models.ForeignKey(
+        BlogPost,
+        on_delete=models.CASCADE,
+        related_name="selected_as_related",
+    )
+    position = models.PositiveSmallIntegerField(
+        choices=[(1, "1"), (2, "2"), (3, "3")],
+        help_text="The order in which this article appears.",
+    )
+
+    class Meta:
+        ordering = ["position"]
+        verbose_name = "important related article"
+        verbose_name_plural = "important related articles"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_post", "related_post"],
+                name="blogpost_related_unique_post",
+            ),
+            models.UniqueConstraint(
+                fields=["source_post", "position"],
+                name="blogpost_related_unique_position",
+            ),
+            models.CheckConstraint(
+                condition=~models.Q(source_post=models.F("related_post")),
+                name="blogpost_related_not_self",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(position__gte=1, position__lte=3),
+                name="blogpost_related_position_1_to_3",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        if self.source_post_id == self.related_post_id:
+            raise ValidationError(
+                {"related_post": "An article cannot recommend itself."}
+            )
+
+    def __str__(self):
+        return f"{self.source_post} → {self.related_post} ({self.position})"
 
 
 class BlogImportRun(TimeStampedModel):

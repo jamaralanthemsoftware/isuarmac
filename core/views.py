@@ -1,14 +1,15 @@
 import logging
 
 from django.contrib import messages
+from django.db.models import Count, Q, Subquery
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 from .forms import LeadForm
 from .anthem import deliver_lead_to_anthem
-from .models import FAQ, Page, Service
+from .models import BlogPost, FAQ, Page, Service
 from .postmark import PostmarkDeliveryError, send_contact_lead_notification
 from .recaptcha import get_contact_recaptcha_config, verify_contact_recaptcha
 
@@ -69,6 +70,70 @@ class ServiceDetailView(DetailView):
 
     def get_queryset(self):
         return Service.objects.filter(is_published=True)
+
+
+class BlogListView(ListView):
+    model = BlogPost
+    template_name = "blog/list.html"
+    context_object_name = "posts"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BlogPost.objects.filter(is_published=True)
+
+
+class BlogDetailView(DetailView):
+    model = BlogPost
+    template_name = "blog/detail.html"
+
+    def get_queryset(self):
+        return BlogPost.objects.filter(is_published=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        selected_articles = list(
+            BlogPost.objects.filter(
+                is_published=True,
+                selected_as_related__source_post=self.object,
+            )
+            .only(
+                "title",
+                "slug",
+                "summary",
+                "original_published_at",
+                "created_at",
+            )
+            .order_by("selected_as_related__position")
+        )
+        remaining_slots = 3 - len(selected_articles)
+        topic_ids = self.object.topics.through.objects.filter(
+            blogpost_id=self.object.pk
+        ).values("blogtopic_id")
+        automatic_articles = list(
+            BlogPost.objects.filter(is_published=True)
+            .exclude(pk__in=[self.object.pk, *(post.pk for post in selected_articles)])
+            .annotate(
+                shared_topic_count=Count(
+                    "topics",
+                    filter=Q(topics__in=Subquery(topic_ids)),
+                    distinct=True,
+                )
+            )
+            .order_by(
+                "-shared_topic_count",
+                "-original_published_at",
+                "-created_at",
+            )
+            .only(
+                "title",
+                "slug",
+                "summary",
+                "original_published_at",
+                "created_at",
+            )[:remaining_slots]
+        )
+        context["related_articles"] = selected_articles + automatic_articles
+        return context
 
 
 def _contact_context(form, recaptcha_config):

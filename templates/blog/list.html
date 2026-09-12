@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Blog | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
+{% block meta_description %}Browse the latest articles from {{ site_settings.site_name|default:"our team" }}.{% endblock %}
+{% block content %}
+<section class="prose blog-list">
+  <h1>Blog</h1>
+  {% for post in posts %}
+    <article class="blog-summary">
+      <p class="post-meta">
+        <time datetime="{{ post.publication_date|date:'c' }}">{{ post.publication_date|date:"F j, Y" }}</time>
+        {% if post.author_name %}<span> by {{ post.author_name }}</span>{% endif %}
+      </p>
+      <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+      {% if post.summary %}<p>{{ post.summary }}</p>{% endif %}
+    </article>
+  {% empty %}
+    <p>No articles have been published yet.</p>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <nav class="pagination" aria-label="Blog pagination">
+      {% if page_obj.has_previous %}
+        <a rel="prev" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a rel="next" href="?page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</section>
+{% endblock %}

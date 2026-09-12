@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 
-from .models import Page, Service
+from .models import BlogPost, Page, Service
 
 
 class PublishedContentSitemap(Sitemap):
@@ -19,3 +19,11 @@ class PageSitemap(PublishedContentSitemap):
 class ServiceSitemap(PublishedContentSitemap):
     def items(self):
         return Service.objects.filter(is_published=True)
+
+
+class BlogPostSitemap(PublishedContentSitemap):
+    def items(self):
+        return BlogPost.objects.filter(is_published=True)
+
+    def lastmod(self, obj):
+        return obj.original_modified_at or obj.updated_at

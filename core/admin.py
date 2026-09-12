@@ -8,6 +8,8 @@ from .models import (
     BlogImportItem,
     BlogImportRun,
     BlogPost,
+    BlogPostRelatedSelection,
+    BlogTopic,
     DownloadableAsset,
     FAQ,
     GoogleServicesIntegration,
@@ -81,16 +83,29 @@ class BlogImportMixin:
         return request.user.is_active and request.user.is_superuser
 
 
+class BlogPostRelatedSelectionInline(admin.TabularInline):
+    model = BlogPostRelatedSelection
+    fk_name = "source_post"
+    autocomplete_fields = ["related_post"]
+    extra = 0
+    max_num = 3
+    fields = ["position", "related_post"]
+    verbose_name = "important related article"
+    verbose_name_plural = "Important related articles (up to 3)"
+
+
 @admin.register(BlogPost)
 class BlogPostAdmin(BlogImportMixin, admin.ModelAdmin):
+    inlines = [BlogPostRelatedSelectionInline]
     list_display = [
         "title", "slug", "is_published", "author_name", "original_published_at", "updated_at",
     ]
-    list_filter = ["is_published", "created_at"]
+    list_filter = ["is_published", "topics", "created_at"]
     search_fields = ["title", "summary", "body", "source_url", "source_guid"]
+    filter_horizontal = ["topics"]
     readonly_fields = ["created_at", "updated_at", "word_count"]
     fieldsets = [
-        ("Content", {"fields": ["title", "slug", "summary", "body", "word_count"]}),
+        ("Content", {"fields": ["title", "slug", "summary", "body", "word_count", "topics"]}),
         ("Search metadata", {"fields": ["meta_title", "meta_description", "canonical_url"]}),
         ("Imported source", {
             "fields": [
@@ -107,7 +122,11 @@ class BlogPostAdmin(BlogImportMixin, admin.ModelAdmin):
         from django.utils.html import strip_tags
         return len(strip_tags(obj.body).split())
 
-
+@admin.register(BlogTopic)
+class BlogTopicAdmin(admin.ModelAdmin):
+    list_display = ["name", "slug", "updated_at"]
+    search_fields = ["name"]
+    prepopulated_fields = {"slug": ("name",)}
 @admin.register(BlogImportRun)
 class BlogImportRunAdmin(BlogImportMixin, admin.ModelAdmin):
     list_display = [

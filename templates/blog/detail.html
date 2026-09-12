@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load site_tags %}
+{% block title %}{{ object.seo_title }}{% endblock %}
+{% block meta_description %}{{ object.seo_description }}{% endblock %}
+{% block canonical_url %}{% if object.canonical_url %}{{ object.canonical_url }}{% else %}{{ request.build_absolute_uri }}{% endif %}{% endblock %}
+{% block open_graph_type %}article{% endblock %}
+{% block open_graph_title %}{{ object.seo_title }}{% endblock %}
+{% block open_graph_description %}{{ object.seo_description }}{% endblock %}
+{% block twitter_title %}{{ object.seo_title }}{% endblock %}
+{% block twitter_description %}{{ object.seo_description }}{% endblock %}
+{% block twitter_card %}{% if object.featured_image %}summary_large_image{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block open_graph_image %}
+  {% if object.featured_image %}
+    <meta property="og:image" content="{{ object.featured_image.url|absolute_url:request }}">
+    <meta property="og:image:alt" content="{{ object.title }}">
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+{% block content %}
+<article class="prose blog-post">
+  <header>
+    <p class="post-meta">
+      <time datetime="{{ object.publication_date|date:'c' }}">{{ object.publication_date|date:"F j, Y" }}</time>
+      {% if object.author_name %}<span> by {{ object.author_name }}</span>{% endif %}
+    </p>
+    <h1>{{ object.title }}</h1>
+    {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
+  </header>
+  <div class="post-body">{{ object.body|safe }}</div>
+</article>
+{% if related_articles %}
+  <aside class="prose blog-related" aria-labelledby="related-articles-heading">
+    <h2 id="related-articles-heading">Related reading</h2>
+    {% for post in related_articles %}
+      <article class="blog-summary">
+        <p class="post-meta">
+          <time datetime="{{ post.publication_date|date:'c' }}">{{ post.publication_date|date:"F j, Y" }}</time>
+        </p>
+        <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+        {% if post.summary %}<p>{{ post.summary }}</p>{% endif %}
+      </article>
+    {% endfor %}
+  </aside>
+{% endif %}
+{% endblock %}
