@@ -47,10 +47,11 @@ SQLite, local media, and console email are preview conveniences, not production 
 
 ## 4. Email
 
-- [ ] Create a new Postmark server, or a separate equivalent provider connection.
-- [ ] Verify the client's sending domain.
-- [ ] Add that client's SMTP/API credential to the deployment environment.
-- [ ] Configure new sender and error-reporting addresses.
+- [ ] Create a new Postmark server for this client.
+- [ ] Verify the client's sending domain or sender signature.
+- [ ] In Django admin, open **Postmark integration**.
+- [ ] Enter the verified From email, notification recipients, message stream, and Server API token.
+- [ ] Enable the integration only after all Postmark settings are complete.
 - [ ] Send and receive a production test message.
 
 Never reuse another client's Postmark server token, message stream, webhook secret, or
@@ -63,7 +64,9 @@ sender signature.
 - [ ] Create each administrator manually in Django and grant only required staff permissions.
 - [ ] Add each administrator email to `ADMIN_GOOGLE_ALLOWED_EMAILS`.
 - [ ] Confirm two-step verification is enabled for every approved Google account.
-- [ ] Generate unique `ADMIN_URL` and `ADMIN_LOCAL_LOGIN_URL` values.
+- [ ] Confirm the normal admin login is available at `/admin/jamarallogin/`.
+- [ ] Generate a unique `ADMIN_LOCAL_LOGIN_URL` value for emergency access.
+- [ ] Store `DJANGO_SUPERUSER_PASSWORD` as a secret before provisioning the default administrator.
 - [ ] Store one long, random break-glass password in a password manager and deployment secrets.
 - [ ] Confirm an unapproved Google account cannot sign in.
 - [ ] Confirm the emergency account locks after repeated failures.
@@ -72,12 +75,21 @@ sender signature.
 
 Create only the services the site needs, with new client-owned identifiers:
 
-- [ ] Google Analytics property and web stream
+- [ ] Enable the Google Analytics Admin API, Search Console API, and Site Verification API.
+- [ ] Add `https://CLIENT-DOMAIN/integrations/google/callback/` to the OAuth web client.
+- [ ] Store the Google services OAuth client ID, client secret, and a dedicated Fernet encryption key.
+- [ ] Set the exact production `GOOGLE_SERVICES_CALLBACK_URI`.
+- [ ] Connect the managing Google account from **Google Analytics and Search Console** in Django admin.
+- [ ] Create or select the client's Google Analytics property and web stream.
+- [ ] reCAPTCHA v3 site and secret keys restricted to the permanent domain
+- [ ] Enter the reCAPTCHA keys and allowed hostnames in Django admin
+- [ ] Confirm the reCAPTCHA score threshold defaults to `0.80`
+- [ ] Enable reCAPTCHA only after the permanent-domain contact form is ready to test
 - [ ] Google Tag Manager container
-- [ ] Search Console property and verification value
+- [ ] Create, verify, and test the Search Console property and sitemap.
 - [ ] Google Maps project/key with domain and API restrictions
 - [ ] reCAPTCHA site and secret keys
-- [ ] OAuth client with exact production callback URLs, if sign-in is added
+- [ ] Keep the Google services OAuth callback separate from the administrator SSO callback.
 
 Give the client access to the appropriate Google property rather than hiding ownership in
 another client's account.
@@ -86,6 +98,11 @@ another client's account.
 
 For every added provider:
 
+- [ ] Obtain the client-specific Anthem CRM webhook if form-to-CRM delivery is required.
+- [ ] Enter the encrypted webhook in **Anthem CRM integration** in Django admin.
+- [ ] Enable Anthem delivery only for a controlled production test.
+- [ ] Confirm the Lead is marked **Confirmed** and appears exactly once in Anthem CRM.
+- [ ] Review any **Needs review** result manually before attempting another delivery.
 - [ ] Create a separate project, app, workspace, webhook, or scoped credential.
 - [ ] Restrict credentials to the minimum permissions and allowed domains.
 - [ ] Use new webhook signing secrets and callback URLs.

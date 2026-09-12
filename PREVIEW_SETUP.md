@@ -1,6 +1,9 @@
 # Pre-launch client review
 
 Use preview mode while the site is being designed and reviewed with the client.
+
+The template's reCAPTCHA integration remains disabled during temporary preview work. Configure
+and enable it from Django admin only after the permanent domain and its reCAPTCHA v3 keys exist.
 It intentionally does not require a custom domain, PostgreSQL, Spaces, SMTP,
 Google OAuth, analytics, webhooks, or other launch-only services.
 
@@ -26,6 +29,7 @@ Use this run command:
 
 ```bash
 python manage.py migrate --noinput &&
+python manage.py provision_admin &&
 gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}
 ```
 
@@ -47,9 +51,9 @@ until the client has a domain and a client-owned OAuth application.
 - Local uploaded media for the current review environment
 - Static files, sitemap, robots.txt, and health checks
 
-The contact form stores submissions in the database. Preview mode does not send
-email, so review leads in Django admin. This avoids making client review depend
-on a verified sender domain or email provider.
+The contact form stores submissions in the database. The Postmark integration is disabled by
+default, so preview does not send email unless an administrator deliberately configures and
+enables it. Review leads in Django admin during preview.
 
 ## Persistence warning
 
@@ -64,6 +68,14 @@ Provision Spaces before relying on uploaded files. These resources can still
 use the temporary platform hostname; a custom domain, email, OAuth, analytics,
 and webhooks can wait until launch.
 
+The GA4 and Search Console admin dashboard is available in preview, but its Connect button
+remains disabled until the separate Google services OAuth credentials, encryption key, and
+exact callback URI are configured.
+
+Anthem CRM delivery is also disabled by default. Preview contact submissions remain available
+as Django Leads without contacting the CRM until a valid webhook is entered and enabled in
+Django admin.
+
 ## Moving from preview to production
 
 Before launch:
@@ -72,9 +84,11 @@ Before launch:
 2. Provide PostgreSQL through `DATABASE_URL`.
 3. Configure the final domain, HTTPS origins, and `SITE_URL`.
 4. Configure persistent media storage if uploads are used.
-5. Configure and test real email delivery.
+5. Enter the client-specific Postmark settings in Django admin, enable delivery, and test it.
 6. Create the client-owned Google OAuth application and staff allowlist if used.
-7. Add only the analytics, consent, maps, CAPTCHA, and webhook services required.
-8. Run the production checks in `CLIENT_SETUP_CHECKLIST.md`.
+7. Register the separate `/integrations/google/callback/` URI and connect GA4/Search Console.
+8. Enter and test the client-specific Anthem CRM webhook if CRM delivery is required.
+9. Add only the analytics, consent, maps, CAPTCHA, and other webhook services required.
+10. Run the production checks in `CLIENT_SETUP_CHECKLIST.md`.
 
 Do not copy credentials or service resources from the template or another client.

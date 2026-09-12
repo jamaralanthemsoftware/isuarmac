@@ -7,4 +7,5 @@ class CoreConfig(AppConfig):
     verbose_name = "Website"
 
     def ready(self):
+        from . import checks  # noqa: F401
         from . import security  # noqa: F401

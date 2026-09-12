@@ -8,8 +8,25 @@ class LeadForm(forms.ModelForm):
 
     class Meta:
         model = Lead
-        fields = ["name", "email", "phone", "message", "consent_to_contact"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "message",
+            "consent_to_contact",
+        ]
+        labels = {
+            "first_name": "First name",
+            "last_name": "Last name",
+        }
         widgets = {
+            "first_name": forms.TextInput(
+                attrs={"autocomplete": "given-name"}
+            ),
+            "last_name": forms.TextInput(
+                attrs={"autocomplete": "family-name"}
+            ),
             "message": forms.Textarea(attrs={"rows": 5}),
         }
 

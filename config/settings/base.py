@@ -25,12 +25,28 @@ DEBUG = env_bool("DEBUG", False)
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 SITE_URL = os.getenv("SITE_URL", "http://localhost:8000").rstrip("/")
-ADMIN_URL = env_path("ADMIN_URL", "admin")
+ADMIN_URL = env_path("ADMIN_URL", "admin/jamarallogin")
 ADMIN_LOCAL_LOGIN_URL = env_path("ADMIN_LOCAL_LOGIN_URL", "emergency-admin-login")
 ENABLE_GOOGLE_ADMIN_SSO = env_bool("ENABLE_GOOGLE_ADMIN_SSO", False)
 ADMIN_GOOGLE_ALLOWED_EMAILS = {
     email.casefold() for email in env_list("ADMIN_GOOGLE_ALLOWED_EMAILS")
 }
+GOOGLE_SERVICES_OAUTH_CLIENT_ID = os.getenv(
+    "GOOGLE_SERVICES_OAUTH_CLIENT_ID",
+    "",
+).strip()
+GOOGLE_SERVICES_OAUTH_CLIENT_SECRET = os.getenv(
+    "GOOGLE_SERVICES_OAUTH_CLIENT_SECRET",
+    "",
+).strip()
+GOOGLE_SERVICES_ENCRYPTION_KEY = os.getenv(
+    "GOOGLE_SERVICES_ENCRYPTION_KEY",
+    "",
+).strip()
+GOOGLE_SERVICES_CALLBACK_URI = os.getenv(
+    "GOOGLE_SERVICES_CALLBACK_URI",
+    f"{SITE_URL}/integrations/google/callback/",
+).strip()
 
 INSTALLED_APPS = [
     "django.contrib.admin",

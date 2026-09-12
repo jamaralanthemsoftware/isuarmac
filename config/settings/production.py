@@ -17,7 +17,7 @@ if ALLOWED_HOSTS == ["*"] or not ALLOWED_HOSTS:  # noqa: F405
     raise ImproperlyConfigured("Set explicit production ALLOWED_HOSTS.")
 
 if ADMIN_URL == "admin/":  # noqa: F405
-    raise ImproperlyConfigured("Set a unique ADMIN_URL for production.")
+    raise ImproperlyConfigured("Do not use Django's standard /admin/ URL in production.")
 
 if ADMIN_LOCAL_LOGIN_URL == "emergency-admin-login/":  # noqa: F405
     raise ImproperlyConfigured("Set a unique ADMIN_LOCAL_LOGIN_URL for production.")

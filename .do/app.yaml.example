@@ -37,7 +37,7 @@ services:
         value: https://replace-with-domain.example
         scope: RUN_TIME
       - key: ADMIN_URL
-        value: replace-with-unique-admin-path/
+        value: admin/jamarallogin/
         scope: RUN_TIME
       - key: ADMIN_LOCAL_LOGIN_URL
         value: replace-with-unique-emergency-path/
@@ -64,7 +64,7 @@ jobs:
       deploy_on_push: true
     dockerfile_path: Dockerfile
     source_dir: /
-    run_command: python manage.py migrate --noinput
+    run_command: python manage.py migrate --noinput && python manage.py provision_admin
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-0.5gb
     envs:
@@ -84,8 +84,17 @@ jobs:
         value: replace-with-domain.example
         scope: RUN_TIME
       - key: ADMIN_URL
-        value: replace-with-unique-admin-path/
+        value: admin/jamarallogin/
         scope: RUN_TIME
       - key: ADMIN_LOCAL_LOGIN_URL
         value: replace-with-unique-emergency-path/
+        scope: RUN_TIME
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: jamaral@anthemsoftware.com
+        scope: RUN_TIME
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: jamaral@anthemsoftware.com
+        scope: RUN_TIME
+      - key: DJANGO_SUPERUSER_PASSWORD
+        type: SECRET
         scope: RUN_TIME

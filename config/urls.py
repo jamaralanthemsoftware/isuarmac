@@ -13,6 +13,7 @@ sitemaps = {
 }
 
 urlpatterns = [
+    path("integrations/google/", include("core.google_urls")),
     path(f"{settings.ADMIN_URL}login/", admin_sso_login, name="admin-sso-login"),
     path(
         settings.ADMIN_LOCAL_LOGIN_URL,

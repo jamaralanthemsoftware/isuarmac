@@ -1,0 +1,54 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Google Analytics 4 and Search Console</h1>
+
+{% if token_error %}
+  <p class="errornote">{{ token_error }} Disconnect and reconnect Google services.</p>
+{% endif %}
+
+<h2>OAuth setup</h2>
+<dl>
+  <dt>Authorized redirect URI</dt>
+  <dd><code>{{ callback_uri }}</code></dd>
+  <dt>Required Google APIs</dt>
+  <dd>Google Analytics Admin API, Search Console API, and Site Verification API</dd>
+  <dt>Requested scopes</dt>
+  <dd>
+    <ul>
+      {% for scope in scopes %}<li><code>{{ scope }}</code></li>{% endfor %}
+    </ul>
+  </dd>
+</dl>
+
+{% if not settings_ready %}
+  <p class="errornote">
+    Add the Google services OAuth client ID, client secret, encryption key, and
+    exact callback URI to the deployment before connecting.
+  </p>
+{% endif %}
+
+{% if integration and integration.connected_email and not token_error %}
+  <p><strong>Connected as {{ integration.connected_email }}</strong></p>
+  <p>
+    The authorization scaffold is ready. GA4 property provisioning, data-stream
+    setup, Search Console verification, and sitemap submission will be completed
+    for the first client site that uses this template.
+  </p>
+  <form method="post" action="{% url 'google-services-disconnect' %}">
+    {% csrf_token %}
+    <button type="submit">Disconnect Google services</button>
+  </form>
+{% else %}
+  <p>
+    Connect the Google account that will manage this website's Analytics and
+    Search Console properties.
+  </p>
+  <form method="post" action="{% url 'google-services-connect' %}">
+    {% csrf_token %}
+    <button type="submit"{% if not settings_ready %} disabled{% endif %}>
+      Connect Google services
+    </button>
+  </form>
+{% endif %}
+{% endblock %}

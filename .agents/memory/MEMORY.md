@@ -1,0 +1,5 @@
+- [Admin access convention](admin-access-convention.md) — every duplicated site uses `/admin/jamarallogin/` for normal Django administrator access.
+- [Anthem CRM webhook convention](anthem-crm-webhook-convention.md) — encrypted CMS webhooks stay off by default, and uncertain deliveries are never retried automatically.
+- [Google services OAuth convention](google-services-oauth-convention.md) — GA4/GSC use dedicated PKCE OAuth, separate from admin SSO, with encrypted refresh tokens.
+- [Postmark template convention](postmark-template-convention.md) — each client uses its own Postmark server, configured in admin with an encrypted API token.
+- [reCAPTCHA template convention](recaptcha-template-convention.md) — v3 stays disabled until launch, defaults to score `0.80`, and stores its secret encrypted.

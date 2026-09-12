@@ -1,0 +1,27 @@
+kind = "api"
+previewPath = "/"
+title = "Django CMS template"
+version = "1.0.0"
+id = "3B4_FFSkEVBkAeYMFRJ2e"
+
+[[services]]
+localPort = 8000
+name = "Django CMS template"
+paths = ["/"]
+
+[services.development]
+run = '''cd ../.. && export DJANGO_SETTINGS_MODULE=config.settings.preview ALLOWED_HOSTS="$REPLIT_DEV_DOMAIN,localhost,127.0.0.1" CSRF_TRUSTED_ORIGINS="https://$REPLIT_DEV_DOMAIN" SITE_URL="https://$REPLIT_DEV_DOMAIN" && uv run --with-requirements requirements.txt python manage.py migrate --noinput && uv run --with-requirements requirements.txt python manage.py provision_admin && uv run --with-requirements requirements.txt gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}'''
+
+[services.production]
+
+[services.production.build]
+args = ["sh", "-c", "cd ../.. && DJANGO_SETTINGS_MODULE=config.settings.build uv run --with-requirements requirements.txt python manage.py collectstatic --noinput"]
+
+[services.production.run]
+args = ["sh", "-c", "cd ../.. && uv run --with-requirements requirements.txt gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+
+[services.production.run.env]
+DJANGO_SETTINGS_MODULE = "config.settings.production"
+
+[services.production.health.startup]
+path = "/healthz/"

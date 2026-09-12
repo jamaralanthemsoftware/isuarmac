@@ -9,10 +9,48 @@
 <section class="prose">
   <p class="eyebrow">Contact</p>
   <h1>Start a conversation</h1>
-  <form method="post">
+  <form method="post"{% if recaptcha_enabled %} data-recaptcha-site-key="{{ recaptcha_site_key }}"{% endif %}>
     {% csrf_token %}
+    {% if recaptcha_enabled %}<input type="hidden" name="recaptcha_token" value="">{% endif %}
     {{ form.as_p }}
     <button class="button" type="submit">Send message</button>
+    {% if recaptcha_enabled %}<p class="recaptcha-error" role="alert" hidden>We could not verify this submission. Please try again.</p>{% endif %}
   </form>
 </section>
+{% if recaptcha_enabled %}
+<script async defer src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key|urlencode }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("[data-recaptcha-site-key]");
+    if (!form) return;
+
+    const siteKey = form.dataset.recaptchaSiteKey;
+    const tokenInput = form.querySelector('input[name="recaptcha_token"]');
+    const errorMessage = form.querySelector(".recaptcha-error");
+    let verifiedSubmission = false;
+
+    form.addEventListener("submit", function (event) {
+      if (verifiedSubmission) return;
+      event.preventDefault();
+
+      if (!window.grecaptcha) {
+        errorMessage.hidden = false;
+        return;
+      }
+
+      window.grecaptcha.ready(function () {
+        window.grecaptcha.execute(siteKey, { action: "contact_form" })
+          .then(function (token) {
+            tokenInput.value = token;
+            verifiedSubmission = true;
+            form.requestSubmit();
+          })
+          .catch(function () {
+            errorMessage.hidden = false;
+          });
+      });
+    });
+  });
+</script>
+{% endif %}
 {% endblock %}
