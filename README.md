@@ -86,6 +86,180 @@ Then create one **Site settings** record at the configured admin URL.
     before enabling normal deploy-on-push.
 12. Complete `CLIENT_SETUP_CHECKLIST.md` before launch.
 
+## Initialize post-live setup
+
+Use this runbook **after the first production deployment is reachable at the permanent HTTPS
+domain**. It is designed so the site owner can give a new project agent one instruction:
+
+> **Initialize the go-live process.**
+
+When that instruction is received, the agent must use this section and
+`CLIENT_SETUP_CHECKLIST.md` to guide the owner through the stages below in order. The agent
+should inspect the project first, report what is already complete, and ask only for the next
+missing non-secret information. Secrets must be entered through DigitalOcean environment
+variables or the masked Django admin fields—never pasted into chat, source code, GitHub, or
+logs.
+
+Do not enable an integration merely because credentials were entered. Complete its production
+test and verification gate before proceeding to the next stage.
+
+### Stage 1 — Confirm the production foundation
+
+Required input:
+
+- Permanent domain, including whether `www` redirects to the apex domain or the reverse
+- DigitalOcean App Platform application and PostgreSQL database
+- Whether the site accepts uploaded files and therefore requires DigitalOcean Spaces
+
+Steps:
+
+1. Confirm the permanent domain loads over HTTPS.
+2. Confirm `/healthz/` returns `200`.
+3. Confirm the production deployment uses:
+   - `DJANGO_SETTINGS_MODULE=config.settings.production`
+   - A unique, stable `SECRET_KEY`
+   - The private production `DATABASE_URL`
+   - Exact `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, and `SITE_URL` values
+   - `REQUIRE_POSTGRES=true`
+4. Run migrations and confirm there are no pending migrations.
+5. Confirm static files and, when applicable, uploaded media load from production.
+6. Sign in at `https://CLIENT-DOMAIN/admin/jamarallogin/`.
+7. Confirm **Site settings**, public contact information, legal links, and production metadata.
+
+Verification gate: the public site, Django admin, database, static assets, and health endpoint
+must work on the permanent domain before configuring external services.
+
+### Stage 2 — Activate Google reCAPTCHA v3
+
+Required from Google reCAPTCHA:
+
+- Production-domain **site key**
+- Production-domain **secret key**
+- Exact allowed hostname or hostnames
+
+Steps:
+
+1. Create a new reCAPTCHA v3 key pair for this client and permanent domain.
+2. In Django admin, open **reCAPTCHA integration**.
+3. Enter the site key, secret key, and allowed production hostnames.
+4. Keep the minimum score at `0.80` unless there is a documented reason to change it.
+5. Enable reCAPTCHA.
+6. Submit a real production contact form and confirm the Lead is saved.
+7. Confirm an invalid or missing token is rejected.
+
+Verification gate: legitimate production submissions work and unverified submissions do not
+create Leads. Never reuse another client's keys.
+
+### Stage 3 — Activate Postmark form delivery
+
+Required from a new client-owned Postmark server:
+
+- Verified sending domain or sender signature
+- Verified **From email**
+- Notification recipient addresses
+- Message stream, normally the transactional stream used for website forms
+- **Server API token** for that Postmark server
+
+The Server API token is the credential the application needs; a Postmark server name or
+dashboard ID by itself cannot send email.
+
+Steps:
+
+1. Create a separate Postmark server for the client.
+2. Complete sender-domain or sender-signature verification.
+3. In Django admin, open **Postmark integration**.
+4. Enter the From email, recipients, message stream, and masked Server API token.
+5. Enable Postmark delivery.
+6. Submit the production contact form.
+7. Confirm the Lead remains in Django admin and the notification reaches every intended inbox.
+8. Confirm Reply-To uses the visitor's email address.
+
+Verification gate: one production submission creates one Lead and one expected Postmark
+notification. Never reuse another client's server or Server API token.
+
+### Stage 4 — Connect GA4 and Google Search Console
+
+Required in the client's Google Cloud project:
+
+- OAuth 2.0 **Web application** client ID and client secret dedicated to site services
+- Enabled **Google Analytics Admin API**
+- Enabled **Search Console API**
+- Enabled **Site Verification API**
+- Exact authorized redirect URI:
+  `https://CLIENT-DOMAIN/integrations/google/callback/`
+- A dedicated Fernet encryption key for refresh-token storage
+
+Required DigitalOcean secrets:
+
+- `GOOGLE_SERVICES_OAUTH_CLIENT_ID`
+- `GOOGLE_SERVICES_OAUTH_CLIENT_SECRET`
+- `GOOGLE_SERVICES_ENCRYPTION_KEY`
+- `GOOGLE_SERVICES_CALLBACK_URI`
+
+Steps:
+
+1. Create or select the client-owned Google Cloud project.
+2. Configure the OAuth consent screen and enable the three required APIs.
+3. Create the site-services OAuth web client.
+4. Register the exact callback above; do not use the administrator SSO callback.
+5. Add the four values as DigitalOcean secrets and redeploy.
+6. In Django admin, open **Google Analytics and Search Console**.
+7. Connect the Google account that will manage the client's properties.
+8. Create or select the client's GA4 property and production web data stream.
+9. Add the resulting GA4 measurement ID to the site's analytics configuration.
+10. Create and verify the production Search Console URL-prefix property.
+11. Submit `https://CLIENT-DOMAIN/sitemap.xml` in Search Console.
+12. Give the client appropriate access to both properties.
+
+Verification gate: the OAuth connection is healthy, GA4 receives production traffic, the
+Search Console property is verified, and the sitemap is accepted. GA4/GSC service OAuth must
+remain separate from Google administrator SSO.
+
+### Stage 5 — Activate Anthem CRM when applicable
+
+First ask whether this client uses Anthem CRM. If not, leave the integration disabled and mark
+this stage **not applicable**.
+
+Required when applicable:
+
+- Client-specific Anthem CRM Gravity Forms-compatible webhook URL
+
+Steps:
+
+1. Obtain the webhook for the correct Anthem CRM organization.
+2. In Django admin, open **Anthem CRM integration**.
+3. Enter the masked webhook URL and enable delivery.
+4. Submit one controlled production form using separate first-name and last-name fields.
+5. Confirm the Django Lead shows **Confirmed**.
+6. Confirm exactly one corresponding prospect appears in Anthem CRM.
+
+Verification gate: one submission creates one Lead and one CRM prospect. If the Lead shows
+**Needs review**, check Anthem CRM manually before attempting anything again. Never
+automatically retry an uncertain webhook delivery.
+
+### Stage 6 — Final go-live verification
+
+1. Test the complete contact flow once:
+   - Separate required first-name and last-name fields
+   - reCAPTCHA verification
+   - Django Lead persistence
+   - Postmark notification
+   - Anthem CRM confirmation when applicable
+2. Verify public pages, canonical production URLs, Open Graph metadata, `robots.txt`, and
+   `sitemap.xml`.
+3. Run `python manage.py check --deploy` with production settings.
+4. Review production logs and confirm credentials, webhook URLs, form contents, and tokens are
+   not logged.
+5. Raise `SECURE_HSTS_SECONDS` only after HTTPS and redirects are confirmed.
+6. Enable normal deploy-on-push only after the first production deployment and all applicable
+   integration tests succeed.
+7. Record which integrations are **complete**, **not applicable**, or **blocked**, without
+   recording secret values.
+
+The initialization is complete only when every applicable verification gate passes. The agent
+must finish with an ordered status report showing completed stages, remaining owner actions,
+and any blocked provider-side setup.
+
 ## Pre-launch client review
 
 Use `config.settings.preview` while collaborating with the client before the final domain
