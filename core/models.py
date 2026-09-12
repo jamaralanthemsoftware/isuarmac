@@ -543,3 +543,100 @@ class DownloadableAsset(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class BlogPost(TimeStampedModel):
+    """Reusable imported/editorial article record.
+
+    Imported records deliberately remain drafts.  Source identifiers are retained so
+    subsequent imports can report duplicates without replacing an editor's work.
+    """
+
+    title = models.CharField(max_length=240)
+    slug = models.SlugField(max_length=240)
+    summary = models.CharField(max_length=500, blank=True)
+    body = models.TextField(blank=True)
+    meta_title = models.CharField(max_length=70, blank=True)
+    meta_description = models.CharField(max_length=300, blank=True)
+    canonical_url = models.URLField(max_length=1000, blank=True)
+    source_url = models.URLField(max_length=1000, blank=True)
+    source_guid = models.CharField(max_length=1000, blank=True)
+    author_name = models.CharField(max_length=255, blank=True)
+    original_published_at = models.DateTimeField(null=True, blank=True)
+    original_modified_at = models.DateTimeField(null=True, blank=True)
+    featured_image = models.FileField(upload_to="blog-posts/%Y/%m/", blank=True)
+    is_published = models.BooleanField(default=False, db_index=True)
+
+    class Meta:
+        ordering = ["-original_published_at", "-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_url"],
+                condition=~models.Q(source_url=""),
+                name="blogpost_unique_source_url",
+            ),
+            models.UniqueConstraint(
+                fields=["source_guid"],
+                condition=~models.Q(source_guid=""),
+                name="blogpost_unique_source_guid",
+            ),
+        ]
+
+    def __str__(self):
+        return self.title
+
+
+class BlogImportRun(TimeStampedModel):
+    class Mode(models.TextChoices):
+        WXR = "wxr", "WordPress WXR upload"
+        SITEMAP = "sitemap", "Public sitemap URL"
+
+    class Status(models.TextChoices):
+        RUNNING = "running", "Running"
+        COMPLETED = "completed", "Completed"
+        FAILED = "failed", "Failed"
+
+    mode = models.CharField(max_length=20, choices=Mode.choices)
+    source_url = models.URLField(max_length=1000, blank=True)
+    uploaded_name = models.CharField(max_length=255, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.RUNNING)
+    imported_count = models.PositiveIntegerField(default=0)
+    duplicate_count = models.PositiveIntegerField(default=0)
+    failed_count = models.PositiveIntegerField(default=0)
+    error_summary = models.TextField(blank=True)
+    limits = models.JSONField(default=dict, blank=True)
+    created_by = models.ForeignKey(
+        "auth.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="blog_import_runs"
+    )
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.get_mode_display()} ({self.created_at:%Y-%m-%d %H:%M})"
+
+
+class BlogImportItem(TimeStampedModel):
+    class Status(models.TextChoices):
+        IMPORTED = "imported", "Imported"
+        DUPLICATE = "duplicate", "Duplicate"
+        FAILED = "failed", "Failed"
+
+    run = models.ForeignKey(BlogImportRun, on_delete=models.CASCADE, related_name="items")
+    source_url = models.URLField(max_length=1000, blank=True)
+    source_guid = models.CharField(max_length=1000, blank=True)
+    title = models.CharField(max_length=240, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices)
+    blog_post = models.ForeignKey(
+        BlogPost, null=True, blank=True, on_delete=models.SET_NULL, related_name="import_items"
+    )
+    error_summary = models.TextField(blank=True)
+    details = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self):
+        return f"{self.status}: {self.title or self.source_url or 'item'}"

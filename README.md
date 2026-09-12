@@ -27,6 +27,9 @@ credentials, analytics identifiers, and service configuration must never be copi
 - Admin-configured Anthem CRM webhook delivery with encrypted destination storage
 - Dedicated GA4 and Search Console OAuth scaffolding with PKCE and encrypted refresh tokens
 - Deliberately neutral templates that can be replaced per client
+- Reusable responsive WebP image tags, self-hosted font hooks, critical CSS, and safe public caching
+- Consent-aware deferred GA4 and selective third-party script hooks
+- Superuser-only WordPress WXR and same-origin sitemap blog importer
 
 ## Admin-managed integrations
 
@@ -66,6 +69,24 @@ python manage.py runserver 0.0.0.0:${PORT:-8000}
 ```
 
 Then create one **Site settings** record at the configured admin URL.
+
+## WordPress blog importer
+
+Superusers can open **Blog posts → Start another import** in Django admin. Choose either a
+WordPress WXR export upload or a public Yoast, Rank Math, AIOSEO, or standard sitemap URL.
+Every successful item is saved as an unpublished `BlogPost` draft; existing source URLs/GUIDs
+are reported as duplicates and never overwritten. WXR content, title, slug, author, canonical
+URL, source identifiers, original dates, metadata, and attachment relationships are retained.
+For crawled pages, featured-image discovery uses Open Graph, Twitter cards, Article JSON-LD,
+WordPress image markup, and then article images.
+
+The importer rejects unsafe XML DTD/entity declarations, sanitizes HTML, blocks private,
+reserved, link-local, and loopback addresses, revalidates DNS on redirects, and stays on the
+original public origin. Responses, uploads, redirects, total bytes, sitemap items, and image
+types/sizes are bounded. Media failures are recorded against the import item while preserving
+the draft. Persistent run and item reports are available in admin. It is intentionally
+synchronous and should be used in bounded batches; it does not execute JavaScript, authenticate
+to a source site, infer arbitrary non-sitemap URLs, or publish automatically.
 
 ## Start a new client project
 
@@ -271,6 +292,13 @@ See `PREVIEW_SETUP.md` for the Replit settings, run command, persistence limitat
 the exact transition to production. Do not use the strict production settings for this
 stage: their missing-integration failures are intentional launch safeguards.
 
+## Performance and privacy
+
+`PERFORMANCE.md` documents the reusable responsive image tag, client-owned WOFF2 convention,
+font preload hooks, critical CSS boundaries, selective third-party scripts, consent-aware
+GA4 behavior, and production Brotli/gzip, Cloudflare, HSTS, and PageSpeed checks. Normal CSS
+continues to use WhiteNoise's fingerprinted manifest storage.
+
 ## Frontend implementation
 
 `FRONTEND_IMPLEMENTATION_GUIDE.md` is the frontend handoff for each client build. It maps the
@@ -310,6 +338,9 @@ Required:
 Recommended:
 
 - `REQUIRE_POSTGRES=true`
+- `ANALYTICS_CONSENT_REQUIRED=true` when the client requires analytics opt-in
+- `THIRD_PARTY_SCRIPT_ORIGINS` as the explicit comma-separated allowlist for page-selective
+  HTTPS maps, booking, or chat scripts
 - DigitalOcean Spaces variables when uploads are enabled
 - `SECURE_HSTS_SECONDS=3600` initially; raise after HTTPS is confirmed
 

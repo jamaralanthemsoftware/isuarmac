@@ -1,0 +1,36 @@
+{% if site_settings.analytics_measurement_id %}
+<script>
+  (() => {
+    const measurementId = "{{ site_settings.analytics_measurement_id|escapejs }}";
+    const consentRequired = {{ analytics_consent_required|yesno:"true,false" }};
+    const load = () => {
+      if (window.__ga4Loaded) return;
+      window.__ga4Loaded = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", measurementId);
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(measurementId);
+      document.head.appendChild(script);
+    };
+    // Register first: a consent UI may grant consent immediately after this script runs.
+    window.addEventListener("analytics-consent-granted", load, {once: true});
+    if (!measurementId) return;
+    const allowed = !consentRequired || document.cookie.split(";").some((item) => {
+      const value = item.trim().split("=");
+      return value[0] === "analytics_consent" && value[1] === "granted";
+    });
+    if (!allowed) return;
+    if (!consentRequired) {
+      load();
+    } else {
+      window.addEventListener("load", () => {
+        if ("requestIdleCallback" in window) window.requestIdleCallback(load, {timeout: 2000});
+        else setTimeout(load, 0);
+      }, {once: true});
+    }
+  })();
+</script>
+{% endif %}

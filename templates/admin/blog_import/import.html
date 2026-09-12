@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Import WordPress blog posts</h1>
+<p>
+  Imports always create unpublished drafts and never replace an existing post.
+  WXR files are limited to 10 MB; sitemap crawls are same-origin and subject to
+  response, item, redirect, and network safety limits.
+</p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="default">Start import</button>
+</form>
+{% if run %}
+  <h2>Import report</h2>
+  <dl>
+    <dt>Status</dt><dd>{{ run.get_status_display }}</dd>
+    <dt>Drafts created</dt><dd>{{ run.imported_count }}</dd>
+    <dt>Duplicates skipped</dt><dd>{{ run.duplicate_count }}</dd>
+    <dt>Failures</dt><dd>{{ run.failed_count }}</dd>
+  </dl>
+  {% if run.error_summary %}<p class="errornote">{{ run.error_summary }}</p>{% endif %}
+  <p><a href="{% url 'admin:core_blogimportrun_change' run.pk %}">Open persistent report</a></p>
+{% endif %}
+{% endblock %}

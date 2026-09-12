@@ -124,3 +124,33 @@ For every added provider:
 - [ ] Run migrations through the single pre-deploy job.
 - [ ] Verify `/healthz/`, forms, email delivery, static files, and uploaded media.
 - [ ] Enable deploy-on-push only after the first deployment succeeds.
+
+## 9. Optional WordPress blog import
+
+- [ ] Confirm the source export/site and content license are approved by the client.
+- [ ] Create a backup and test the importer in preview before importing production content.
+- [ ] As a superuser, open **Blog posts → Start another import** and use a WXR file or the
+      source's public Yoast/Rank Math/AIOSEO sitemap URL.
+- [ ] Review the persistent run/item report, including duplicate and featured-image failures.
+- [ ] Review imported HTML, metadata, canonical URLs, authors, dates, and media manually.
+- [ ] Keep every imported `BlogPost` as a draft until editorial review is complete; the importer
+      never publishes or overwrites content.
+- [ ] Use bounded batches for large sites. The importer does not crawl authenticated pages,
+      execute JavaScript, follow cross-origin sitemap/page links, or import videos/other files.
+
+## 10. Performance and privacy launch checks
+
+- [ ] Follow `PERFORMANCE.md`; use `responsive_image` for CMS images and mark only the true
+      above-the-fold LCP image eager/high priority.
+- [ ] Add only client-owned, licensed WOFF2 files; confirm `font-display: swap` and preload
+      only first-viewport fonts.
+- [ ] Confirm normal CSS uses fingerprinted WhiteNoise URLs and pages render with JavaScript
+      disabled.
+- [ ] Configure GA4 only with the client's measurement ID and verify consent-denied and
+      consent-granted behavior.
+- [ ] Keep maps, booking, chat, and other third-party scripts page-selective.
+- [ ] Verify public anonymous pages receive the short shared-cache policy, while admin,
+      authenticated, POST, message/session, CSRF, and personalized responses do not.
+- [ ] Enable Brotli/gzip and review Cloudflare email obfuscation and HSTS before launch.
+- [ ] Record PageSpeed/Lighthouse mobile and desktop before/after values, including LCP,
+      CLS, INP, transfer size, fonts, and third-party requests.

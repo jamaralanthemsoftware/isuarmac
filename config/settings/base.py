@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "core.middleware.PublicPageCacheMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -177,6 +178,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 SERVE_LOCAL_MEDIA = env_bool("SERVE_LOCAL_MEDIA", DEBUG)
+ANALYTICS_CONSENT_REQUIRED = env_bool("ANALYTICS_CONSENT_REQUIRED", False)
+THIRD_PARTY_SCRIPT_ORIGINS = {
+    origin.rstrip("/")
+    for origin in env_list("THIRD_PARTY_SCRIPT_ORIGINS")
+}
 
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},

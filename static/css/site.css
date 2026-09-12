@@ -6,6 +6,7 @@
   --surface: #ffffff;
   --accent: #1e6759;
   --line: #d8ddd9;
+  /* Add client-owned /static/fonts/*.woff2 @font-face rules here; use font-display: swap. */
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 

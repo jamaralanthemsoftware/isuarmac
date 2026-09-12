@@ -1,9 +1,13 @@
 from django import forms
-from django.contrib import admin
-from django.shortcuts import redirect
+from django.contrib import admin, messages
+from django.shortcuts import redirect, render
+from django.urls import path
 
 from .models import (
     AnthemCRMIntegration,
+    BlogImportItem,
+    BlogImportRun,
+    BlogPost,
     DownloadableAsset,
     FAQ,
     GoogleServicesIntegration,
@@ -14,6 +18,140 @@ from .models import (
     Service,
     SiteSettings,
 )
+from .blog_importer import MAX_UPLOAD_BYTES, run_import
+
+
+class BlogImportForm(forms.Form):
+    mode = forms.ChoiceField(
+        choices=[("wxr", "Upload WordPress WXR XML"), ("sitemap", "Crawl a public sitemap URL")],
+        widget=forms.RadioSelect,
+    )
+    wxr_file = forms.FileField(required=False, label="WordPress WXR XML")
+    source_url = forms.URLField(required=False, label="Public sitemap or sitemap-index URL")
+
+    def clean(self):
+        cleaned = super().clean()
+        mode = cleaned.get("mode")
+        upload = cleaned.get("wxr_file")
+        source_url = cleaned.get("source_url")
+        if mode == "wxr":
+            if not upload:
+                self.add_error("wxr_file", "Choose a WXR XML file.")
+            elif upload.size > MAX_UPLOAD_BYTES:
+                self.add_error("wxr_file", "The WXR file exceeds the 10 MB limit.")
+        elif mode == "sitemap" and not source_url:
+            self.add_error("source_url", "Enter a public sitemap URL.")
+        return cleaned
+
+
+class BlogImportMixin:
+    def import_view(self, request):
+        if not request.user.is_active or not request.user.is_superuser:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied
+        form = BlogImportForm(request.POST or None, request.FILES or None)
+        run = None
+        if request.method == "POST" and form.is_valid():
+            upload = form.cleaned_data.get("wxr_file")
+            run = run_import(
+                user=request.user,
+                mode=form.cleaned_data["mode"],
+                payload=upload.read() if upload else None,
+                source_url=form.cleaned_data.get("source_url", ""),
+                uploaded_name=upload.name if upload else "",
+            )
+            if run.status == BlogImportRun.Status.FAILED:
+                messages.error(request, run.error_summary)
+            else:
+                messages.success(
+                    request,
+                    f"Import complete: {run.imported_count} drafts, "
+                    f"{run.duplicate_count} duplicates, {run.failed_count} failures.",
+                )
+        return render(request, "admin/blog_import/import.html", {"form": form, "run": run})
+
+    def get_urls(self):
+        urls = super().get_urls()
+        return [path("import/", self.admin_site.admin_view(self.import_view), name="blog-import")] + urls
+
+    def has_module_permission(self, request):
+        return request.user.is_active and request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_active and request.user.is_superuser
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(BlogImportMixin, admin.ModelAdmin):
+    list_display = [
+        "title", "slug", "is_published", "author_name", "original_published_at", "updated_at",
+    ]
+    list_filter = ["is_published", "created_at"]
+    search_fields = ["title", "summary", "body", "source_url", "source_guid"]
+    readonly_fields = ["created_at", "updated_at", "word_count"]
+    fieldsets = [
+        ("Content", {"fields": ["title", "slug", "summary", "body", "word_count"]}),
+        ("Search metadata", {"fields": ["meta_title", "meta_description", "canonical_url"]}),
+        ("Imported source", {
+            "fields": [
+                "source_url", "source_guid", "author_name", "original_published_at",
+                "original_modified_at", "featured_image",
+            ]
+        }),
+        ("Publishing", {"fields": ["is_published"]}),
+        ("Record details", {"fields": ["created_at", "updated_at"]}),
+    ]
+
+    @admin.display(description="Words")
+    def word_count(self, obj):
+        from django.utils.html import strip_tags
+        return len(strip_tags(obj.body).split())
+
+
+@admin.register(BlogImportRun)
+class BlogImportRunAdmin(BlogImportMixin, admin.ModelAdmin):
+    list_display = [
+        "created_at", "mode", "status", "imported_count", "duplicate_count", "failed_count",
+        "created_by",
+    ]
+    list_filter = ["mode", "status", "created_at"]
+    readonly_fields = [
+        "mode", "source_url", "uploaded_name", "status", "imported_count", "duplicate_count",
+        "failed_count", "error_summary", "limits", "created_by", "started_at", "finished_at",
+    ]
+    change_form_template = "admin/blog_import/run_change_form.html"
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(BlogImportItem)
+class BlogImportItemAdmin(admin.ModelAdmin):
+    list_display = ["run", "status", "title", "source_url", "error_summary"]
+    list_filter = ["status"]
+    search_fields = ["title", "source_url", "source_guid", "error_summary"]
+    readonly_fields = [field.name for field in BlogImportItem._meta.fields]
+
+    def has_add_permission(self, request):
+        return False
+
+    def _superuser_access(self, request):
+        return request.user.is_active and request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return self._superuser_access(request)
+
+    def has_change_permission(self, request, obj=None):
+        return self._superuser_access(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return self._superuser_access(request)
+
+    def has_module_permission(self, request):
+        return self._superuser_access(request)
 
 
 @admin.register(SiteSettings)
