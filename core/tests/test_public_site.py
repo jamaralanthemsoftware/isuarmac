@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
-from core.models import FAQ, Page, Service
+from core.models import DownloadableAsset, FAQ, Page, Service, SiteSettings
 
 
 class PublicSiteStructureTests(TestCase):
@@ -78,7 +78,7 @@ class PublicSiteStructureTests(TestCase):
         self.assertIn("durable financial plan", page.meta_description)
         self.assertIn("durable financial plan", page.open_graph_description)
 
-    def test_published_content_page_requires_approximately_750_words(self):
+    def test_published_content_page_warns_outside_recommended_word_count(self):
         page = Page(
             title="Short page",
             slug="short-page",
@@ -86,11 +86,40 @@ class PublicSiteStructureTests(TestCase):
             is_published=True,
         )
 
-        with self.assertRaises(ValidationError):
-            page.full_clean()
+        page.full_clean()
+        self.assertIn("650–900", page.word_count_warning)
 
         page.body = " ".join(["useful"] * 750)
         page.full_clean()
+        self.assertEqual(page.word_count_warning, "")
+
+    def test_downloadable_asset_serves_only_when_published(self):
+        published_asset = DownloadableAsset.objects.create(
+            title="Client Guide",
+            slug="client-guide",
+            file=SimpleUploadedFile("guide.pdf", b"%PDF-1.4 guide"),
+            is_published=True,
+        )
+        draft_asset = DownloadableAsset.objects.create(
+            title="Draft Guide",
+            slug="draft-guide",
+            file=SimpleUploadedFile("draft.pdf", b"%PDF-1.4 draft"),
+            is_published=False,
+        )
+
+        response = self.client.get(published_asset.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        response.close()
+
+        self.assertEqual(self.client.get(draft_asset.get_absolute_url()).status_code, 404)
+
+    def test_site_settings_validates_ga4_measurement_id(self):
+        invalid_settings = SiteSettings(analytics_measurement_id="UA-12345-1")
+        with self.assertRaises(ValidationError):
+            invalid_settings.full_clean()
+
+        valid_settings = SiteSettings(analytics_measurement_id="G-ABC123XYZ")
+        valid_settings.full_clean()
 
     def test_detail_page_assigns_article_open_graph_elements(self):
         page = Page.objects.create(
@@ -107,3 +136,22 @@ class PublicSiteStructureTests(TestCase):
         self.assertContains(response, 'property="og:type" content="article"')
         self.assertContains(response, f'property="og:title" content="{page.open_graph_title}"')
         self.assertContains(response, 'property="og:image" content="http://testserver/')
+
+    def test_robots_txt_and_static_sitemap_and_reserved_page_slugs(self):
+        robots_response = self.client.get(reverse("robots-txt"))
+        self.assertEqual(robots_response.status_code, 200)
+        self.assertContains(robots_response, "Sitemap: http://testserver/sitemap.xml")
+
+        sitemap_response = self.client.get(reverse("sitemap"))
+        self.assertEqual(sitemap_response.status_code, 200)
+        for route_name in ("home", "about", "services", "blog-list", "faq", "contact"):
+            self.assertContains(sitemap_response, reverse(route_name))
+
+        reserved_page = Page(
+            title="Reserved",
+            slug="services",
+            body="Reserved route test.",
+            is_published=False,
+        )
+        with self.assertRaises(ValidationError):
+            reserved_page.full_clean()

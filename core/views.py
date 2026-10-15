@@ -1,21 +1,25 @@
 import logging
+from pathlib import PurePosixPath
 
 from django.contrib import messages
 from django.db.models import Count, Q, Subquery
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
 from django.views.generic import DetailView, ListView
 
 from .forms import LeadForm
 from .anthem import deliver_lead_to_anthem
-from .models import BlogPost, FAQ, Page, Service
+from .models import BlogPost, DownloadableAsset, FAQ, Page, Service
 from .postmark import PostmarkDeliveryError, send_contact_lead_notification
 from .recaptcha import get_contact_recaptcha_config, verify_contact_recaptcha
 
 logger = logging.getLogger(__name__)
 
 
+@never_cache
 @require_GET
 def healthz(request):
     return JsonResponse({"status": "ok"})
@@ -23,7 +27,8 @@ def healthz(request):
 
 @require_GET
 def robots_txt(request):
-    lines = ["User-agent: *", "Allow: /", "Sitemap: /sitemap.xml"]
+    sitemap_url = request.build_absolute_uri(reverse("sitemap"))
+    lines = ["User-agent: *", "Allow: /", f"Sitemap: {sitemap_url}"]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
@@ -54,6 +59,23 @@ def faq(request):
         "faq.html",
         {"faqs": FAQ.objects.filter(is_published=True)},
     )
+
+
+@never_cache
+@require_GET
+def download_asset(request, slug):
+    asset = get_object_or_404(DownloadableAsset, slug=slug, is_published=True)
+    if not asset.file:
+        raise Http404("Downloadable file not found.")
+    filename = PurePosixPath(asset.file.name).name or asset.slug
+    try:
+        return FileResponse(
+            asset.file.open("rb"),
+            as_attachment=True,
+            filename=filename,
+        )
+    except FileNotFoundError as exc:
+        raise Http404("Downloadable file not found.") from exc
 
 
 class PageDetailView(DetailView):

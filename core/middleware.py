@@ -27,12 +27,21 @@ class PublicPageCacheMiddleware:
         for private_prefix in (
             "/" + str(getattr(settings, "ADMIN_LOCAL_LOGIN_URL", "")).strip("/") + "/",
             "/accounts/",
+            "/api/",
+            "/integrations/",
+            "/downloads/",
+            "/healthz/",
         ):
             if private_prefix != "//" and (
                 request.path == private_prefix.rstrip("/")
                 or request.path.startswith(private_prefix)
             ):
                 return False
+        if (
+            getattr(request, "headers", {}).get("Authorization")
+            or getattr(request, "META", {}).get("HTTP_AUTHORIZATION")
+        ):
+            return False
         if getattr(request, "user", None) is not None and request.user.is_authenticated:
             return False
         session = getattr(request, "session", None)

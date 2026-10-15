@@ -82,23 +82,23 @@ def _save_rendition(
 ) -> ImageRendition:
     ratio = width / image.width
     height = max(1, round(image.height * ratio))
+    name = _rendition_name(source_name, source_version, width)
+    if default_storage.exists(name):
+        return ImageRendition(default_storage.url(name), width, height)
     resized = image.resize((width, height), Image.Resampling.LANCZOS) if width < image.width else image
     output = io.BytesIO()
     resized.save(output, format="WEBP", quality=82, method=6)
-    name = _rendition_name(source_name, source_version, width)
-    saved_name = (
-        name
-        if default_storage.exists(name)
-        else default_storage.save(name, ContentFile(output.getvalue()))
-    )
+    saved_name = default_storage.save(name, ContentFile(output.getvalue()))
     return ImageRendition(default_storage.url(saved_name), width, height)
 
 
-def responsive_renditions(image, widths=RENDITION_WIDTHS) -> tuple[ImageRendition, ...]:
-    """Return bounded WebP renditions for a Django FileField or uploaded file."""
+def responsive_image_data(
+    image, widths=RENDITION_WIDTHS
+) -> tuple[tuple[ImageRendition, ...], int, int]:
+    """Return bounded WebP renditions and intrinsic dimensions in a single pass."""
     source_name = _source_name(image)
     if not source_name:
-        return ()
+        return (), 0, 0
     source_version = _source_version(image)
     source = _open_image(image)
     terminal_width = min(source.width, MAX_WIDTH)
@@ -112,11 +112,18 @@ def responsive_renditions(image, widths=RENDITION_WIDTHS) -> tuple[ImageRenditio
         width for width in selected_widths if width <= terminal_width
     )
     if not selected_widths:
-        return ()
-    return tuple(
+        return (), source.width, source.height
+    renditions = tuple(
         _save_rendition(source_name, source_version, source, width)
         for width in selected_widths
     )
+    return renditions, source.width, source.height
+
+
+def responsive_renditions(image, widths=RENDITION_WIDTHS) -> tuple[ImageRendition, ...]:
+    """Return bounded WebP renditions for a Django FileField or uploaded file."""
+    renditions, _width, _height = responsive_image_data(image, widths=widths)
+    return renditions
 
 
 def image_dimensions(image) -> tuple[int, int]:

@@ -320,6 +320,18 @@ class AnthemDeliveryTests(TestCase):
             Lead.AnthemDeliveryStatus.CONFIGURATION_ERROR,
         )
         self.assertFalse(integration.webhook_url_configured)
+
+        confirmed_lead = self.make_lead()
+        confirmed_lead.anthem_delivery_status = (
+            Lead.AnthemDeliveryStatus.CONFIRMED
+        )
+        confirmed_lead.save(update_fields=["anthem_delivery_status"])
+        self.assertFalse(deliver_lead_to_anthem(confirmed_lead.pk))
+        confirmed_lead.refresh_from_db()
+        self.assertEqual(
+            confirmed_lead.anthem_delivery_status,
+            Lead.AnthemDeliveryStatus.CONFIRMED,
+        )
         connection_class.assert_not_called()
 
     @patch("core.anthem.http.client.HTTPSConnection")

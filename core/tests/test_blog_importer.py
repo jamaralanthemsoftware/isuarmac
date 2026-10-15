@@ -317,6 +317,22 @@ class BlogImporterTests(TestCase):
         self.assertEqual(run.items.first().blog_post.title, "Imported & useful")
         self.assertTrue(run.finished_at)
 
+    def test_wxr_excerpt_strips_html_tags_and_safe_html_fallback_strips_attributes(self):
+        from core.blog_importer import _safe_html
+
+        wxr_with_html_excerpt = WXR.replace(
+            b"An excerpt.",
+            b"<p>An <strong>important</strong> &amp; clean excerpt.</p>",
+        )
+        run_import(user=self.user, mode="wxr", payload=wxr_with_html_excerpt)
+        post = BlogPost.objects.get(source_guid="post-123")
+        self.assertEqual(post.summary, "An important & clean excerpt.")
+        self.assertEqual(post.meta_description, "An important & clean excerpt.")
+
+        with patch("core.blog_importer.bleach", None):
+            cleaned = _safe_html('<p onclick="alert(1)">Hello</p><img src="x" onerror="alert(1)">')
+        self.assertEqual(cleaned, "<p>Hello</p>")
+
 
 class BlogImporterAdminAccessTests(TestCase):
     def setUp(self):

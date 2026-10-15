@@ -1,5 +1,5 @@
 {% if managed_faq %}
-<section class="managed-faq prose" aria-labelledby="managed-faq-title">
+<section class="managed-faq prose"{% if managed_faq.section_title %} aria-labelledby="managed-faq-title"{% endif %}>
   {% if managed_faq.section_title %}<h2 id="managed-faq-title">{{ managed_faq.section_title }}</h2>{% endif %}
   <div class="faq-list">
     {% for pair in managed_faq.faqs %}

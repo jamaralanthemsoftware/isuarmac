@@ -143,6 +143,8 @@ PASSWORD_HASHERS = [
 ACCOUNT_SIGNUP_FIELDS = ["email*"]
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = f"/{ADMIN_URL}"
+LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_ONLY = True
 SOCIALACCOUNT_ADAPTER = "core.auth.AdminSocialAccountAdapter"
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
@@ -151,6 +153,7 @@ SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
         "AUTH_PARAMS": {"access_type": "online"},
+        "VERIFIED_EMAIL": True,
         "APP": {
             "client_id": os.getenv("GOOGLE_OAUTH_CLIENT_ID", ""),
             "secret": os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", ""),
@@ -164,6 +167,11 @@ AXES_COOLOFF_TIME = timedelta(minutes=30)
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_LOCKOUT_TEMPLATE = "security/locked_out.html"
+AXES_IPWARE_PROXY_COUNT = int(os.getenv("AXES_IPWARE_PROXY_COUNT", "1"))
+AXES_IPWARE_META_PRECEDENCE_ORDER = [
+    "HTTP_X_FORWARDED_FOR",
+    "REMOTE_ADDR",
+]
 
 SESSION_COOKIE_AGE = 60 * 60
 SESSION_SAVE_EVERY_REQUEST = True

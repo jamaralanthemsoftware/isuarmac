@@ -102,6 +102,7 @@ class BlogPostAdmin(BlogImportMixin, admin.ModelAdmin):
     ]
     list_filter = ["is_published", "topics", "created_at"]
     search_fields = ["title", "summary", "body", "source_url", "source_guid"]
+    prepopulated_fields = {"slug": ("title",)}
     filter_horizontal = ["topics"]
     readonly_fields = ["created_at", "updated_at", "word_count"]
     fieldsets = [
@@ -491,8 +492,15 @@ class AnthemCRMIntegrationAdmin(admin.ModelAdmin):
         return False
 
 
+class PublishableModelAdminMixin:
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if obj.word_count_warning:
+            messages.warning(request, obj.word_count_warning)
+
+
 @admin.register(Page)
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(PublishableModelAdminMixin, admin.ModelAdmin):
     list_display = ["title", "slug", "is_published", "show_in_navigation", "updated_at"]
     list_filter = ["is_published", "show_in_navigation"]
     search_fields = ["title", "summary", "body"]
@@ -520,7 +528,7 @@ class PageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
+class ServiceAdmin(PublishableModelAdminMixin, admin.ModelAdmin):
     list_display = ["title", "slug", "is_published", "display_order", "updated_at"]
     list_filter = ["is_published"]
     search_fields = ["title", "summary", "body"]

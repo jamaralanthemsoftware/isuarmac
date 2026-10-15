@@ -6,9 +6,15 @@ from django.urls import include, path
 
 from anthem_seo.admin import status as anthem_seo_status
 from core.admin_auth import admin_sso_login, emergency_admin_login
-from core.sitemaps import BlogPostSitemap, PageSitemap, ServiceSitemap
+from core.sitemaps import (
+    BlogPostSitemap,
+    PageSitemap,
+    ServiceSitemap,
+    StaticViewSitemap,
+)
 
 sitemaps = {
+    "static": StaticViewSitemap,
     "pages": PageSitemap,
     "services": ServiceSitemap,
     "blog": BlogPostSitemap,

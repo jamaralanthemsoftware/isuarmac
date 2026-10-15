@@ -9,7 +9,7 @@ def site_settings(request):
     navigation_pages = Page.objects.filter(
         is_published=True,
         show_in_navigation=True,
-    ).exclude(slug__in={"about", "contact", "faq", "services"})
+    ).exclude(slug__in={"about", *Page.RESERVED_SLUGS})
     return {
         "site_settings": settings_record,
         "navigation_pages": navigation_pages,

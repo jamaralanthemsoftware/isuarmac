@@ -32,6 +32,13 @@ class AdminAuthenticationTests(TestCase):
         self.assertIn(reverse("google_login"), response.url)
         self.assertIn("process=login", response.url)
 
+        unsafe_next = self.client.get(
+            reverse("admin:login"),
+            {"next": "https://attacker.example/phish"},
+        )
+        self.assertEqual(unsafe_next.status_code, 302)
+        self.assertNotIn("attacker.example", unsafe_next.url)
+
     def test_emergency_login_is_separate_from_normal_admin_login(self):
         response = self.client.get(reverse("emergency-admin-login"))
         self.assertEqual(response.status_code, 200)
@@ -55,6 +62,20 @@ class AdminAuthenticationTests(TestCase):
         AdminSocialAccountAdapter().pre_social_login(None, social_login)
 
         social_login.connect.assert_called_once_with(None, self.staff_user)
+
+    @override_settings(ADMIN_GOOGLE_ALLOWED_EMAILS={"approved@example.com"})
+    def test_unverified_google_email_is_denied(self):
+        social_login = SimpleNamespace(
+            user=SimpleNamespace(email="approved@example.com"),
+            account=SimpleNamespace(extra_data={"email_verified": False}),
+            is_existing=False,
+            connect=Mock(),
+        )
+
+        with self.assertRaises(ImmediateHttpResponse):
+            AdminSocialAccountAdapter().pre_social_login(None, social_login)
+
+        social_login.connect.assert_not_called()
 
     @override_settings(ADMIN_GOOGLE_ALLOWED_EMAILS={"approved@example.com"})
     def test_unapproved_google_email_is_denied(self):

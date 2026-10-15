@@ -209,3 +209,17 @@ class PublicBlogTests(TestCase):
             [older_match, newest_fallback, unrelated],
         )
         self.assertNotContains(response, draft_match.title)
+
+    def test_blogpost_enforces_unique_slug_and_sanitizes_body_on_save(self):
+        from django.db import IntegrityError
+
+        post = self.make_post(
+            slug="unique-article",
+            body='<p>Safe</p><script>alert(1)</script><img src="https://example.com/a.jpg" onerror="alert(1)">',
+        )
+        self.assertNotIn("<script>", post.body)
+        self.assertNotIn("onerror", post.body)
+        self.assertIn("<p>Safe</p>", post.body)
+
+        with self.assertRaises(IntegrityError):
+            self.make_post(slug="unique-article")

@@ -329,3 +329,14 @@ class PublicPageCacheIntegrationTests(TestCase):
 
         self.assertIn("no-cache", response["Cache-Control"])
         self.assertIn("no-store", response["Cache-Control"])
+
+    def test_healthz_api_integrations_and_authorized_requests_are_not_cacheable(self):
+        healthz_response = self.client.get(reverse("healthz"))
+        self.assert_not_public(healthz_response)
+        self.assertIn("no-cache", healthz_response["Cache-Control"])
+
+        auth_response = self.client.get(
+            reverse("home"),
+            HTTP_AUTHORIZATION="Bearer test-token",
+        )
+        self.assert_not_public(auth_response)

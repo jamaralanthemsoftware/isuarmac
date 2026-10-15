@@ -29,6 +29,22 @@ class AdminSocialAccountAdapter(DefaultSocialAccountAdapter):
         if not email or email not in settings.ADMIN_GOOGLE_ALLOWED_EMAILS:
             deny_social_login("email is not on the administrator allowlist")
 
+        account = getattr(sociallogin, "account", None)
+        extra_data = getattr(account, "extra_data", None)
+        if isinstance(extra_data, dict) and (
+            extra_data.get("email_verified") is False
+            or extra_data.get("verified_email") is False
+        ):
+            deny_social_login("Google email address is not verified")
+
+        email_addresses = getattr(sociallogin, "email_addresses", None)
+        if email_addresses and not any(
+            (getattr(addr, "email", "") or "").strip().casefold() == email
+            and getattr(addr, "verified", False)
+            for addr in email_addresses
+        ):
+            deny_social_login("Google email address is not verified")
+
         user_model = get_user_model()
         try:
             user = user_model.objects.get(

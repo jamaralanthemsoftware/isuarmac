@@ -190,7 +190,16 @@ def redirect_for_path(path, language="en-us", bundle=None):
 
 def enforce_route(request, language="en-us"):
     if request.path.startswith(
-        ("/admin/", "/api/", "/static/", "/media/", "/accounts/", "/integrations/", "/healthz/")
+        (
+            "/admin/",
+            "/api/",
+            "/static/",
+            "/media/",
+            "/accounts/",
+            "/integrations/",
+            "/downloads/",
+            "/healthz/",
+        )
     ):
         return None
     try:

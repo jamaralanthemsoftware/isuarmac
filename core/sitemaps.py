@@ -1,6 +1,18 @@
 from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 
 from .models import BlogPost, Page, Service
+
+
+class StaticViewSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.8
+
+    def items(self):
+        return ("home", "about", "services", "blog-list", "faq", "contact")
+
+    def location(self, item):
+        return reverse(item)
 
 
 class PublishedContentSitemap(Sitemap):
@@ -13,7 +25,7 @@ class PublishedContentSitemap(Sitemap):
 
 class PageSitemap(PublishedContentSitemap):
     def items(self):
-        return Page.objects.filter(is_published=True)
+        return Page.objects.filter(is_published=True).exclude(slug="about")
 
 
 class ServiceSitemap(PublishedContentSitemap):

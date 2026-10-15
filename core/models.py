@@ -44,6 +44,13 @@ class SiteSettings(TimeStampedModel):
     def clean(self):
         if self.pk is None and SiteSettings.objects.exists():
             raise ValidationError("Only one SiteSettings record is allowed.")
+        if self.analytics_measurement_id and not re.fullmatch(
+            r"^G-[A-Za-z0-9]+$",
+            self.analytics_measurement_id,
+        ):
+            raise ValidationError(
+                {"analytics_measurement_id": "Enter a valid GA4 measurement ID."}
+            )
 
     def __str__(self):
         return self.site_name
@@ -144,7 +151,7 @@ class RecaptchaIntegration(TimeStampedModel):
 
     @property
     def secret_key_configured(self):
-        return bool(self.secret_key_encrypted)
+        return bool(self.get_secret_key())
 
     def set_secret_key(self, secret_key):
         value = secret_key.strip()
@@ -417,9 +424,26 @@ class PublishableModel(TimeStampedModel):
     def resolved_open_graph_description(self):
         return self.open_graph_description or self.seo_description
 
+    RECOMMENDED_MIN_WORDS = 650
+    RECOMMENDED_MAX_WORDS = 900
+
     @property
     def word_count(self):
         return len(strip_tags(self.body).split())
+
+    @property
+    def word_count_warning(self):
+        if self.is_published and not (
+            self.RECOMMENDED_MIN_WORDS
+            <= self.word_count
+            <= self.RECOMMENDED_MAX_WORDS
+        ):
+            return (
+                "Published content pages are recommended to be approximately 750 words "
+                f"({self.RECOMMENDED_MIN_WORDS}–{self.RECOMMENDED_MAX_WORDS}). "
+                f"This page currently has {self.word_count} words."
+            )
+        return ""
 
     def _populate_metadata_defaults(self):
         plain_body = " ".join(strip_tags(self.body).split())
@@ -436,15 +460,6 @@ class PublishableModel(TimeStampedModel):
     def clean(self):
         super().clean()
         self._populate_metadata_defaults()
-        if self.is_published and not 650 <= self.word_count <= 900:
-            raise ValidationError(
-                {
-                    "body": (
-                        "Published content pages should be approximately 750 words. "
-                        f"This page currently has {self.word_count} words; use 650–900."
-                    )
-                }
-            )
 
     def save(self, *args, **kwargs):
         self._populate_metadata_defaults()
@@ -455,11 +470,42 @@ class PublishableModel(TimeStampedModel):
 
 
 class Page(PublishableModel):
+    RESERVED_SLUGS = frozenset(
+        {
+            "accounts",
+            "admin",
+            "api",
+            "blog",
+            "cms",
+            "contact",
+            "downloads",
+            "faq",
+            "healthz",
+            "integrations",
+            "media",
+            "robots.txt",
+            "services",
+            "sitemap.xml",
+            "static",
+        }
+    )
+
     show_in_navigation = models.BooleanField(default=False)
     navigation_order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
         ordering = ["navigation_order", "title"]
+
+    def clean(self):
+        super().clean()
+        if self.slug in self.RESERVED_SLUGS:
+            raise ValidationError(
+                {
+                    "slug": (
+                        f'The slug "{self.slug}" is reserved for a built-in site route.'
+                    )
+                }
+            )
 
     def get_absolute_url(self):
         return reverse("page-detail", kwargs={"slug": self.slug})
@@ -541,6 +587,9 @@ class DownloadableAsset(TimeStampedModel):
     file = models.FileField(upload_to="downloads/%Y/%m/")
     is_published = models.BooleanField(default=False)
 
+    def get_absolute_url(self):
+        return reverse("download-asset", kwargs={"slug": self.slug})
+
     def __str__(self):
         return self.title
 
@@ -561,7 +610,7 @@ class BlogPost(TimeStampedModel):
     """
 
     title = models.CharField(max_length=240)
-    slug = models.SlugField(max_length=240)
+    slug = models.SlugField(max_length=240, unique=True)
     summary = models.CharField(max_length=500, blank=True)
     body = models.TextField(blank=True)
     meta_title = models.CharField(max_length=70, blank=True)
@@ -604,6 +653,18 @@ class BlogPost(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        super().clean()
+        from .blog_importer import _safe_html
+
+        self.body = _safe_html(self.body)
+
+    def save(self, *args, **kwargs):
+        from .blog_importer import _safe_html
+
+        self.body = _safe_html(self.body)
+        return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("blog-detail", kwargs={"slug": self.slug})

@@ -133,7 +133,20 @@ class AnthemSeoTemplateTests(TestCase):
                     "Short Blog Update | Test Site",
                 )
                 self.assertEqual(len(resolved["managed_faq"]["faqs"]), 1)
+                self.assertEqual(
+                    resolved["managed_faq"]["faqs"][0]["answer"],
+                    "Yes, BlogPost has no 650-900 word constraint.",
+                )
                 self.assertIn("FAQPage", resolved["faq_json_ld"])
+                self.assertNotIn("<p>", resolved["faq_json_ld"])
+
+                service_request = self.factory.get(
+                    "/services/short-update/", HTTP_HOST="example.com"
+                )
+                self.assertEqual(
+                    resolve_request_overrides(service_request)["anthem_seo_override"],
+                    {},
+                )
 
     def test_discovery_lists_static_routes_pages_services_and_posts(self):
         Page.objects.create(

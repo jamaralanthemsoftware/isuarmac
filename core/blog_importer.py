@@ -23,6 +23,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 from PIL import Image, UnidentifiedImageError
 
@@ -56,12 +57,13 @@ ALLOWED_IMAGE_TYPES = {
     "image/webp": ".webp",
 }
 ALLOWED_HTML_TAGS = {
-    "a", "abbr", "blockquote", "br", "code", "em", "h2", "h3", "h4",
-    "hr", "i", "img", "li", "ol", "p", "pre", "strong", "ul",
+    "a", "abbr", "blockquote", "br", "code", "em", "figcaption", "figure",
+    "h2", "h3", "h4", "hr", "i", "img", "li", "ol", "p", "pre", "strong", "ul",
 }
 ALLOWED_HTML_ATTRS = {
     "a": {"href", "title", "rel"},
-    "img": {"src", "alt", "title", "width", "height"},
+    "figure": {"class"},
+    "img": {"src", "alt", "title", "width", "height", "loading"},
 }
 
 
@@ -123,12 +125,15 @@ def _safe_html(value):
             protocols=["http", "https", "mailto"],
             strip=True,
         )
-    # The dependency is required in production; this conservative fallback keeps
-    # an accidental incomplete environment from persisting executable markup.
-    value = re.sub(r"(?is)<(script|style|iframe|object|embed|form)\b.*?</\1\s*>", "", value)
-    return re.sub(r"(?is)<[^>]+>", lambda match: match.group(0)
-                  if re.match(r"(?is)^</?(?:p|br|h[2-4]|ul|ol|li|strong|em|a|img)\b", match.group(0))
-                  else "", value)
+    # The dependency is required in production; this conservative fallback strips
+    # all attributes and non-allowlisted tags so executable markup cannot persist.
+    return re.sub(
+        r"(?is)<(/?)([a-z0-9]+)\b[^>]*>",
+        lambda match: f"<{match.group(1)}{match.group(2).lower()}>"
+        if match.group(2).lower() in (ALLOWED_HTML_TAGS - {"a", "img"})
+        else "",
+        value,
+    )
 
 
 def _public_ips(hostname):
@@ -486,12 +491,15 @@ def parse_wxr(payload):
         encoded = [c for c in item if _local_name(c.tag) == "encoded"]
         if len(encoded) > 1:
             body, excerpt = _text(encoded[0]), _text(encoded[1])
+        plain_excerpt = " ".join(
+            strip_tags(html.unescape(_safe_html(excerpt))).split()
+        )
         items.append({
             "title": value("title")[:240],
             "slug": slugify(value("post_name"))[:240],
             "body": _safe_html(body),
-            "summary": _safe_html(excerpt)[:500],
-            "meta_description": _safe_html(excerpt)[:300],
+            "summary": plain_excerpt[:500],
+            "meta_description": plain_excerpt[:300],
             "source_url": source_url,
             "canonical_url": source_url,
             "source_guid": guid,

@@ -45,7 +45,7 @@ ROBOTS_DIRECTIVES = frozenset({
 })
 RESERVED_PATHS = frozenset({
     "admin", "cms", "static", "media", "api", "accounts", "integrations",
-    "healthz", "robots.txt", "sitemap.xml",
+    "downloads", "healthz", "robots.txt", "sitemap.xml",
 })
 CAPABILITY_KEYS = frozenset(set(SEO_FIELDS) | {"faq", "media", "routing"})
 
@@ -269,11 +269,9 @@ def validate_post(document, *, expected_item=None, expected_language=None, expec
     body_html = _string(post["body_html"], "post.body_html")
     if len(body_html) > 200000:
         raise BundleError("post.body_html exceeds maximum length")
-    post["body_html"] = re.sub(
-        r"(?is)<(script|style|iframe|object|embed|form)\b[^>]*>.*?</\1\s*>",
-        "",
-        body_html,
-    )
+    from core.blog_importer import _safe_html
+
+    post["body_html"] = _safe_html(body_html)
     if "summary" in post:
         summary = _string(post["summary"], "post.summary", allow_blank=True)
         if len(summary) > 500:

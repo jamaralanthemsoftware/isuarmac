@@ -1,6 +1,7 @@
 import http.client
 import json
 import socket
+import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeoutError
 from urllib.parse import urlsplit
@@ -113,15 +114,24 @@ def _payload_for_lead(lead):
     return encoded
 
 
+def _remaining_timeout(deadline):
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise TimeoutError
+    return min(READ_TIMEOUT_SECONDS, remaining)
+
+
 def _perform_webhook_request(destination, payload):
+    deadline = time.monotonic() + TOTAL_TIMEOUT_SECONDS
     connection = http.client.HTTPSConnection(
         destination.hostname,
         destination.port or 443,
-        timeout=CONNECT_TIMEOUT_SECONDS,
+        timeout=min(CONNECT_TIMEOUT_SECONDS, _remaining_timeout(deadline)),
     )
     try:
         connection.connect()
-        connection.sock.settimeout(READ_TIMEOUT_SECONDS)
+        if connection.sock is not None:
+            connection.sock.settimeout(_remaining_timeout(deadline))
         connection.request(
             "POST",
             destination.path,
@@ -131,7 +141,11 @@ def _perform_webhook_request(destination, payload):
                 "Accept": "application/json",
             },
         )
+        if connection.sock is not None:
+            connection.sock.settimeout(_remaining_timeout(deadline))
         response = connection.getresponse()
+        if connection.sock is not None:
+            connection.sock.settimeout(_remaining_timeout(deadline))
         response_body = response.read(MAX_RESPONSE_BYTES + 1)
         if len(response_body) > MAX_RESPONSE_BYTES:
             raise ValueError("Anthem returned an oversized response.")
@@ -144,10 +158,15 @@ def deliver_lead_to_anthem(lead_id):
     try:
         destination = _validated_destination()
     except AnthemConfigurationError as error:
-        _record_result(
-            lead_id,
-            status=Lead.AnthemDeliveryStatus.CONFIGURATION_ERROR,
-            error_summary=str(error),
+        Lead.objects.filter(
+            pk=lead_id,
+            anthem_delivery_status=Lead.AnthemDeliveryStatus.NOT_SENT,
+        ).update(
+            anthem_delivery_status=Lead.AnthemDeliveryStatus.CONFIGURATION_ERROR,
+            anthem_http_status=None,
+            anthem_error_summary=str(error)[:240],
+            anthem_record_identifier="",
+            updated_at=timezone.now(),
         )
         return False
     if destination is None:

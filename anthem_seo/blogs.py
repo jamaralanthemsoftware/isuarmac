@@ -76,7 +76,7 @@ def sync_anthem_blogs(bundle=None):
             blog_post = BlogPost.objects.filter(source_guid=guid).first()
             if blog_post is None:
                 blog_post = (
-                    BlogPost.objects.filter(slug=slug, source_guid="")
+                    BlogPost.objects.filter(slug=slug)
                     .order_by("id")
                     .first()
                 )

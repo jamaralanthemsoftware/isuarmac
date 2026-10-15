@@ -4,7 +4,7 @@ from django import template
 from django.conf import settings
 from django.utils.html import conditional_escape, format_html
 
-from core.image_pipeline import image_dimensions, responsive_renditions
+from core.image_pipeline import responsive_image_data
 
 register = template.Library()
 
@@ -15,8 +15,7 @@ def responsive_image(image, alt="", lcp=False, sizes="100vw", class_name=""):
     if not image:
         return {"image": None}
     try:
-        renditions = responsive_renditions(image)
-        width, height = image_dimensions(image)
+        renditions, width, height = responsive_image_data(image)
     except (OSError, ValueError, TypeError):
         return {"image": None}
     if not renditions:

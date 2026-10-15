@@ -157,6 +157,10 @@ class RecaptchaIntegrationTests(TestCase):
 
         self.assertNotIn("google-secret-value", integration.secret_key_encrypted)
         self.assertEqual(integration.get_secret_key(), "google-secret-value")
+        self.assertTrue(integration.secret_key_configured)
+
+        integration.secret_key_encrypted = "invalid-ciphertext"
+        self.assertFalse(integration.secret_key_configured)
 
     def test_database_rejects_threshold_outside_zero_and_one(self):
         with self.assertRaises(IntegrityError), transaction.atomic():

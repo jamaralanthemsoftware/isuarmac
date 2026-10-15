@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import html
 import json
 import re
 
@@ -30,7 +31,7 @@ def _safe_json(value):
 
 
 def _plain(value):
-    return re.sub(r"\s+", " ", strip_tags(value or "")).strip()
+    return re.sub(r"\s+", " ", strip_tags(html.unescape(value or ""))).strip()
 
 
 def _raw_for(page, language="en-us"):
@@ -203,8 +204,11 @@ def managed_faq_json(faq, canonical_url):
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": pair["question"],
-                "acceptedAnswer": {"@type": "Answer", "text": pair["answer"]},
+                "name": _plain(pair["question"]),
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": _plain(pair["answer"]),
+                },
             }
             for pair in faq["faqs"]
         ],
@@ -253,9 +257,13 @@ def resolve_request_overrides(request, language="en-us") -> dict:
         }
 
     path = getattr(request, "path", "/") or "/"
+    normalized_path = "/" if path == "/" else "/" + path.strip("/") + "/"
     reverse_id = getattr(request, "anthem_seo_reverse_id", None)
     candidates = [reverse_id] if reverse_id else _reverse_id_candidates_for_path(path)
     leaf = path.strip("/").split("/")[-1] if path.strip("/") else ""
+    is_blog_detail_path = (
+        normalized_path.startswith("/blog/") and normalized_path != "/blog/"
+    )
 
     posts = bundle.get("posts") or {}
     matched_doc = None
@@ -272,7 +280,7 @@ def resolve_request_overrides(request, language="en-us") -> dict:
         if (
             b_rev in candidates
             or (doc_slug and doc_slug == leaf)
-            or (post_slug and post_slug == leaf)
+            or (is_blog_detail_path and post_slug and post_slug == leaf)
         ):
             matched_doc = doc
             break
@@ -334,7 +342,17 @@ def resolve_request_overrides(request, language="en-us") -> dict:
     managed_faq = None
     faq_json_ld = None
     if "faq" in matched_doc and matched_doc["faq"].get("faqs"):
-        managed_faq = matched_doc["faq"]
+        raw_faq = matched_doc["faq"]
+        managed_faq = {
+            "section_title": _plain(raw_faq.get("section_title", "")),
+            "faqs": [
+                {
+                    "question": _plain(pair["question"]),
+                    "answer": _plain(pair["answer"]),
+                }
+                for pair in raw_faq["faqs"]
+            ],
+        }
         faq_json_ld = managed_faq_json(managed_faq, canonical)
 
     return {
