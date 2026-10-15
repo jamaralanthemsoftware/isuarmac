@@ -154,3 +154,18 @@ For every added provider:
 - [ ] Enable Brotli/gzip and review Cloudflare email obfuscation and HSTS before launch.
 - [ ] Record PageSpeed/Lighthouse mobile and desktop before/after values, including LCP,
       CLS, INP, transfer size, fonts, and third-party requests.
+
+## 11. Anthem SEO & Automated Blogging (GitOps Connection)
+
+- [ ] Update `"site_id"` in `django_site/seo/manifest.json` to a unique slug for this client
+      (e.g., `"coastal-florida-plumbing"`), then commit and push to `main`.
+- [ ] In Anthem (**Website SEO → Settings → Django CMS**), click **Generate & copy token**
+      under **Discovery password**.
+- [ ] In **DigitalOcean → Apps → [Client App] → Settings**, open the web service component's
+      **Environment Variables** (or App-Level Environment Variables) and click **Edit**.
+- [ ] Add key `ANTHEM_SEO_DISCOVERY_TOKEN`, paste the generated token as the value, check
+      **Encrypt**, and click **Save** to redeploy.
+- [ ] In Anthem, authorize GitHub OAuth, select the client's repository and `main` branch,
+      click **Save connection**, and once the DigitalOcean deployment is `ACTIVE`, click
+      **Test & use connection**.
+
