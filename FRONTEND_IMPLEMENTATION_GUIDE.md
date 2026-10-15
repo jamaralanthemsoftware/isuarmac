@@ -121,8 +121,8 @@ title, and Open Graph description from their title, summary, and body when an ed
 those fields blank. Editors should review and refine the generated text before publishing.
 Each record can also receive its own Open Graph image; otherwise the site-wide image is used.
 
-Published Page and Service bodies are validated at 650–900 words, targeting approximately
-750 words of useful, original content. Do not add filler merely to satisfy the word count.
+Published Page and Service bodies have a recommended length of 650–900 words (targeting
+approximately 750 words of useful, original content) and show a non-blocking admin warning outside that range. Do not add filler merely to satisfy the word count.
 
 ## 8. Images, fonts, and uploaded media
 
