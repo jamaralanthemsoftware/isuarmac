@@ -30,16 +30,16 @@ class AnthemSeoTemplateTests(TestCase):
         self.assertEqual(bundle["manifest"]["contract_version"], 1)
 
         with override_settings(ANTHEM_SEO_DISCOVERY_TOKEN="secret-token"):
-            unauth = self.client.get("/_anthem/seo/v1/status/")
+            unauth = self.client.get("/api/seo/capabilities/")
             self.assertEqual(unauth.status_code, 401)
 
             auth = self.client.get(
-                "/_anthem/seo/v1/status/",
+                "/api/seo/capabilities/",
                 HTTP_AUTHORIZATION="Bearer secret-token",
             )
             self.assertEqual(auth.status_code, 200)
             payload = auth.json()
-            self.assertEqual(payload["status"], "ok")
+            self.assertEqual(payload["cms"], "django-cms")
             self.assertEqual(payload["contract_version"], 1)
 
     def test_sync_anthem_blogs_upserts_blogpost_without_650_word_constraint(self):
@@ -150,15 +150,15 @@ class AnthemSeoTemplateTests(TestCase):
         )
         with override_settings(ANTHEM_SEO_DISCOVERY_TOKEN="secret-token"):
             resp = self.client.get(
-                "/_anthem/seo/v1/pages/",
+                "/api/seo/pages/",
                 HTTP_AUTHORIZATION="Bearer secret-token",
             )
             self.assertEqual(resp.status_code, 200)
-            items = resp.json()["items"]
+            items = resp.json()["results"]
             item_ids = {item["item_id"] for item in items}
             self.assertIn("page-home", item_ids)
-            self.assertIn("page-emergency-plumbing", item_ids)
-            self.assertIn("svc-drain-cleaning", item_ids)
+            self.assertIn("cms:page-emergency-plumbing", item_ids)
+            self.assertIn("cms:svc-drain-cleaning", item_ids)
 
     def test_unoverridden_route_uses_zero_db_queries(self):
         request = self.factory.get("/blog/some-article/", HTTP_HOST="example.com")
