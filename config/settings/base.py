@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "axes",
+    "anthem_seo",
     "core",
 ]
 
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "anthem_seo.middleware.AnthemSeoRoutingMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "allauth.account.middleware.AccountMiddleware",
@@ -171,9 +173,16 @@ TIME_ZONE = os.getenv("TIME_ZONE", "America/New_York")
 USE_I18N = True
 USE_TZ = True
 
+PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", SITE_URL).rstrip("/")
+ANTHEM_SEO_ROOT = BASE_DIR / "django_site" / "seo"
+
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [
+    path
+    for path in (BASE_DIR / "static", BASE_DIR / "django_site" / "static")
+    if path.exists()
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

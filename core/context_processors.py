@@ -1,5 +1,6 @@
 from django.conf import settings
 
+from anthem_seo.resolver import resolve_request_overrides
 from .models import Page, SiteSettings
 
 
@@ -13,4 +14,5 @@ def site_settings(request):
         "site_settings": settings_record,
         "navigation_pages": navigation_pages,
         "analytics_consent_required": settings.ANALYTICS_CONSENT_REQUIRED,
+        **resolve_request_overrides(request),
     }
