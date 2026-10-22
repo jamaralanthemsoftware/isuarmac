@@ -194,6 +194,7 @@ class Command(BaseCommand):
         ph = placeholders["content"]
         url = path_of(wp["link"])
         fix = lambda t: apply_fixes(t, url=url)
+        designed_pages.industry_hero(placeholders["hero"], url, title)
         blocks = page_blocks(wp["content"]["rendered"], clean_title(wp["title"]["rendered"]), self.images)
         if not blocks:
             self.report["notes"].append(f"{path_of(wp['link'])}: no content found on WordPress page")

@@ -121,12 +121,12 @@ def build_home(phs, wp=None, ctx=None):
 
     s = section(ph, background="navy", eyebrow="Specialty programs", heading="Deep expertise where the stakes are highest")
     g = grid(ph, s, 2, "program")
-    card(ph, g, "Contractors & Construction", badge="CA · NV · AZ", image_url=PHOTO + "contractor-crew.jpg",
-         image_alt="Contractor wearing a tool belt on a job site",
+    card(ph, g, "Contractors & Construction", badge="CA · NV · AZ", image_url=PHOTO + "contractor-crew-framing.jpg",
+         image_alt="A construction crew in hard hats framing a new home in the High Desert",
          text="General liability, workers' comp, bonds and crew benefits from one team. Free workers' comp and experience-mod review.",
          link_text="Explore contractor insurance", link_url=f"{CI}/contractor-insurance/")
-    card(ph, g, "Independent Hospitals", badge="Nationwide", image_url=PHOTO + "hospital-care.jpg",
-         image_alt="Clinician listening to a patient's heart with a stethoscope",
+    card(ph, g, "Independent Hospitals", badge="Nationwide", image_url=PHOTO + "hospital-exterior.jpg",
+         image_alt="A community hospital emergency entrance with an ambulance at sunset",
          text="Property, casualty and employee benefits together, including management of your self-insured plan with our TPA partner.",
          link_text="Explore hospital programs", link_url=f"{CI}/hospital-insurance/")
 
@@ -145,7 +145,7 @@ def build_home(phs, wp=None, ctx=None):
         card(ph, g, title, text=sub, link_url=url)
 
     s = section(ph)
-    sp = add_plugin(ph, "SplitPlugin", L, target=s, image_url=PHOTO + "agent-meeting.jpg", image_alt="An agent reviewing a policy with a client",
+    sp = add_plugin(ph, "SplitPlugin", L, target=s, image_url=PHOTO + "agent-consultation.jpg", image_alt="An ISU-ARMAC agent reviewing a policy with two clients",
                     eyebrow="Why ISU-ARMAC", heading="An independent agency that works for you",
                     text="We don't work for an insurance company. We work for you, shopping the market at every renewal and standing beside you when you file a claim.",
                     button_text="About our agency", button_url="/about-us/")
@@ -176,8 +176,8 @@ def build_contractor(phs, wp=None, ctx=None):
     page_hero(ph, "Contractor Insurance for California, Nevada and Arizona",
               sub="General liability, workers' comp, bonds and crew benefits from one agency that shops 300+ carriers for you.",
               badge="CALIFORNIA · NEVADA · ARIZONA", primary=("Get My Free Workers' Comp Review", "#quote"),
-              secondary=("Call (760) 241-7900", "tel:+17602417900"), image=PHOTO + "electrician.jpg",
-              alt="Electrician in a hard hat and safety vest beside an electrical panel",
+              secondary=("Call (760) 241-7900", "tel:+17602417900"), image=PHOTO + "contractor-roofer.jpg",
+              alt="A roofing contractor holding a hard hat and tablet beside his work truck",
               checks="60+ years in business\n300+ carriers\nInsurance, bonds and benefits")
     ph = phs["content"]
     s = section(ph, compact=True)
@@ -243,12 +243,22 @@ def build_hospital(phs, wp=None, ctx=None):
     page_hero(phs["hero"], "Insurance and Employee Benefits for Independent Hospitals",
               sub="Property, casualty and employee benefits from one team, including management of your self-insured health plan with our TPA partner.",
               badge="INDEPENDENT HOSPITALS · NATIONWIDE", primary=("Talk to Our Healthcare Team", "#quote"),
-              secondary=("Call (760) 241-7900", "tel:+17602417900"), image=PHOTO + "hospital-care.jpg",
-              alt="Clinician listening to a patient's heart with a stethoscope",
+              secondary=("Call (760) 241-7900", "tel:+17602417900"), image=PHOTO + "hospital-leaders-corridor.jpg",
+              alt="A hospital executive and a nurse leader walking down a hospital corridor",
               checks="Trusted by multiple independent hospital groups\nP&C and employee benefits\nLicensed nationwide")
     ph = phs["content"]
-    s = section(ph, eyebrow="Why ISU-ARMAC", heading="Independent hospitals deserve an independent partner",
-                intro="Independent hospitals carry the same risks as large health systems, without a system's buying power or a corporate risk department. One ISU-ARMAC team reviews your property and casualty program and your employee benefits together, so you see your full cost of risk in one place.")
+    s = section(ph)
+    sp = add_plugin(ph, "SplitPlugin", L, target=s, image_url=PHOTO + "hospital-nursing-station.jpg",
+                    image_alt="Nurses and a physician at a hospital nursing station",
+                    eyebrow="Why ISU-ARMAC", heading="Independent hospitals deserve an independent partner",
+                    text="Independent hospitals carry the same risks as large health systems, without a system's buying power or a corporate risk department. One ISU-ARMAC team reviews your property and casualty program and your employee benefits together, so you see your full cost of risk in one place.")
+    for title, body in [
+        ("Hospital experience", "We work with multiple independent hospital groups."),
+        ("Both lines, one team", "Property and casualty and employee benefits, reviewed together."),
+        ("Self-insured plans", "We manage self-insured plans alongside our TPA partner."),
+        ("Licensed nationwide", "Our team comes to you, wherever your hospital is."),
+    ]:
+        card(ph, sp, title, text=body)
     s = section(ph, background="pale", eyebrow="Property and casualty", heading="A risk program built for how hospitals operate",
                 intro="Hospital liability remains one of the hardest insurance markets, while commercial property rates have been falling. We make sure you benefit from the soft markets and get the right structure in the hard ones.")
     g = grid(ph, s, 3, "plain")
@@ -264,9 +274,11 @@ def build_hospital(phs, wp=None, ctx=None):
         ("Crime and fiduciary", "Employee theft, fraud and benefit plan fiduciary exposure."),
     ]:
         card(ph, g, title, text=body)
-    s = section(ph, eyebrow="Employee benefits", heading="Benefits that keep your nurses and control your costs",
-                intro="Your people are your largest expense and your hardest resource to replace. We design benefits that help you recruit and retain clinical staff while keeping plan costs predictable.")
-    g = grid(ph, s, 3, "soft")
+    s = section(ph)
+    g = add_plugin(ph, "SplitPlugin", L, target=s, image_url=PHOTO + "hospital-bedside.jpg",
+                   image_alt="A nurse adjusting an IV pump for a smiling patient while a physician reviews a chart",
+                   eyebrow="Employee benefits", heading="Benefits that keep your nurses and control your costs",
+                   text="Your people are your largest expense and your hardest resource to replace. We design benefits that help you recruit and retain clinical staff while keeping plan costs predictable.")
     for title, body in [
         ("Medical, dental, vision and life", "Group plans built around a clinical workforce."),
         ("Self-funded and level-funded plans", "Plan design that keeps more of your claims dollars working for you."),
@@ -308,9 +320,9 @@ def build_hospital(phs, wp=None, ctx=None):
 
 # Hubs and listing pages --------------------------------------------------------
 
-def hub_builder(heading, sub, prefix, intro_heading, extra_links=()):
+def hub_builder(heading, sub, prefix, intro_heading, extra_links=(), image="", alt=""):
     def build(phs, wp=None, ctx=None):
-        page_hero(phs["hero"], heading, sub=sub)
+        page_hero(phs["hero"], heading, sub=sub, image=PHOTO + image if image else "", alt=alt)
         ph = phs["content"]
         s = section(ph, heading=intro_heading)
         g = grid(ph, s, 4, "tile")
@@ -335,7 +347,8 @@ INDUSTRY_SLUGS = [
 
 def build_industries(phs, wp=None, ctx=None):
     page_hero(phs["hero"], "Industries we insure",
-              sub="Specialized coverage for more than 20 industries, from contractors and hospitals to restaurants, farms and nonprofits.")
+              sub="Specialized coverage for more than 20 industries, from contractors and hospitals to restaurants, farms and nonprofits.",
+              image=PHOTO + "industries-main-street.jpg", alt="A busy High Desert main street with restaurants, a medical office and a contractor's truck")
     ph = phs["content"]
     s = section(ph, heading="Find your industry")
     g = grid(ph, s, 4, "tile")
@@ -446,14 +459,14 @@ SPECS = {
                      "seo_title": "Industries We Insure | ISU-ARMAC Insurance Services",
                      "seo_description": "Specialized business insurance for contractors, hospitals, medical and dental offices, restaurants, manufacturers, farms, nonprofits and more."},
     f"{PL}/": {"title": "Personal Insurance", "template": "landing.html",
-               "build": hub_builder("Personal insurance", "Home, auto and everything in between, compared across 300+ carriers.", f"{PL}/", "Personal coverage")},
+               "build": hub_builder("Personal insurance", "Home, auto and everything in between, compared across 300+ carriers.", f"{PL}/", "Personal coverage", image="personal-family-home.jpg", alt="A family carrying groceries from their car to their desert home")},
     f"{PC}/": {"title": "Private Client Insurance", "template": "landing.html",
-               "build": hub_builder("Private client insurance", "Tailored protection for significant homes, collections and assets.", f"{PC}/", "Private client coverage")},
+               "build": hub_builder("Private client insurance", "Tailored protection for significant homes, collections and assets.", f"{PC}/", "Private client coverage", image="private-client-desert-home.jpg", alt="A modern desert home with a pool at dusk")},
     f"{CI}/": {"title": "Business Insurance", "template": "landing.html",
-               "build": hub_builder("Business insurance", "Liability, property, workers' comp and specialty coverage for every industry.", f"{CI}/", "Business coverage",
+               "build": hub_builder("Business insurance", "Liability, property, workers' comp and specialty coverage for every industry.", f"{CI}/", "Business coverage", image="business-bakery-owner.jpg", alt="A bakery owner hanging a sign in her shop window",
                                     extra_links=[("Hospitals", f"{CI}/hospital-insurance/")])},
     f"{IC}/employee-benefits/": {"title": "Employee Benefits", "template": "landing.html",
-                                 "build": hub_builder("Employee benefits", "Group plans that help you hire, keep and care for your team.", f"{IC}/employee-benefits/", "Benefits we offer",
+                                 "build": hub_builder("Employee benefits", "Group plans that help you hire, keep and care for your team.", f"{IC}/employee-benefits/", "Benefits we offer", image="benefits-team-meeting.jpg", alt="A team meeting in a bright office with mountain views",
                                                       extra_links=[("Group Medical", f"{IC}/group-medical/"), ("Group Dental", f"{IC}/group-dental/"),
                                                                    ("Group Vision", f"{IC}/group-vision-template/"), ("Group Life", f"{IC}/group-life/"),
                                                                    ("Life & AD&D", f"{IC}/life-accidental-death-dismemberment-insurance/"),
@@ -475,6 +488,29 @@ SPECS = {
     "/contact/": {"title": "Contact", "template": "landing.html", "build": build_contact},
     "/thank-you/": {"title": "Thank You", "template": "landing.html", "build": build_thank_you},
 }
+# Photos for industry pages converted from WordPress: shown in a page hero with the page title.
+INDUSTRY_PHOTOS = {
+    f"{CI}/medical-office-insurance/": ("industry-medical-office.jpg", "A receptionist and physician greeting a patient at a medical office front desk"),
+    f"{CI}/dental-office-insurance/": ("industry-dental.jpg", "A dentist explaining an X-ray to a patient"),
+    f"{CI}/restaurant-insurance/": ("industry-restaurant.jpg", "A chef plating a dish in a busy restaurant kitchen"),
+    f"{CI}/manufacturer-insurance/": ("industry-manufacturer.jpg", "A machinist in safety glasses operating a CNC machine"),
+    f"{CI}/property-manager-insurance/": ("industry-property-manager.jpg", "A property manager showing a tenant a renovated home"),
+    f"{CI}/farm-insurance/": ("industry-farm.jpg", "A farmer checking irrigation lines in a field at sunrise"),
+    f"{CI}/vacant-land-insurance/": ("industry-vacant-land.jpg", "Open desert land with a wire fence and mountains at sunset"),
+    f"{CI}/non-profit-insurance/": ("industry-nonprofit.jpg", "Volunteers sorting donations at a community center"),
+}
+
+
+def industry_hero(placeholder, path, title):
+    """Page hero with photo for a converted industry page; returns False when the page has no photo."""
+    if path not in INDUSTRY_PHOTOS:
+        return False
+    image, alt = INDUSTRY_PHOTOS[path]
+    page_hero(placeholder, title, sub="Coverage compared across 300+ carriers by a local, independent agency.",
+              secondary=("Call (760) 241-7900", "tel:+17602417900"), image=PHOTO + image, alt=alt)
+    return True
+
+
 NEW_PAGES = [f"{CI}/hospital-insurance/", "/industries/"]
 
 
