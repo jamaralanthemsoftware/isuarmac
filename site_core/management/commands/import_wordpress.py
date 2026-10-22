@@ -140,7 +140,11 @@ class Command(BaseCommand):
 
     def import_team(self):
         for order, (name, title, photo, featured) in enumerate(TEAM):
-            TeamMember.objects.create(name=name, title=title, photo_url=f"/media/uploads/{photo}", order=order, featured=featured)
+            # Pre-sized square headshots (static/img/team/) look sharper than the large WordPress originals.
+            slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+            square = Path(settings.BASE_DIR) / "static" / "img" / "team" / f"{slug}.jpg"
+            photo_url = f"/static/img/team/{slug}.jpg" if square.exists() else f"/media/uploads/{photo}"
+            TeamMember.objects.create(name=name, title=title, photo_url=photo_url, order=order, featured=featured)
             self.images.add(f"https://isu-armac.com/wp-content/uploads/{photo}")
         if not TEAM[-1][1]:
             self.report["notes"].append("Rebecca Scharnberg has no job title on the current Our Team page.")

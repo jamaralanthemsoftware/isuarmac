@@ -256,7 +256,7 @@ p { margin: 0 0 1em; }
 .team-grid.all { }
 @media (min-width: 1000px) { .team-grid.all { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .member { text-align: center; }
-.member img, .member .initials { width: 100%; aspect-ratio: 1; border-radius: 50%; object-fit: cover; object-position: center 20%; display: block; margin: 0 auto 12px; border: 4px solid #fff; max-width: 180px; }
+.member img, .member .initials { width: 100%; aspect-ratio: 1; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 12px; border: 4px solid #fff; max-width: 180px; }
 .member .initials { background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font: 700 32px var(--serif); }
 .member strong { display: block; color: var(--navy); line-height: 1.3; }
 .member span { color: var(--muted); font-size: 14px; }
