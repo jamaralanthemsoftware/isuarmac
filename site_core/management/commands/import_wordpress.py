@@ -19,7 +19,7 @@ from django.db import transaction
 from django.utils.timezone import make_aware
 
 from site_core import designed_pages
-from site_core.content_fixes import apply_fixes
+from site_core.content_fixes import apply_fixes, unapplied_page_fixes
 from site_core.models import BlogCategory, BlogPost, TeamMember
 from site_core.wp_clean import clean_fragment, clean_title, page_blocks, plain_text, site_path
 
@@ -76,6 +76,26 @@ TEAM = [  # (name, title, photo upload path) in the order shown on the Our Team 
 DROP_HEADINGS = re.compile(r"(get started below|ready to get a quote|request a quote below)", re.I)
 
 
+def drop_repeated_paragraphs(blocks):
+    """Some WordPress pages repeat whole sections; keep only the first copy of any long paragraph."""
+    from bs4 import BeautifulSoup
+    seen, out = set(), []
+    for kind, value in blocks:
+        if kind == "html":
+            soup = BeautifulSoup(value, "lxml")
+            for el in soup.find_all(["p", "li", "h2", "h3"]):
+                key = " ".join(el.get_text(" ").split())
+                if len(key) > 60:
+                    if key in seen:
+                        el.decompose()
+                    else:
+                        seen.add(key)
+            body = soup.body or soup
+            value = "".join(str(c) for c in body.contents)
+        out.append((kind, value))
+    return out
+
+
 def path_of(link):
     return site_path(link)
 
@@ -101,10 +121,12 @@ class Command(BaseCommand):
             self.import_pages(wp_pages)
             self.import_posts(posts, categories, media)
             self.import_redirects()
+        self.report["unapplied_page_fixes"] = unapplied_page_fixes()
         (CACHE / "images.json").write_text(json.dumps(sorted(self.images)))
         (CACHE / "import_report.json").write_text(json.dumps(self.report, indent=1))
         self.stdout.write(f"pages {len(self.report['pages'])}, posts {self.report['posts']}, "
-                          f"redirects {self.report['redirects']}, images to download {len(self.images)}")
+                          f"redirects {self.report['redirects']}, images to download {len(self.images)}, "
+                          f"page fixes not matched {len(self.report['unapplied_page_fixes'])}")
 
     # ------------------------------------------------------------------
     def reset(self):
@@ -126,7 +148,7 @@ class Command(BaseCommand):
     # ------------------------------------------------------------------
     def seo_for(self, link):
         data = self.seo.get(link, {})
-        return apply_fixes(data.get("title", "")), apply_fixes(data.get("description", ""))
+        return apply_fixes(data.get("title", ""), brand=False), apply_fixes(data.get("description", ""))
 
     def import_pages(self, wp_pages):
         by_path = {path_of(p["link"]): p for p in wp_pages}
@@ -170,27 +192,30 @@ class Command(BaseCommand):
 
     def build_from_wordpress(self, placeholders, wp, title):
         ph = placeholders["content"]
+        url = path_of(wp["link"])
+        fix = lambda t: apply_fixes(t, url=url)
         blocks = page_blocks(wp["content"]["rendered"], clean_title(wp["title"]["rendered"]), self.images)
         if not blocks:
             self.report["notes"].append(f"{path_of(wp['link'])}: no content found on WordPress page")
+        blocks = drop_repeated_paragraphs(blocks)
         for kind, value in blocks:
             if kind == "html":
                 value = re.sub(r"<h[23]>[^<]*</h[23]>", lambda m: "" if DROP_HEADINGS.search(m.group(0)) else m.group(0), value)
                 if plain_text(value):
-                    add_plugin(ph, "TextPlugin", LANG, body=apply_fixes(value))
+                    add_plugin(ph, "TextPlugin", LANG, body=fix(value))
             elif kind == "faq":
                 faq = add_plugin(ph, "FAQPlugin", LANG)
                 for i, (q, a) in enumerate(value):
-                    add_plugin(ph, "FAQItemPlugin", LANG, target=faq, question=apply_fixes(q)[:255],
-                               answer=apply_fixes(plain_text(a)), open=(i == 0))
+                    add_plugin(ph, "FAQItemPlugin", LANG, target=faq, question=fix(q)[:255],
+                               answer=fix(plain_text(a)), open=(i == 0))
             elif kind == "cards":
                 grid = add_plugin(ph, "CardGridPlugin", LANG, columns=2 if len(value) % 2 == 0 else 3, style="plain")
                 for card_title, text, img in value:
-                    add_plugin(ph, "CardPlugin", LANG, target=grid, title=apply_fixes(card_title or "")[:255] or "—",
-                               text=apply_fixes(text), image_url=img)
+                    add_plugin(ph, "CardPlugin", LANG, target=grid, title=fix(card_title or "")[:255] or "—",
+                               text=fix(text), image_url=img)
             elif kind == "testimonials":
                 for quote, who in value:
-                    add_plugin(ph, "TestimonialPlugin", LANG, quote=apply_fixes(quote), attribution=who)
+                    add_plugin(ph, "TestimonialPlugin", LANG, quote=fix(quote), attribution=who)
 
     # ------------------------------------------------------------------
     def import_posts(self, posts, categories, media):

@@ -9,7 +9,7 @@ SITE_HOSTS = {"isu-armac.com", "www.isu-armac.com"}
 UPLOADS = "/wp-content/uploads/"
 
 ALLOWED = {
-    "p": [], "h2": [], "h3": [], "h4": [], "ul": [], "ol": [], "li": [], "br": [],
+    "p": [], "h2": ["id"], "h3": ["id"], "h4": ["id"], "ul": [], "ol": [], "li": [], "br": [],
     "a": ["href", "title", "target", "rel"], "strong": [], "em": [], "img": ["src", "alt", "width", "height"],
     "blockquote": [], "table": [], "thead": [], "tbody": [], "tr": [], "th": ["colspan", "rowspan"],
     "td": ["colspan", "rowspan"], "figure": [], "figcaption": [], "hr": [],
@@ -28,6 +28,8 @@ def site_path(url):
     if not url:
         return url
     url = url.strip()
+    if url.startswith("#"):
+        return url
     parsed = urlparse(url)
     if parsed.netloc and parsed.netloc.lower() not in SITE_HOSTS:
         return url
@@ -93,6 +95,7 @@ def clean_fragment(fragment_html, image_urls=None):
             if tag.get("target") == "_blank":
                 tag["rel"] = "noopener"
     out = "".join(str(c) for c in body.contents)
+    out = repair_html(out)
     out = out.replace("\xa0", " ")
     out = re.sub(r"<p>\s*(<br/?>\s*)*</p>", "", out)
     out = re.sub(r"(<br/?>\s*){3,}", "<br><br>", out)
@@ -213,3 +216,72 @@ def clean_title(raw):
     t = TITLE_SUFFIX.sub("", t).strip()
     t = re.sub(r"\s{2,}", " ", t)
     return t
+
+
+# Repairs for damage left by earlier automated editing of the WordPress content -----------------
+
+MD_LINK = re.compile(r"\(?\[([^\]]{1,120})\]\((https?://[^)\s]+)\)\)?")
+UTM_OPENAI = re.compile(r"[?&]utm_source=openai")
+
+
+def _strip_utm(url):
+    url = UTM_OPENAI.sub("", url)
+    return url
+
+
+def repair_html(fragment):
+    """Remove writer-facing notes, convert pasted markdown citations to links, drop stray image URLs."""
+    if not fragment:
+        return fragment
+    soup = BeautifulSoup(fragment, "lxml")
+    body = soup.body or soup
+    for p in body.find_all("p"):
+        text = text_of(p)
+        if (re.match(r"^(header image|(iptc|image|photo) metadata\b|suggested image metadata|alt text\b|!\[|\{: \.align)", text, re.I)
+                or re.search(r"\bIPTC\b|data-iptc|includes IPTC metadata", text)):
+            nxt = p.find_next_sibling()
+            if nxt is not None and nxt.name in ("ul", "ol"):
+                nxt.decompose()
+            p.decompose()
+            continue
+        if re.fullmatch(r"https?://\S+\.(jpe?g|png|webp|gif)", text, re.I):
+            p.decompose()
+            continue
+        if "[object Object]" in text and re.search(r"internal link", text, re.I):
+            p.decompose()  # the AI writer's note about a missing link, published by mistake
+            continue
+        if re.search(r"\bvocab( to learn)?\s*:\s*$", text, re.I):
+            p.clear()
+            strong = soup.new_tag("strong")
+            strong.string = "Related reading"
+            p.append(strong)
+    for h in body.find_all(["h2", "h3", "h4"]):
+        if re.fullmatch(r"header image", text_of(h), re.I):
+            h.decompose()
+    for li in body.find_all("li"):
+        if re.match(r"^(alt text|iptc (headline|description|keywords)|image (title|caption))\s*:", text_of(li), re.I):
+            li.decompose()
+    for a in body.find_all("a"):
+        if not a.get("href") and not text_of(a):
+            a.decompose()
+            continue
+        if a.get("href"):
+            a["href"] = _strip_utm(a["href"])
+    for p in body.find_all("p"):
+        if not text_of(p) and not p.find("img"):
+            p.decompose()
+    for node in list(body.find_all(string=MD_LINK)):
+        if node.find_parent("a"):
+            continue
+        parts, last = [], 0
+        for m in MD_LINK.finditer(node):
+            parts.append(node[last:m.start()])
+            link = soup.new_tag("a", href=_strip_utm(m.group(2)), rel="noopener", target="_blank")
+            link.string = m.group(1)
+            parts.extend(["(", link, ")"])
+            last = m.end()
+        parts.append(node[last:])
+        for piece in parts:
+            node.insert_before(piece if not isinstance(piece, str) else NavigableString(piece))
+        node.extract()
+    return "".join(str(c) for c in body.contents)

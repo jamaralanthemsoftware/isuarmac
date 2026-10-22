@@ -1,1 +1,1254 @@
-{"words": {}, "phrases": {}}
+{
+  "_about": "Corrections applied on import. words: whole-word replacements. phrases: exact text anywhere. brand: body text only (not SEO titles). page_fixes: proofreading fixes scoped to one page. brand rules run in listed order. ARMAC Insurance Services (without ISU) is handled per page.",
+  "words": {
+    "finded": "found",
+    "Finded": "Found",
+    "liftd": "elevated",
+    "digd": "dug",
+    "steerd": "navigated",
+    "solveing": "unraveling",
+    "findy": "discovery",
+    "Findy": "Discovery",
+    "tripr": "rider",
+    "agencys": "agency’s",
+    "pharmcists": "pharmacists",
+    "devasting": "devastating",
+    "assitant": "assistant",
+    "offe": "offer",
+    "lossrs": "losses",
+    "mishappenings": "mishaps",
+    "honestlywould": "honestly would",
+    "claimswill": "claims will",
+    "experiencepolicy": "experience, policy",
+    "elseand": "else, and",
+    "carriernot": "carrier, not",
+    "safeeven": "safe, even",
+    "valueit": "value, it",
+    "witih": "with",
+    "indeoth": "in-depth"
+  },
+  "phrases": {
+    "Open uping": "Unlocking",
+    "open uping": "unlocking",
+    "open uped": "unlocked",
+    "worrywe’re": "worry: we’re",
+    "whatgeneral general liability insurance covers covera and what it does not cover": "what general liability insurance covers and what it does not cover",
+    "This points will help": "These points will help",
+    "Barbara.mceachron@isu-armac.comsu-armac.com": "Barbara.mceachron@isu-armac.com",
+    "[object Object]": "ISU-ARMAC",
+    "due due to": "due to",
+    "need a a garage": "need a garage",
+    "understand understand": "understand"
+  },
+  "brand": {
+    "ISU – Armac Insurance Agency": "ISU-ARMAC Insurance Services",
+    "ISU Insurance Services ARMAC Agency": "ISU-ARMAC",
+    "Armac Insurance Agency": "ISU-ARMAC Insurance Services",
+    "ISU – Armac": "ISU-ARMAC",
+    "ISU-Armac": "ISU-ARMAC",
+    "ISU Armac": "ISU-ARMAC",
+    "ISU ARMAC": "ISU-ARMAC"
+  },
+  "page_fixes": [
+    {
+      "url": "/claim-contacts/",
+      "find": "Met-Life – 800.854.6011",
+      "replace": "MetLife – 800.854.6011",
+      "reason": "Carrier name"
+    },
+    {
+      "url": "/claim-contacts/",
+      "find": "Lloyds of London – 866.367.3424",
+      "replace": "Lloyd's of London – 866.367.3424",
+      "reason": "Carrier name"
+    },
+    {
+      "url": "/claim-contacts/",
+      "find": "One Beacon – 877.248.3455",
+      "replace": "OneBeacon – 877.248.3455",
+      "reason": "Carrier name"
+    },
+    {
+      "url": "/contact-az/",
+      "find": "Commonly also known as homeowner’s insurance, protects you financially",
+      "replace": "Commonly known as homeowner’s insurance, home insurance protects you financially",
+      "reason": "Missing subject"
+    },
+    {
+      "url": "/contact-az/",
+      "find": "Looking for life insurance Phoenix?",
+      "replace": "Looking for life insurance in Phoenix?",
+      "reason": "Missing preposition"
+    },
+    {
+      "url": "/contact-az/",
+      "find": "Welcome to ARMAC Insurance Services, your trusted provider",
+      "replace": "Welcome to ISU-ARMAC Insurance Services, your trusted provider",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/commercial-property-insurance/",
+      "find": "The Important of Insuring Your Workspace",
+      "replace": "The Importance of Insuring Your Workspace",
+      "reason": "Word form"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/crime-insurance/",
+      "find": "Contact ISU-Armac Insurance Services to select",
+      "replace": "Contact ISU-ARMAC Insurance Services to select",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/errors-omissions-liability/",
+      "find": "Now you know why this type of liability insurance is necessary",
+      "replace": "Now that you know why this type of liability insurance is necessary",
+      "reason": "Missing 'that'"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/farm-insurance/",
+      "find": "you could make a loss if your animals",
+      "replace": "you could suffer a loss if your animals",
+      "reason": "US idiom"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/farm-insurance/",
+      "find": "cheap but comprehensive cover.",
+      "replace": "cheap but comprehensive coverage.",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/inland-marine-insurance/",
+      "find": "Adding inland marine insurance to your police profile",
+      "replace": "Adding inland marine insurance to your policy profile",
+      "reason": "Typo"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/inland-marine-insurance/",
+      "find": "contact ISU Armac insurance services.",
+      "replace": "contact ISU-ARMAC Insurance Services.",
+      "reason": "Brand name and capitalization"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/manufacturer-insurance/",
+      "find": "Manufacturing Companies often work with heavy machinery",
+      "replace": "Manufacturing companies often work with heavy machinery",
+      "reason": "Capitalization"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/manufacturer-insurance/",
+      "find": "Contact ISU-Armac Insurance Services today to formulate",
+      "replace": "Contact ISU-ARMAC Insurance Services today to formulate",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/night-club-and-bar-insurance/",
+      "find": "you can cover for some of those risks",
+      "replace": "you can cover some of those risks",
+      "reason": "Unneeded preposition"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/retail-insurance/",
+      "find": "operate out of a bricks-and-mortar location",
+      "replace": "operate out of a brick-and-mortar location",
+      "reason": "US form"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/retail-insurance/",
+      "find": "contact us today at ISU Armac .",
+      "replace": "contact us today at ISU-ARMAC.",
+      "reason": "Brand name; stray space"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "At ISU Insurance Services in Victorville, California, we help landowners",
+      "replace": "At ISU-ARMAC Insurance Services in Victorville, California, we help landowners",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "At ISU Insurance Services, we consider multiple factors",
+      "replace": "At ISU-ARMAC Insurance Services, we consider multiple factors",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "Why Choose ISU Insurance Services in Victorville?",
+      "replace": "Why Choose ISU-ARMAC Insurance Services in Victorville?",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "At ISU Insurance Services, we understand the unique needs",
+      "replace": "At ISU-ARMAC Insurance Services, we understand the unique needs",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "With ISU Insurance Services in Victorville, California, you can have",
+      "replace": "With ISU-ARMAC Insurance Services in Victorville, California, you can have",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "Trust ISU Insurance Services to help you",
+      "replace": "Trust ISU-ARMAC Insurance Services to help you",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "speak with an ISU Insurance Services agent",
+      "replace": "speak with an ISU-ARMAC Insurance Services agent",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+      "find": "extend limited liability to land you own",
+      "replace": "extend limited liability coverage to land you own",
+      "reason": "Misused term"
+    },
+    {
+      "url": "/insurance-center/service/employee-benefits/401k/",
+      "find": "401(K) When offering employee benefits",
+      "replace": "401(k) When offering employee benefits",
+      "reason": "Correct form 401(k)"
+    },
+    {
+      "url": "/insurance-center/service/employee-benefits/401k/",
+      "find": "plan.With a thrift plan",
+      "replace": "plan. With a thrift plan",
+      "reason": "Missing space"
+    },
+    {
+      "url": "/insurance-center/service/employee-benefits/401k/",
+      "find": "The employee’s salary is deducted from each paycheck at a fixed percentage",
+      "replace": "A fixed percentage of the employee’s salary is deducted from each paycheck",
+      "reason": "Says whole salary is deducted"
+    },
+    {
+      "url": "/insurance-center/service/employee-benefits/401k/",
+      "find": "take full advantage of a this plan",
+      "replace": "take full advantage of this plan",
+      "reason": "Doubled determiner"
+    },
+    {
+      "url": "/insurance-center/service/group-dental/",
+      "find": "commitment to employee wellbeing",
+      "replace": "commitment to employee well-being",
+      "reason": "Consistency"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "The ISU – Armac team adds value",
+      "replace": "The ISU-ARMAC team adds value",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "contact ISU – Armac when you’re ready",
+      "replace": "contact ISU-ARMAC when you’re ready",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "you’re not alone with ISU – Armac.",
+      "replace": "you’re not alone with ISU-ARMAC.",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "We can help at every step of the way",
+      "replace": "We can help every step of the way",
+      "reason": "Idiom"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "ISU – Armac can give you personalized attention",
+      "replace": "ISU-ARMAC can give you personalized attention",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "Does ISU – Armac offer roadside assistance",
+      "replace": "Does ISU-ARMAC offer roadside assistance",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "ISU – Armac's agents actively guide",
+      "replace": "ISU-ARMAC's agents actively guide",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/classic-auto-insurance/",
+      "find": "ISU – Armac offers full value / agreed value coverage",
+      "replace": "ISU-ARMAC offers full value / agreed value coverage",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+      "find": "Commonly also known as homeowner’s insurance, protects you financially",
+      "replace": "Commonly known as homeowner’s insurance, home insurance protects you financially",
+      "reason": "Missing subject"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+      "find": "contact the ISU – Armac team of agents",
+      "replace": "contact the ISU-ARMAC team of agents",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+      "find": "these four, basic types of damage",
+      "replace": "these four basic types of damage",
+      "reason": "Unneeded comma"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+      "find": "the certified agents at ISU – Armac are here",
+      "replace": "the certified agents at ISU-ARMAC are here",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+      "find": "help clients get home owners insurance Hesperia, home owners insurance Victorville, home owners insurance Apple valley or all over California",
+      "replace": "help clients get homeowners insurance in Hesperia, Victorville, Apple Valley, and all over California",
+      "reason": "Ungrammatical keyword string"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/pet-insurance/",
+      "find": "At ISU Armac Insurance Services in Victorville, California , we understand",
+      "replace": "At ISU-ARMAC Insurance Services in Victorville, California, we understand",
+      "reason": "Brand name; stray space"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/pet-insurance/",
+      "find": "Turn-around time varies",
+      "replace": "Turnaround time varies",
+      "reason": "Spelling"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/pet-insurance/",
+      "find": "pet representative at 844-397- 8939",
+      "replace": "pet representative at 844-397-8939",
+      "reason": "Stray space in phone number"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/umbrella-insurance/",
+      "find": "Umbrella Insurancee",
+      "replace": "Umbrella Insurance",
+      "reason": "Typo"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/umbrella-insurance/",
+      "find": "also known as extended liability insurance",
+      "replace": "also known as excess liability insurance",
+      "reason": "Standard term"
+    },
+    {
+      "url": "/about-us/",
+      "find": "ISU Armac has been your dedicated insurance agency",
+      "replace": "ISU-ARMAC has been your dedicated insurance agency",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/about-us/",
+      "find": "kind, considerate, knowledge able and able and willing",
+      "replace": "kind, considerate, knowledgeable and able and willing",
+      "reason": "Spelling: 'knowledgeable' split into two words"
+    },
+    {
+      "url": "/annuities/",
+      "find": "offered by insurance companies pays out a fixed stream",
+      "replace": "offered by insurance companies that pays out a fixed stream",
+      "reason": "Missing word"
+    },
+    {
+      "url": "/annuities/",
+      "find": "The ISU – Armac team will guide you",
+      "replace": "The ISU-ARMAC team will guide you",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/annuities/",
+      "find": "Hesperia, and nearby California. Contact us",
+      "replace": "Hesperia, and nearby California communities. Contact us",
+      "reason": "Missing noun"
+    },
+    {
+      "url": "/annuities/",
+      "find": "Immediate annuity requires a large lump-sum payment like described above.",
+      "replace": "An immediate annuity requires a large lump-sum payment, as described above.",
+      "reason": "Missing article; 'like described' should be 'as described'"
+    },
+    {
+      "url": "/annuities/",
+      "find": "At ISU – Armac, we have more than 20",
+      "replace": "At ISU-ARMAC, we have more than 20",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/insurance-center/products/health-insurance/medicare-supplement/",
+      "find": "Learn more about Medicare supplements, today!",
+      "replace": "Learn more about Medicare supplements today!",
+      "reason": "Stray comma"
+    },
+    {
+      "url": "/insurance-center/products/health-insurance/medicare-supplement/",
+      "find": "At ISU – Armac, we want to make",
+      "replace": "At ISU-ARMAC, we want to make",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/business-auto-insurance/",
+      "find": "If your vehicle also employs any number of regular cars",
+      "replace": "If your business also employs any number of regular cars",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/business-auto-insurance/",
+      "find": "an injury or any personal damage that an auto accident might cause",
+      "replace": "an injury or any property damage that an auto accident might cause",
+      "reason": "Misused insurance term"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/business-auto-insurance/",
+      "find": "Contact ISU – Armac today!",
+      "replace": "Contact ISU-ARMAC today!",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/employment-practice-liability-insurance/",
+      "find": "Infliction of emotional damage",
+      "replace": "Infliction of emotional distress",
+      "reason": "Standard term is 'emotional distress'"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/employment-practice-liability-insurance/",
+      "find": "for example, has your organization faced employment practices lawsuits in the past.",
+      "replace": "for example, whether your organization has faced employment practices lawsuits in the past.",
+      "reason": "Word order"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/employment-practice-liability-insurance/",
+      "find": "contact us today at ISU Armac .",
+      "replace": "contact us today at ISU-ARMAC.",
+      "reason": "Brand name; stray space"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/general-liability-insurance/",
+      "find": "What Type of Businesses Need General Liability Coverage?",
+      "replace": "What Types of Businesses Need General Liability Coverage?",
+      "reason": "Agreement"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/general-liability-insurance/",
+      "find": "contact us today at ISU Armac .",
+      "replace": "contact us today at ISU-ARMAC.",
+      "reason": "Brand name; stray space"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/golf-course-insurance/",
+      "find": "someone could vandalize or steal from your court",
+      "replace": "someone could vandalize or steal from your course",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/office-risk-insurance/",
+      "find": "When you include all the protection, you need to continue operations, and you’ll have the best protection",
+      "replace": "When you include all the protection you need to continue operations, you’ll have the best protection",
+      "reason": "Broken sentence"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/office-risk-insurance/",
+      "find": "find out how to provide you with the best coverage",
+      "replace": "find out how we can provide you with the best coverage",
+      "reason": "Missing subject"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/property-manager-insurance/",
+      "find": "To learn more, contact ISU-Armac and find",
+      "replace": "To learn more, contact ISU-ARMAC and find",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/workers-compensation-insurance/",
+      "find": "a minimum level of cover. For example",
+      "replace": "a minimum level of coverage. For example",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "a loss maybe covered",
+      "replace": "a loss may be covered",
+      "reason": "'maybe' should be 'may be'"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "The first or third party. That is any person",
+      "replace": "The first or third party. That is, any person",
+      "reason": "Missing comma"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "and causing damage to the bumper",
+      "replace": "and caused damage to the bumper",
+      "reason": "Verb form"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "Collision Deductive Waiver",
+      "replace": "Collision Deductible Waiver",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "This coverage waves your collision deductible if you are hit by an negligent",
+      "replace": "This coverage waives your collision deductible if you are hit by a negligent",
+      "reason": "'waves' should be 'waives'; 'an' should be 'a'"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "to include but not limited to fire",
+      "replace": "including but not limited to fire",
+      "reason": "Unidiomatic phrasing"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "To be eligible for the Good Drivers Discount all operators",
+      "replace": "To be eligible for the Good Driver Discount, all operators",
+      "reason": "Term name; missing comma"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "licensed for three or more year,",
+      "replace": "licensed for three or more years,",
+      "reason": "Plural"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "and has not been determined “at fault”",
+      "replace": "and have not been determined “at fault”",
+      "reason": "Agreement"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "will pay specifies sums for medical expenses",
+      "replace": "will pay specified sums for medical expenses",
+      "reason": "Word form"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "permits the policy holder to buy",
+      "replace": "permits the policyholder to buy",
+      "reason": "Spelling"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "necessary medical and /or funeral services",
+      "replace": "necessary medical and/or funeral services",
+      "reason": "Stray space"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "while occupying a covered automobile .",
+      "replace": "while occupying a covered automobile.",
+      "reason": "Stray space"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "Premium Financing A a policyholder contracts",
+      "replace": "Premium Financing A policyholder contracts",
+      "reason": "Doubled article"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "for bodily injury cause by a negligent uninsured motorist",
+      "replace": "for bodily injury caused by a negligent uninsured motorist",
+      "reason": "Verb form"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "to your automobile, set up to a limit, when caused",
+      "replace": "to your automobile, up to a set limit, when caused",
+      "reason": "Garbled word order"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "both the principal and the surety are obligers",
+      "replace": "both the principal and the surety are obligors",
+      "reason": "Spelling"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "whose obligation are guaranteed by a bond",
+      "replace": "whose obligations are guaranteed by a bond",
+      "reason": "Agreement"
+    },
+    {
+      "url": "/insurance-center/service/glossary/",
+      "find": "Surety Bond A bond which the surety agrees",
+      "replace": "Surety Bond A bond in which the surety agrees",
+      "reason": "Missing preposition"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/earthquake-insurance/",
+      "find": "reach out to ISU Insurance Services today",
+      "replace": "reach out to ISU-ARMAC Insurance Services today",
+      "reason": "Brand name consistency"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/earthquake-insurance/",
+      "find": "percentage-based deductible , usually",
+      "replace": "percentage-based deductible, usually",
+      "reason": "Stray space"
+    },
+    {
+      "url": "/contact-nv/",
+      "find": "Commonly also known as homeowner’s insurance, protects you financially",
+      "replace": "Commonly known as homeowner’s insurance, home insurance protects you financially",
+      "reason": "Missing subject"
+    },
+    {
+      "url": "/contact-nv/",
+      "find": "Looking for life insurance Las Vegas?",
+      "replace": "Looking for life insurance in Las Vegas?",
+      "reason": "Missing preposition"
+    },
+    {
+      "url": "/contact-nv/",
+      "find": "Welcome to ARMAC Insurance Services, your trusted provider",
+      "replace": "Welcome to ISU-ARMAC Insurance Services, your trusted provider",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/individual-medical/",
+      "find": "From short term to critical care coverage",
+      "replace": "From short-term to critical care coverage",
+      "reason": "Hyphen"
+    },
+    {
+      "url": "/individual-medical/",
+      "find": "individual medical insurance solutions, today.",
+      "replace": "individual medical insurance solutions today.",
+      "reason": "Stray comma"
+    },
+    {
+      "url": "/individual-medical/",
+      "find": "we assure you not to worry",
+      "replace": "we assure you there is no need to worry",
+      "reason": "Unidiomatic"
+    },
+    {
+      "url": "/individual-medical/",
+      "find": "rather than wait until last minute",
+      "replace": "rather than wait until the last minute?",
+      "reason": "Missing article and question mark"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/aviation-insurance/",
+      "find": "The two types of cover named above",
+      "replace": "The two types of coverage named above",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/business-owners-insurance/",
+      "find": "which is like that of a general liability policy",
+      "replace": "which is similar to that of a general liability policy",
+      "reason": "Grammar"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/commercial-umbrella-insurance/",
+      "find": "Acting as a supplementary coverage to business liability",
+      "replace": "Acting as supplementary coverage to business liability",
+      "reason": "Article"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/commercial-umbrella-insurance/",
+      "find": "businesses with high profile, sizable sales",
+      "replace": "businesses with a high profile, sizable sales",
+      "reason": "Missing article"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/commercial-umbrella-insurance/",
+      "find": "and high loss potential,.",
+      "replace": "and high loss potential.",
+      "reason": "Stray comma"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/landscape-services-insurance/",
+      "find": "usually between $25-75,",
+      "replace": "usually between $25 and $75,",
+      "reason": "between ... and"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/technology-firm-insurance/",
+      "find": "where multi-million dollar deals are common",
+      "replace": "where multimillion-dollar deals are common",
+      "reason": "Hyphenation"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/technology-firm-insurance/",
+      "find": "without a director’s and officers’ insurance policy",
+      "replace": "without a directors and officers insurance policy",
+      "reason": "Standard term"
+    },
+    {
+      "url": "/insurance-center/service/group-medical/",
+      "find": "has to do with the law of numbers",
+      "replace": "has to do with the law of large numbers",
+      "reason": "Correct term"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/boat-insurance/",
+      "find": "ISU Insurance Services can shop from multiple carriers",
+      "replace": "ISU-ARMAC Insurance Services can shop from multiple carriers",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/flood-insurance/",
+      "find": "the difference between what flood insurance covers as opposed to life insurance and commercial liability insurance",
+      "replace": "the difference between what flood insurance covers and what life insurance and commercial liability insurance cover",
+      "reason": "Grammar"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/long-term-care-insurance/",
+      "find": "long-term care insurance can avoid this outcome",
+      "replace": "long-term care insurance can help you avoid this outcome",
+      "reason": "Wrong subject"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/long-term-care-insurance/",
+      "find": "reach out to ISU Insurance Services today",
+      "replace": "reach out to ISU-ARMAC Insurance Services today",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "Welcome to ARMAC Insurance Services, your trusted provider",
+      "replace": "Welcome to ISU-ARMAC Insurance Services, your trusted provider",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "When you choose ARMAC Insurance Services, you’re not",
+      "replace": "When you choose ISU-ARMAC Insurance Services, you’re not",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "ensuring your motorcycle safety against potential risks",
+      "replace": "ensuring your motorcycle’s safety against potential risks",
+      "reason": "Possessive"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "Perks at ARMAC Insurance Services",
+      "replace": "Perks at ISU-ARMAC Insurance Services",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "Our collision coverage extends beyond the motorcycle, including liability",
+      "replace": "Our coverage extends beyond the motorcycle, including liability",
+      "reason": "Collision coverage does not include liability"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "What You Will Get?",
+      "replace": "What Will You Get?",
+      "reason": "Word order"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "Regarding protecting your motorcycle, our comprehensive",
+      "replace": "When it comes to protecting your motorcycle, our comprehensive",
+      "reason": "Unidiomatic"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "ensures you’re financially protected/save money in the unfortunate event of an accident or motorcycle insurance cover theft.",
+      "replace": "ensures you’re financially protected in the unfortunate event of an accident or theft.",
+      "reason": "Garbled keyword phrase"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "At ARMAC Insurance Services, we understand that every motorcycle owner",
+      "replace": "At ISU-ARMAC Insurance Services, we understand that every motorcycle owner",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "We offer flexible, affordable motorcycle insurance California cost that fits your budget.",
+      "replace": "We offer flexible, affordable California motorcycle insurance that fits your budget.",
+      "reason": "Garbled keyword phrase"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "also allow adding add-on features such as",
+      "replace": "also allow you to add features such as",
+      "reason": "Redundant"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "Why Choose ARMAC Insurance Services?",
+      "replace": "Why Choose ISU-ARMAC Insurance Services?",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "motorcycle insurance, ARMAC Insurance Services stands out",
+      "replace": "motorcycle insurance, ISU-ARMAC Insurance Services stands out",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "with leading insurance carriers as reputable insurance providers.",
+      "replace": "with leading, reputable insurance carriers.",
+      "reason": "Garbled phrasing"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "At ARMAC Insurance Services, we prioritize",
+      "replace": "At ISU-ARMAC Insurance Services, we prioritize",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "By choosing ARMAC Insurance Services, you can",
+      "replace": "By choosing ISU-ARMAC Insurance Services, you can",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+      "find": "to discuss motorcycle insurance California policy and cost,",
+      "replace": "to discuss California motorcycle insurance policies and costs,",
+      "reason": "Garbled keyword phrase"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/annuities-personal/",
+      "find": "along with social security, it can",
+      "replace": "along with Social Security, it can",
+      "reason": "Proper noun"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/annuities-personal/",
+      "find": "relying only on social security and",
+      "replace": "relying only on Social Security and",
+      "reason": "Proper noun"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/annuities-personal/",
+      "find": "regardless of marketing conditions",
+      "replace": "regardless of market conditions",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/annuities-personal/",
+      "find": "At ISU Insurance Services, we want to make sure",
+      "replace": "At ISU-ARMAC Insurance Services, we want to make sure",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/annuities-personal/",
+      "find": "Thank for you considering ISU Armac!",
+      "replace": "Thank you for considering ISU-ARMAC!",
+      "reason": "Transposed words"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/golf-carts-insurance/",
+      "find": "streets with low-speed limits",
+      "replace": "streets with low speed limits",
+      "reason": "Hyphen"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/high-fire-risk-insurance/",
+      "find": "California FAIR Plan —a program",
+      "replace": "California FAIR Plan—a program",
+      "reason": "Stray space"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/high-fire-risk-insurance/",
+      "find": "looking for california home insurance",
+      "replace": "looking for California home insurance",
+      "reason": "Proper noun"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/secondary-home-insurance/",
+      "find": "With regards to secondary homes",
+      "replace": "With regard to secondary homes",
+      "reason": "Idiom"
+    },
+    {
+      "url": "/privacy-policy/",
+      "find": "The security procedures in place to protect the misuse",
+      "replace": "The security procedures in place to protect against the misuse",
+      "reason": "Missing preposition"
+    },
+    {
+      "url": "/privacy-policy/",
+      "find": "only has access to/collect information",
+      "replace": "only has access to/collects information",
+      "reason": "Agreement"
+    },
+    {
+      "url": "/privacy-policy/",
+      "find": "in which personally identifiable information are stored is in a secure environment",
+      "replace": "in which personally identifiable information is stored are in a secure environment",
+      "reason": "Agreement"
+    },
+    {
+      "url": "/ca-consumer-privacy-act-ccpa-disclosure/",
+      "find": "products and service purchased, obtained or considered",
+      "replace": "products or services purchased, obtained or considered",
+      "reason": "Number agreement"
+    },
+    {
+      "url": "/ca-consumer-privacy-act-ccpa-disclosure/",
+      "find": "breaches of policy, and criminal offences, in accordance",
+      "replace": "breaches of policy, and criminal offenses, in accordance",
+      "reason": "US spelling"
+    },
+    {
+      "url": "/ca-consumer-privacy-act-ccpa-disclosure/",
+      "find": "ISU Armac nor 220 Group, LLC does not offer an opt-out",
+      "replace": "Neither ISU-ARMAC nor 220 Group, LLC offers an opt-out",
+      "reason": "Double negative"
+    },
+    {
+      "url": "/insurance-center/products/business-insurance/",
+      "find": "With business insurance, it covers many different aspects",
+      "replace": "Business insurance covers many different aspects",
+      "reason": "Dangling 'it'"
+    },
+    {
+      "url": "/insurance-center/products/business-insurance/",
+      "find": "For example business insurance can help",
+      "replace": "For example, business insurance can help",
+      "reason": "Comma"
+    },
+    {
+      "url": "/insurance-center/products/business-insurance/",
+      "find": "Protects your business if it would be sued.",
+      "replace": "Protects your business if it is sued.",
+      "reason": "Verb form"
+    },
+    {
+      "url": "/insurance-center/products/business-insurance/",
+      "find": "Workers Compensation",
+      "replace": "Workers’ Compensation",
+      "reason": "Apostrophe"
+    },
+    {
+      "url": "/insurance-center/products/business-insurance/",
+      "find": "While we are located in California we can offer",
+      "replace": "While we are located in California, we can offer",
+      "reason": "Comma"
+    },
+    {
+      "url": "/insurance-center/products/health-insurance/",
+      "find": "Why Buy Through Armac Insurance Agency?",
+      "replace": "Why Buy Through ISU-ARMAC?",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/child-care-center-insurance/",
+      "find": "you can never be too cautious: and people",
+      "replace": "you can never be too cautious, and people",
+      "reason": "Punctuation"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/child-care-center-insurance/",
+      "find": "anyone who runs a Headstart program",
+      "replace": "anyone who runs a Head Start program",
+      "reason": "Program name"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/child-care-center-insurance/",
+      "find": "If this is what you need to cover you in case someone slips and falls, for example.",
+      "replace": "This is what you need to cover you in case someone slips and falls, for example.",
+      "reason": "Broken sentence"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/child-care-center-insurance/",
+      "find": "Get Childcare Insurance Quote Today",
+      "replace": "Get a Childcare Insurance Quote Today",
+      "reason": "Missing article"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/dental-office-insurance/",
+      "find": "not putting yourself at risk or paying for something you need.",
+      "replace": "not putting yourself at risk or paying for something you don’t need.",
+      "reason": "Missing negation"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/directors-and-officers-liability-insurance/",
+      "find": "The latter protects the company against damages",
+      "replace": "The second protects the company against damages",
+      "reason": "Pairing with 'The first'"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/environmental-insurance/",
+      "find": "but it should also have legal liabilities to deal with",
+      "replace": "but it could also have legal liabilities to deal with",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/hospitality-insurance/",
+      "find": "property gets damaged. . While the regular risks",
+      "replace": "property gets damaged. While the regular risks",
+      "reason": "Extra period"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/hospitality-insurance/",
+      "find": "six or even seven-figure damage.",
+      "replace": "six- or even seven-figure damages.",
+      "reason": "Term"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/medical-office-insurance/",
+      "find": "Now you understand why medical practice liability insurance is important",
+      "replace": "Now that you understand why medical practice liability insurance is important",
+      "reason": "Missing 'that'"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/surety-bonds/",
+      "find": "By working with ISU Armac, we’ll make it easy",
+      "replace": "When you work with ISU-ARMAC, we’ll make it easy",
+      "reason": "Dangling modifier"
+    },
+    {
+      "url": "/insurance-center/service/commercial-insurance/surety-bonds/",
+      "find": "just as an added piece of mind",
+      "replace": "just as an added peace of mind",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/group-life/",
+      "find": "it can be compounded with retirement benefits",
+      "replace": "it can be combined with retirement benefits",
+      "reason": "Wrong word"
+    },
+    {
+      "url": "/insurance-center/service/group-life/",
+      "find": "for a certain amount of days",
+      "replace": "for a certain number of days",
+      "reason": "Countable noun"
+    },
+    {
+      "url": "/insurance-center/service/group-vision-template/",
+      "find": "the figure jumps over 70%!",
+      "replace": "the figure jumps to over 70%!",
+      "reason": "Missing word"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "can also be offered as part of a group scheme.",
+      "replace": "can also be offered as part of a group plan.",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "Types of Group Insurance Product",
+      "replace": "Types of Group Insurance Products",
+      "reason": "Plural"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "potential group participants, while giving you, as the main client,",
+      "replace": "potential group participants, it gives you, as the main client,",
+      "reason": "Sentence fragment"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "Group Disability Insurance protects the scheme participants",
+      "replace": "Group Disability Insurance protects the plan participants",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "in contrast to short-term cover, which is paid weekly",
+      "replace": "in contrast to short-term coverage, which is paid weekly",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "Group Vison Insurance",
+      "replace": "Group Vision Insurance",
+      "reason": "Spelling"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "have a small pension pot.",
+      "replace": "have a small pension.",
+      "reason": "US usage"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "for the purposes of corporation tax",
+      "replace": "for the purposes of corporate income tax",
+      "reason": "US term"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "either for your companies employees",
+      "replace": "either for your company’s employees",
+      "reason": "Possessive"
+    },
+    {
+      "url": "/insurance-center/service/group-voluntary-benefits/",
+      "find": "affiliated with ISU insurance services, a national agency",
+      "replace": "affiliated with ISU Insurance Services, a national agency",
+      "reason": "Proper name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "At ISU Insurance Services in Victorville, California , we pride ourselves",
+      "replace": "At ISU-ARMAC Insurance Services in Victorville, California, we pride ourselves",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "so wherever the road may take you, ISU Insurance Services will be right there",
+      "replace": "so wherever the road may take you, ISU-ARMAC will be right there",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "At ISU Insurance Services in Victorville , we understand",
+      "replace": "At ISU-ARMAC in Victorville, we understand",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "At ISU Insurance Services , we work closely with you",
+      "replace": "At ISU-ARMAC, we work closely with you",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "At ISU Insurance Services in Victorville, California , we make the process",
+      "replace": "At ISU-ARMAC Insurance Services in Victorville, California, we make the process",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "At ISU Insurance Services , we don’t just sell insurance",
+      "replace": "At ISU-ARMAC, we don’t just sell insurance",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "Hit the Road to Protection with ISU – Armac Insurance Agency",
+      "replace": "Hit the Road to Protection with ISU-ARMAC",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "Our agents at ISU Insurance Services can help assess your needs",
+      "replace": "Our agents at ISU-ARMAC can help assess your needs",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "ISU Insurance Services works with over 300 carriers to help you find",
+      "replace": "ISU-ARMAC works with over 300 carriers to help you find",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "confirm with your ISU Insurance Services agent before you travel",
+      "replace": "confirm with your ISU-ARMAC agent before you travel",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/auto-insurance/",
+      "find": "driving history, ISU Insurance Services can help you find coverage.",
+      "replace": "driving history, ISU-ARMAC can help you find coverage.",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/personal-lines-insurance/individual-short-term-disability/",
+      "find": "usually between 50% to 70%",
+      "replace": "usually between 50% and 70%",
+      "reason": "between ... and"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "Looking for life insurance Victorville?",
+      "replace": "Looking for life insurance in Victorville?",
+      "reason": "Missing preposition"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "having a security net to safeguard them",
+      "replace": "having a safety net to safeguard them",
+      "reason": "Idiom"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "At ISU Insurance Services in Victorville, California, we understand that planning",
+      "replace": "At ISU-ARMAC Insurance Services in Victorville, California, we understand that planning",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "At ISU Insurance Services, we’ll walk you through",
+      "replace": "At ISU-ARMAC, we’ll walk you through",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "our team at ISU Insurance Services in Victorville, California is here to help",
+      "replace": "our team at ISU-ARMAC Insurance Services in Victorville, California, is here to help",
+      "reason": "Brand name; comma"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "Contact ISU Insurance Services today to schedule a consultation",
+      "replace": "Contact ISU-ARMAC today to schedule a consultation",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "ISU Insurance Services can help you determine which option",
+      "replace": "ISU-ARMAC can help you determine which option",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "but ISU Insurance Services can work with you to customize",
+      "replace": "but ISU-ARMAC can work with you to customize",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+      "find": "The team at ISU Insurance Services in Victorville can help",
+      "replace": "The team at ISU-ARMAC in Victorville can help",
+      "reason": "Brand name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/renters-insurance/",
+      "find": "it’s critical you obtain rental insurance as quickly as possible",
+      "replace": "it’s critical you obtain renters insurance as quickly as possible",
+      "reason": "Product name"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/renters-insurance/",
+      "find": "What Is Renters’ Insurance",
+      "replace": "What Is Renters’ Insurance?",
+      "reason": "Question mark"
+    },
+    {
+      "url": "/insurance-center/service/private-client-insurance/renters-insurance/",
+      "find": "create a home inventory —listing",
+      "replace": "create a home inventory—listing",
+      "reason": "Stray space"
+    },
+    {
+      "url": "/testimonials/",
+      "find": "knowledge able and able and willing",
+      "replace": "knowledgeable and able and willing",
+      "reason": "Split word"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ def wp_testimonials():
         if wp:
             for kind, value in page_blocks(wp["content"]["rendered"], "", set()):
                 if kind == "testimonials":
-                    quotes.extend((apply_fixes(q), who) for q, who in value)
+                    quotes.extend((apply_fixes(q, url="/testimonials/") if path == "/testimonials/" else apply_fixes(q, url=path), who) for q, who in value)
     return quotes
 
 
@@ -68,14 +68,15 @@ def wordpress_text(ph, parent, wp, ctx):
     """Append a WordPress page's text blocks and FAQs under parent (used on hub pages)."""
     if not wp:
         return
+    url = site_path(wp["link"])
     for kind, value in page_blocks(wp["content"]["rendered"], clean_title(wp["title"]["rendered"]), ctx.images):
         if kind == "html" and plain_text(value):
-            text(ph, parent, apply_fixes(value))
+            text(ph, parent, apply_fixes(value, url=url))
         elif kind == "faq":
             faq = add_plugin(ph, "FAQPlugin", L, target=parent)
             for i, (q, a) in enumerate(value):
-                add_plugin(ph, "FAQItemPlugin", L, target=faq, question=apply_fixes(q)[:255],
-                           answer=apply_fixes(plain_text(a)), open=(i == 0))
+                add_plugin(ph, "FAQItemPlugin", L, target=faq, question=apply_fixes(q, url=url)[:255],
+                           answer=apply_fixes(plain_text(a), url=url), open=(i == 0))
 
 
 def page_hero(ph, heading, sub="", badge="", primary=("Get a Quote", "/get-a-quote/"), secondary=None, image="", alt="", checks=""):
@@ -399,7 +400,40 @@ def build_thank_you(phs, wp=None, ctx=None):
     card(phs["content"], g, "Refer a friend", link_url="/refer-a-friend/")
 
 
+def build_life_add(phs, wp=None, ctx=None):
+    ph = phs["content"]
+    add_plugin(ph, "TextPlugin", L, body=(
+        "<p>Group life and accidental death and dismemberment (AD&amp;D) insurance give your employees and their families "
+        "financial protection at a low cost per person. Most employers offer them together as part of a benefits package.</p>"
+        "<h2>Group life insurance</h2>"
+        "<p>Group term life pays a benefit to an employee's beneficiaries if the employee dies while covered. Employers often "
+        "provide a flat amount or a multiple of salary, and many plans let employees buy additional coverage for themselves and "
+        "their dependents through payroll deduction.</p>"
+        "<h2>Accidental death and dismemberment</h2>"
+        "<p>AD&amp;D pays an additional benefit if a covered employee dies or suffers a qualifying serious injury, such as the loss "
+        "of a limb or eyesight, as the result of an accident. It is usually paired with group life and adds meaningful "
+        "protection for a small added premium.</p>"
+        "<h2>Why employers offer it</h2>"
+        "<ul><li>Low cost per employee compared with individual policies</li>"
+        "<li>Guaranteed coverage up to plan limits, often without medical questions</li>"
+        "<li>A valued benefit that helps you recruit and keep good people</li>"
+        "<li>Optional employee-paid coverage at no cost to the employer</li></ul>"
+        "<h2>How ISU-ARMAC helps</h2>"
+        "<p>We compare group life and AD&amp;D plans from multiple carriers, coordinate them with your medical, dental and "
+        "vision benefits, and help your employees understand what they have. Ask us for a quote alongside your next benefits "
+        "renewal.</p>"))
+    faq = add_plugin(ph, "FAQPlugin", L)
+    for i, (q, a) in enumerate([
+        ("Is group life insurance portable if an employee leaves?", "Many group plans let employees convert or port their coverage when they leave. The terms depend on the carrier and plan, and we can explain the options in the plan you choose."),
+        ("How much group life coverage should we offer?", "Common designs are a flat amount, such as $25,000 or $50,000, or a multiple of salary, such as one or two times annual earnings. We'll help you pick a design that fits your budget and workforce."),
+        ("Can employees add coverage for their families?", "Yes. Most plans offer voluntary spouse and child life coverage that employees pay for through payroll deduction."),
+    ]):
+        add_plugin(ph, "FAQItemPlugin", L, target=faq, question=q, answer=a, open=(i == 0))
+
+
 SPECS = {
+    f"{IC}/life-accidental-death-dismemberment-insurance/": {"title": "Life & Accidental Death & Dismemberment Insurance",
+                                                               "template": "detail.html", "build": build_life_add},
     "/": {"title": "Home", "template": "home.html", "build": build_home,
           "seo_title": "Insurance Agency in Victorville, CA | ISU-ARMAC Insurance Services"},
     f"{CI}/contractor-insurance/": {"title": "Contractor Insurance", "template": "landing.html", "build": build_contractor,
