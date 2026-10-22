@@ -1,6 +1,6 @@
 {
   "contract_version": 1,
-  "site_id": "djangocms-master-template",
+  "site_id": "isuarmac",
   "cms": "django-cms",
   "content_root": "seo/pages",
   "supported_languages": ["en-us"],
