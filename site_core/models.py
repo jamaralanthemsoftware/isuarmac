@@ -62,6 +62,8 @@ class Section(CMSPlugin):
     link_url = models.CharField(max_length=500, blank=True)
     anchor = models.SlugField("Anchor ID", blank=True)
     compact = models.BooleanField("Less vertical padding", default=False)
+    prose = models.BooleanField("Long-form text styling", default=False)
+    two_columns = models.BooleanField("Show content blocks side by side", default=False)
 
     def __str__(self):
         return self.heading or self.eyebrow or "Section"

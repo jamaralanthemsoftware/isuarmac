@@ -11,6 +11,6 @@
       {% if instance.link_text %}<a class="text-link" href="{{ instance.link_url }}">{{ instance.link_text }}</a>{% endif %}
     </div>
     {% endif %}
-    {% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% endfor %}
+    {% if instance.prose %}<div class="prose section-prose">{% elif instance.two_columns %}<div class="pair">{% endif %}{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% endfor %}{% if instance.prose or instance.two_columns %}</div>{% endif %}
   </div>
 </section>

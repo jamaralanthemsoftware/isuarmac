@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}{% page_attribute "page_title" %} | ISU-ARMAC Insurance Services{% endblock %}</title>
+<title>{% block title %}{% page_attribute "page_title" as seo_title %}{% page_attribute "title" as plain_title %}{% if seo_title and seo_title != plain_title %}{{ seo_title }}{% else %}{{ plain_title }} | ISU-ARMAC Insurance Services{% endif %}{% endblock %}</title>
 {% block meta %}<meta name="description" content="{% page_attribute "meta_description" %}">{% endblock %}
 <link rel="icon" href="{% static 'img/favicon.png' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">

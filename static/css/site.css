@@ -298,6 +298,12 @@ p { margin: 0 0 1em; }
 .faq details[open] summary::after { content: "−"; }
 .faq .answer { margin-top: 12px; color: var(--muted); }
 
+/* Long-form text inside a section */
+.section-prose { max-width: 820px; }
+.section .testimonial + .testimonial { margin-top: 24px; }
+.testimonial-grid { display: grid; gap: 24px; }
+@media (min-width: 900px) { .testimonial-grid { grid-template-columns: 1fr 1fr; } }
+
 /* Two-column page layout (content + sidebar) */
 .page-layout { display: grid; gap: 40px; padding: var(--section-y) 0; }
 @media (min-width: 1000px) { .page-layout { grid-template-columns: minmax(0, 1fr) 340px; gap: 56px; align-items: start; } .page-sidebar { position: sticky; top: 140px; } }

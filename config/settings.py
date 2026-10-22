@@ -141,3 +141,4 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+SILENCED_SYSTEM_CHECKS = ["treebeard.E001"]  # CMS 5 manager; we pin treebeard<6
