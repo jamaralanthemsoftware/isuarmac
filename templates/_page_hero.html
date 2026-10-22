@@ -1,0 +1,9 @@
+{% load cms_tags menu_tags %}
+<section class="hero page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>{% show_breadcrumb 0 "menu/breadcrumb.html" %}</ol></nav>
+  </div>
+  <div class="wrap hero-inner">
+    <div><h1>{% page_attribute "title" %}</h1></div>
+  </div>
+</section>

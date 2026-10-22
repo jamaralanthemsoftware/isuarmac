@@ -1,0 +1,4 @@
+<section class="hero page-hero">
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>{% for label, url in crumbs %}<li>{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span aria-current="page">{{ label }}</span>{% endif %}</li>{% endfor %}</ol></nav></div>
+  <div class="wrap hero-inner"><div>{% if eyebrow %}<span class="badge-pill teal">{{ eyebrow }}</span>{% endif %}<h1>{{ heading }}</h1>{% if lede %}<p class="lede">{{ lede }}</p>{% endif %}</div></div>
+</section>

@@ -1,0 +1,27 @@
+{% load cms_tags menu_tags %}
+<section class="hero">
+  {% if instance.style == "page" %}
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol>{% show_breadcrumb 0 "menu/breadcrumb.html" %}</ol></nav></div>
+  {% endif %}
+  <div class="wrap hero-inner">
+    <div>
+      {% if instance.badge %}<span class="badge-pill{% if instance.style == 'page' %} teal{% endif %}">{% if instance.style == "home" %}<span class="dot"></span>{% endif %}{{ instance.badge }}</span>{% endif %}
+      <h1>{{ instance.heading|linebreaksbr }}</h1>
+      {% if instance.subheading %}<p class="lede">{{ instance.subheading }}</p>{% endif %}
+      <div class="btn-row">
+        {% if instance.primary_text %}<a class="btn btn-bright" href="{{ instance.primary_url }}">{{ instance.primary_text }}</a>{% endif %}
+        {% if instance.secondary_text %}<a class="btn btn-outline-light" href="{{ instance.secondary_url }}">{{ instance.secondary_text }}</a>{% endif %}
+      </div>
+      {% if instance.checklist_items %}<ul class="hero-checks">{% for item in instance.checklist_items %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    {% if instance.style == "home" %}
+      <div class="quote-card">
+        <h2>Start a quote</h2>
+        <p>A licensed agent follows up within one business day.</p>
+        {% include "site_core/_quick_quote.html" %}
+      </div>
+    {% elif instance.image_src %}
+      <img class="hero-photo" src="{{ instance.image_src }}" alt="{{ instance.image_alt }}">
+    {% endif %}
+  </div>
+</section>

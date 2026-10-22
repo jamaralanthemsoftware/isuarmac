@@ -1,0 +1,4 @@
+<div class="callout">
+  <div>{% if instance.eyebrow %}<p class="eyebrow">{{ instance.eyebrow }}</p>{% endif %}<h2>{{ instance.heading }}</h2>{% if instance.text %}<p>{{ instance.text }}</p>{% endif %}</div>
+  {% if instance.button_text %}<a class="btn btn-primary" href="{{ instance.button_url }}">{{ instance.button_text }}</a>{% endif %}
+</div>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ post.seo_title|default:post.title }}{% if not post.seo_title %} | ISU-ARMAC Insurance Services{% endif %}{% endblock %}
+{% block meta %}<meta name="description" content="{{ post.seo_description|default:post.excerpt|striptags|truncatechars:160 }}">
+<meta property="og:title" content="{{ post.title }}">{% if post.featured_image_url %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image_url }}">{% endif %}{% endblock %}
+{% block content %}
+<section class="hero page-hero">
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/blog/">Blog</a></li><li><span aria-current="page">{{ post.title|truncatewords:8 }}</span></li></ol></nav></div>
+  <div class="wrap hero-inner"><div><span class="badge-pill teal"><time datetime="{{ post.published|date:'c' }}">{{ post.published|date:"F j, Y" }}</time></span><h1>{{ post.title }}</h1></div></div>
+</section>
+<div class="wrap page-layout">
+  <article class="prose">
+    {% if post.featured_image_url %}<img class="post-header-image" src="{{ post.featured_image_url }}" alt="">{% endif %}
+    {{ post.content|safe }}
+  </article>
+  <aside class="page-sidebar">{% include "_sidebar_quote.html" %}</aside>
+</div>
+{% if related %}
+<section class="section bg-pale compact"><div class="wrap">
+  <div class="section-head with-link"><h2>Keep reading</h2><a class="text-link" href="/blog/">All articles →</a></div>
+  <div class="blog-grid">{% for p in related %}<a class="post-card" href="{{ p.get_absolute_url }}">{% if p.featured_image_url %}<img src="{{ p.featured_image_url }}" alt="" loading="lazy">{% endif %}<div class="post-card-body"><time datetime="{{ p.published|date:'c' }}">{{ p.published|date:"F j, Y" }}</time><h2>{{ p.title }}</h2></div></a>{% endfor %}</div>
+</div></section>
+{% endif %}
+{% endblock %}

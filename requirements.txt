@@ -1,0 +1,16 @@
+Django>=5.2,<5.3
+django-cms==5.0.13
+djangocms-text==1.0.2
+django-filer==3.6.0
+easy-thumbnails
+django-treebeard>=5.3,<6
+django-sekizai
+whitenoise==6.12.0
+dj-database-url
+gunicorn
+psycopg[binary]
+# import and proofreading tools
+beautifulsoup4
+lxml
+pyspellchecker
+requests

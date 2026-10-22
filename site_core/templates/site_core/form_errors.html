@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Please check the form | ISU-ARMAC Insurance Services{% endblock %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+<div class="wrap" style="padding:var(--section-y) var(--gutter); max-width:720px">
+  <h1>Please check the form</h1>
+  <p class="lede">A few details need fixing before we can send your request.</p>
+  <div class="form-panel light">{% include "site_core/_lead_form.html" with button_text="Send" %}</div>
+</div>
+{% endblock %}

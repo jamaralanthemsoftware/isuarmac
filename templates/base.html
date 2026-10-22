@@ -1,0 +1,107 @@
+{% load cms_tags menu_tags sekizai_tags static %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% page_attribute "page_title" %} | ISU-ARMAC Insurance Services{% endblock %}</title>
+{% block meta %}<meta name="description" content="{% page_attribute "meta_description" %}">{% endblock %}
+<link rel="icon" href="{% static 'img/favicon.png' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
+{% render_block "css" %}
+</head>
+<body class="has-call-bar">
+{% cms_toolbar %}
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="utility">
+  <div class="wrap">
+    <div class="utility-group">
+      <a href="tel:{{ site.phone_ca_tel }}">California {{ site.phone_ca }}</a>
+      <a href="tel:{{ site.phone_nv_tel }}">Nevada {{ site.phone_nv }}</a>
+      <span class="licensed hide-sm">Licensed nationwide</span>
+    </div>
+    <div class="utility-group">
+      <a href="{{ site.pay_online }}">Pay Online</a>
+      <a href="/claim-contacts/">Claim Contacts</a>
+      <a class="hide-sm" href="/refer-a-friend/">Refer a Friend</a>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-bar">
+    <a class="brand" href="/" aria-label="ISU-ARMAC Insurance Services home">
+      <img src="{% static 'img/logo.webp' %}" alt="ISU-ARMAC Insurance Services" width="236" height="120">
+    </a>
+    <nav id="main-nav" class="main-nav" aria-label="Main">
+      <ul>
+        {% for section in main_menu %}
+        <li class="nav-item{% if section.label == active_section %} is-active{% endif %}">
+          <div class="nav-top">
+            <a href="{{ section.url }}">{{ section.label }}</a>
+            <button class="nav-expand" type="button" aria-expanded="false" aria-controls="dd-{{ forloop.counter }}" aria-label="Show {{ section.label }} links">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </div>
+          <div class="dropdown" id="dd-{{ forloop.counter }}">
+            <ul>
+              {% for label, url in section.links %}
+              <li{% if label == "All industries" %} class="dropdown-all"{% endif %}><a href="{{ url }}">{{ label }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="nav-mobile-cta">
+        <a class="btn btn-primary" href="/get-a-quote/">Get a Quote</a>
+        <a class="btn btn-outline-dark" href="tel:{{ site.phone_ca_tel }}">Call {{ site.phone_ca }}</a>
+      </div>
+    </nav>
+    <a class="btn btn-primary header-cta" href="/get-a-quote/">Get a Quote</a>
+    <button class="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-logo" src="{% static 'img/logo.webp' %}" alt="ISU-ARMAC Insurance Services" width="236" height="120">
+        <span>{% for line in site.address_lines %}{{ line }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</span>
+        <a href="tel:{{ site.phone_ca_tel }}">California {{ site.phone_ca }}</a>
+        <a href="tel:{{ site.phone_nv_tel }}">Nevada {{ site.phone_nv }}</a>
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      </div>
+      {% for heading, links in footer_columns %}
+      <div class="footer-col">
+        <h2>{{ heading }}</h2>
+        <ul>{% for label, url in links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}</ul>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="footer-bottom">
+      <span>© {% now "Y" %} ISU-ARMAC Insurance Services. All rights reserved.</span>
+      <ul>{% for label, url in legal_links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}</ul>
+    </div>
+  </div>
+</footer>
+
+<nav class="call-bar" aria-label="Quick contact">
+  <a href="tel:{{ site.phone_ca_tel }}">Call us</a>
+  <a href="/get-a-quote/">Get a Quote</a>
+</nav>
+
+<script src="{% static 'js/site.js' %}" defer></script>
+{% render_block "js" %}
+</body>
+</html>

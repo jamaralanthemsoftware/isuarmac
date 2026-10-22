@@ -1,0 +1,5 @@
+<div class="form-panel {% if instance.dark %}dark{% else %}light{% endif %}" id="quote">
+  <h2>{{ instance.heading }}</h2>
+  {% if instance.intro %}<p>{{ instance.intro }}</p>{% endif %}
+  {% include "site_core/_lead_form.html" with button_text=instance.button_text %}
+</div>

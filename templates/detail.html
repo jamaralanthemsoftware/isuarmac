@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+{% block content %}
+{% placeholder "hero" or %}{% include "_page_hero.html" %}{% endplaceholder %}
+<div class="wrap page-layout">
+  <article class="prose">{% placeholder "content" %}</article>
+  <aside class="page-sidebar">
+    {% placeholder "sidebar" or %}{% include "_sidebar_quote.html" %}{% endplaceholder %}
+  </aside>
+</div>
+{% placeholder "after" %}
+{% endblock %}

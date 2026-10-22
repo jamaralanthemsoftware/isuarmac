@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page not found | ISU-ARMAC Insurance Services{% endblock %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+{% include "site_core/_simple_hero.html" with heading="We couldn't find that page" %}
+<div class="wrap" style="padding-top:var(--section-y); padding-bottom:var(--section-y); max-width:760px">
+  <p class="lede">The page may have moved. Try the menu above, our <a href="/site-map/">site map</a>, or call us at <a href="tel:{{ site.phone_ca_tel }}">{{ site.phone_ca }}</a>.</p>
+  <div class="btn-row"><a class="btn btn-primary" href="/">Go to the homepage</a><a class="btn btn-outline-dark" href="/get-a-quote/">Get a Quote</a></div>
+</div>
+{% endblock %}

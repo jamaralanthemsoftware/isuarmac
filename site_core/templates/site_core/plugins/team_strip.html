@@ -1,0 +1,9 @@
+<div class="section-head with-link"><h2>{{ instance.heading }}</h2>{% if instance.link_text and not instance.show_all %}<a class="text-link" href="{{ instance.link_url }}">{{ instance.link_text }}</a>{% endif %}</div>
+<div class="team-grid{% if instance.show_all %} all{% endif %}">
+  {% for m in members %}
+  <div class="member">
+    {% if m.photo_src %}<img src="{{ m.photo_src }}" alt="{{ m.name }}" loading="lazy">{% else %}<div class="initials" aria-hidden="true">{{ m.name|slice:":1" }}</div>{% endif %}
+    <strong>{{ m.name }}</strong><span>{{ m.title }}</span>
+  </div>
+  {% endfor %}
+</div>

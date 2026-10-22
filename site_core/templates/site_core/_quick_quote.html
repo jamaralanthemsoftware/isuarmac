@@ -1,0 +1,16 @@
+<form class="lead-form" method="post" action="{% url 'submit_lead' %}">
+  {% csrf_token %}
+  <input type="hidden" name="form_type" value="general"><input type="hidden" name="page_url" value="">
+  <div class="hp" aria-hidden="true"><label for="qq-website">Leave blank</label><input id="qq-website" type="text" name="website" tabindex="-1" autocomplete="off"></div>
+  <div><label for="qq-type">Type of insurance</label>
+    <select id="qq-type" name="quote_type" required><option value="">Select…</option><option>Personal (home, auto)</option><option>Private client</option><option>Business</option><option>Employee benefits</option><option>Health or Medicare</option><option>Life or annuities</option></select></div>
+  <div class="field-grid">
+    <div><label for="qq-name">Name</label><input id="qq-name" type="text" name="name" autocomplete="name" required></div>
+    <div><label for="qq-zip">ZIP code</label><input id="qq-zip" type="text" name="zip_code" inputmode="numeric" autocomplete="postal-code"></div>
+  </div>
+  <div class="field-grid">
+    <div><label for="qq-email">Email</label><input id="qq-email" type="email" name="email" autocomplete="email" required></div>
+    <div><label for="qq-phone">Phone</label><input id="qq-phone" type="tel" name="phone" autocomplete="tel"></div>
+  </div>
+  <button class="btn btn-primary" type="submit">Get My Quote</button>
+</form>
