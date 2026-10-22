@@ -3,6 +3,26 @@
 The isu-armac.com rebuild: Django 5.2 LTS + Django CMS 5, using the approved redesign. Every page, blog
 post and old URL from the WordPress site is carried over.
 
+## Note for Joe: about this branch
+
+This branch (`isu-armac-cms`) is a standalone project built before the client template existed. It is
+**not** based on the template on `main`, and nothing on `main` was changed. Key differences:
+
+| | This branch | Template on `main` |
+| --- | --- | --- |
+| Content editing | Django CMS 5 (page tree, editable content blocks, front-end editing) | Plain Django admin models |
+| Settings | Single `config/settings.py`, environment-driven | `config/settings/` split per environment |
+| Admin URL / auth | `/admin/`, Django login | `/admin/jamarallogin/`, Google SSO, axes, argon2 |
+| Forms | `QuoteRequest` model plus email via Django `send_mail` | Leads plus Postmark, reCAPTCHA and Anthem CRM |
+| Deploy files | None yet | Dockerfile, `.do/app.yaml.example`, CI |
+
+Merging options: bring the template's security, integrations and DigitalOcean files into this
+project, or add Django CMS to the template and move `site_core/`, `templates/` and `static/` across.
+
+**Content is not in git.** Pages, posts and team members are built by `import_wordpress` from the live
+WordPress site (see below), and the 173 MB of WordPress uploads go in `media/`. Production needs
+Postgres plus DigitalOcean Spaces (or another persistent volume) for `media/`. Requires Python 3.12+.
+
 ## Run it locally
 
 ```bash
