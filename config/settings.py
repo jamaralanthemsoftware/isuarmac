@@ -119,6 +119,9 @@ CMS_TEMPLATES = [
 CMS_PERMISSION = False
 CMS_PLACEHOLDER_CONF = {}
 TEXT_INLINE_EDITING = True
+CMS_PAGE_CACHE = not DEBUG  # whole-page cache only in production
+CMS_PLACEHOLDER_CACHE = not DEBUG
+CMS_PLUGIN_CACHE = not DEBUG
 
 THUMBNAIL_PROCESSORS = (
     "easy_thumbnails.processors.colorspace",

@@ -1,7 +1,7 @@
-{% load cms_tags menu_tags %}
+{% load cms_tags site_tags %}
 <section class="hero">
   {% if instance.style == "page" %}
-  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol>{% show_breadcrumb 0 "menu/breadcrumb.html" %}</ol></nav></div>
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol>{% page_breadcrumb %}</ol></nav></div>
   {% endif %}
   <div class="wrap hero-inner">
     <div>
