@@ -67,7 +67,7 @@ jobs:
       deploy_on_push: true
     dockerfile_path: Dockerfile
     source_dir: /
-    run_command: python manage.py validate_anthem_seo && python manage.py migrate --noinput && python manage.py provision_admin && python manage.py validate_anthem_seo --strict
+    run_command: python manage.py validate_anthem_seo && python manage.py migrate --noinput && python manage.py import_wordpress --if-empty && python manage.py provision_admin && python manage.py validate_anthem_seo --strict
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-0.5gb
     envs:

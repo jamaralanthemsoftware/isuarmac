@@ -75,27 +75,56 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--reset", action="store_true")
         parser.add_argument(
+            "--if-empty",
+            action="store_true",
+            help="Skip import if pages already exist in the database.",
+        )
+        parser.add_argument(
             "--fetch",
             action="store_true",
             help="Fetch WordPress REST API and SEO metadata into import_cache/ before importing.",
         )
 
-    def handle(self, *args, reset=False, fetch=False, **opts):
+    def handle(self, *args, reset=False, if_empty=False, fetch=False, **opts):
+        import gzip
         from django.core.management import call_command
 
-        if fetch or not (CACHE / "pages.json").exists():
+        if if_empty and Page.objects.filter(slug="home").exists():
+            self.stdout.write("ISU-ARMAC content already imported; skipping.")
+            return
+
+        bundle_path = Path(settings.BASE_DIR) / "core" / "wp_bundle.json.gz"
+        if fetch:
             call_command("fetch_wordpress")
-        if fetch or not (CACHE / "seo.json").exists():
             call_command("fetch_seo")
 
         self.images = set()
         self.report = {"pages": [], "posts": 0, "redirects": 0, "notes": []}
-        seo_path = CACHE / "seo.json"
-        self.seo = json.loads(seo_path.read_text()) if seo_path.exists() else {}
-        wp_pages = json.loads((CACHE / "pages.json").read_text())
-        posts = json.loads((CACHE / "posts.json").read_text())
-        categories = json.loads((CACHE / "categories.json").read_text())
-        media = {m["id"]: m for m in json.loads((CACHE / "media.json").read_text())}
+
+        if (CACHE / "pages.json").exists() and not fetch:
+            seo_path = CACHE / "seo.json"
+            self.seo = json.loads(seo_path.read_text()) if seo_path.exists() else {}
+            wp_pages = json.loads((CACHE / "pages.json").read_text())
+            posts = json.loads((CACHE / "posts.json").read_text())
+            categories = json.loads((CACHE / "categories.json").read_text())
+            media = {m["id"]: m for m in json.loads((CACHE / "media.json").read_text())}
+        elif bundle_path.exists() and not fetch:
+            bundle = json.loads(gzip.decompress(bundle_path.read_bytes()).decode("utf-8"))
+            self.seo = bundle.get("seo", {})
+            wp_pages = bundle["pages"]
+            posts = bundle["posts"]
+            categories = bundle["categories"]
+            media = {m["id"]: m for m in bundle["media"]}
+        else:
+            call_command("fetch_wordpress")
+            call_command("fetch_seo")
+            seo_path = CACHE / "seo.json"
+            self.seo = json.loads(seo_path.read_text()) if seo_path.exists() else {}
+            wp_pages = json.loads((CACHE / "pages.json").read_text())
+            posts = json.loads((CACHE / "posts.json").read_text())
+            categories = json.loads((CACHE / "categories.json").read_text())
+            media = {m["id"]: m for m in json.loads((CACHE / "media.json").read_text())}
+
         with transaction.atomic():
             if reset:
                 self.reset()
@@ -105,8 +134,12 @@ class Command(BaseCommand):
             self.import_pages(wp_pages)
             self.import_redirects()
         self.report["unapplied_page_fixes"] = unapplied_page_fixes()
-        (CACHE / "images.json").write_text(json.dumps(sorted(self.images)))
-        (CACHE / "import_report.json").write_text(json.dumps(self.report, indent=1))
+        try:
+            CACHE.mkdir(exist_ok=True)
+            (CACHE / "images.json").write_text(json.dumps(sorted(self.images)))
+            (CACHE / "import_report.json").write_text(json.dumps(self.report, indent=1))
+        except OSError:
+            pass
         self.stdout.write(
             f"pages {len(self.report['pages'])}, posts {self.report['posts']}, "
             f"redirects {self.report['redirects']}, images to download {len(self.images)}, "

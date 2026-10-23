@@ -29,3 +29,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Created superuser {username}."))
         else:
             self.stdout.write(f"Superuser {username} already exists; no changes made.")
+
+        from django.core.management import call_command
+
+        call_command("import_wordpress", if_empty=True, stdout=self.stdout)
