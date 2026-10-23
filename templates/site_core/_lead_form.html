@@ -1,0 +1,15 @@
+<form class="lead-form" method="post" action="{% url 'submit_lead' %}">
+  {{ form.form_type }}{{ form.page_url }}
+  <div class="hp" aria-hidden="true">{{ form.website.label_tag }}{{ form.website }}</div>
+  <div class="field-grid">
+  {% for field in form.visible_fields %}{% if field.name != "website" %}
+    {% if field.field.widget.input_type == "checkbox" %}
+    <fieldset class="span-2"><legend>{{ field.label }}</legend><div class="checks">{% for cb in field %}<label>{{ cb.tag }} {{ cb.choice_label }}</label>{% endfor %}</div></fieldset>
+    {% else %}
+    <div{% if field.name == "message" %} class="span-2"{% endif %}>{{ field.label_tag }}{{ field }}{% if field.errors %}<p class="form-note">{{ field.errors|join:" " }}</p>{% endif %}</div>
+    {% endif %}
+  {% endif %}{% endfor %}
+  </div>
+  <button class="btn btn-bright" type="submit">{{ button_text|default:"Submit" }}</button>
+  <p class="form-note">Prefer to talk? Call <a href="tel:{{ site.phone_ca_tel }}">{{ site.phone_ca }}</a>.</p>
+</form>

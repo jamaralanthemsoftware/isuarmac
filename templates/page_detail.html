@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load site_tags %}
-{% block title %}{{ object.seo_title }}{% endblock %}
+{% block title %}{{ object.seo_title }}{% if "ISU-ARMAC" not in object.seo_title %} | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endif %}{% endblock %}
 {% block meta_description %}{{ object.seo_description }}{% endblock %}
 {% block open_graph_type %}article{% endblock %}
 {% block open_graph_title %}{{ object.resolved_open_graph_title }}{% endblock %}
@@ -16,9 +16,27 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-<article class="prose">
-  <h1>{{ object.title }}</h1>
-  {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
-  {{ object.body|linebreaks }}
-</article>
+{% if object.hero_html %}
+  {{ object.hero_html|safe }}
+{% else %}
+  {% include "_page_hero.html" with heading=object.title lede=object.summary %}
+{% endif %}
+
+{% if object.template_name == "landing.html" %}
+  {{ object.body|safe }}
+{% else %}
+  <div class="wrap page-layout">
+    <article class="prose">
+      {% if "<" in object.body %}
+        {{ object.body|safe }}
+      {% else %}
+        {{ object.body|linebreaks }}
+      {% endif %}
+    </article>
+    <aside class="page-sidebar">
+      {% include "_sidebar_quote.html" %}
+    </aside>
+  </div>
+{% endif %}
+{% if object.after_html %}{{ object.after_html|safe }}{% endif %}
 {% endblock %}

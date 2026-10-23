@@ -1,0 +1,4 @@
+<div>
+  <div class="section-head with-link"><h2>{{ instance.heading }}</h2><a class="text-link" href="/blog/">All articles →</a></div>
+  <ul class="post-list">{% for post in posts %}<li><a href="{{ post.get_absolute_url }}"><strong>{{ post.title }}</strong><span>{{ post.published|date:"M j" }}</span></a></li>{% endfor %}</ul>
+</div>

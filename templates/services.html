@@ -1,27 +1,63 @@
 {% extends "base.html" %}
-{% block title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block meta_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
-{% block open_graph_title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block open_graph_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
-{% block twitter_title %}Services | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block twitter_description %}Explore the services offered by {{ site_settings.site_name|default:"our team" }}.{% endblock %}
+{% block title %}Insurance Services | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block meta_description %}Personal, private client, commercial, contractor, hospital, and employee benefits insurance services compared across 300+ carriers.{% endblock %}
+{% block open_graph_title %}Insurance Services | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block open_graph_description %}Personal, private client, commercial, contractor, hospital, and employee benefits insurance services compared across 300+ carriers.{% endblock %}
+{% block twitter_title %}Insurance Services | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block twitter_description %}Personal, private client, commercial, contractor, hospital, and employee benefits insurance services compared across 300+ carriers.{% endblock %}
 {% block content %}
-<section class="page-heading">
-  <p class="eyebrow">What we offer</p>
-  <h1>Services</h1>
-  <p class="lead">Select a service to learn more.</p>
-</section>
+{% include "site_core/_simple_hero.html" with heading="Insurance services" eyebrow="What we offer" lede="Personal, private client, business and employee benefits coverage compared across 300+ carriers." %}
+
 {% if services %}
-  <section class="grid" aria-label="Services">
-    {% for service in services %}
-      <article>
-        <h2><a href="{{ service.get_absolute_url }}">{{ service.title }}</a></h2>
+<section class="section" aria-label="Services">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Published services</h2></div></div>
+    <div class="grid cols-3 style-plain">
+      {% for service in services %}
+      <article class="card">
+        <h3><a href="{{ service.get_absolute_url }}">{{ service.title }}</a></h3>
         {% if service.summary %}<p>{{ service.summary }}</p>{% endif %}
-        <a href="{{ service.get_absolute_url }}">Learn more about {{ service.title }}</a>
+        <a class="text-link" href="{{ service.get_absolute_url }}">Learn more about {{ service.title }} →</a>
       </article>
-    {% endfor %}
-  </section>
-{% else %}
-  <p class="empty-state">Published services will appear here after they are added in Django admin.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endif %}
+
+<section class="section{% if services %} bg-pale{% endif %}">
+  <div class="wrap">
+    <div class="section-head"><div><h2>Browse coverage by category</h2></div></div>
+    <div class="grid cols-4 style-service">
+      <div class="card">
+        <h3>Personal Insurance</h3>
+        <p>Protect your home, vehicles and the things you love.</p>
+        <a class="text-link" href="/insurance-center/service/personal-lines-insurance/">All personal coverage →</a>
+      </div>
+      <div class="card">
+        <h3>Private Client</h3>
+        <p>Tailored protection for significant homes and assets.</p>
+        <a class="text-link" href="/insurance-center/service/private-client-insurance/">All private client →</a>
+      </div>
+      <div class="card">
+        <h3>Business Insurance</h3>
+        <p>Liability, property and workers' comp for every industry.</p>
+        <a class="text-link" href="/insurance-center/service/commercial-insurance/">All business coverage →</a>
+      </div>
+      <div class="card">
+        <h3>Employee Benefits</h3>
+        <p>Plans that help you hire, keep and care for your team.</p>
+        <a class="text-link" href="/insurance-center/service/employee-benefits/">All benefits →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band"><div class="wrap">
+  <div><h2>Let 300+ carriers compete for you</h2><p>Quotes for personal, business and group benefits.</p></div>
+  <div class="btn-row">
+    <a class="btn btn-white" href="/get-a-quote/">Get a Quote</a>
+    <a class="btn btn-outline-white" href="/get-a-group-benefits-quote/">Group Benefits Quote</a>
+  </div>
+</div></section>
 {% endblock %}

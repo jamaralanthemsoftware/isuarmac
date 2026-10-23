@@ -1,32 +1,45 @@
 {% extends "base.html" %}
-{% block title %}Blog | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block meta_description %}Browse the latest articles from {{ site_settings.site_name|default:"our team" }}.{% endblock %}
+{% block title %}{% if current_category %}{{ current_category.name }} | {% endif %}Insurance Blog | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block meta_description %}Insurance guides and news from {{ site_settings.site_name|default:"ISU-ARMAC" }}: home, auto, business, benefits, health and more.{% endblock %}
+{% block canonical_url %}{% if page_obj and page_obj.number > 1 %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}?page={{ page_obj.number }}{% else %}{{ request.build_absolute_uri }}{% endif %}{% endblock %}
 {% block content %}
-<section class="prose blog-list">
-  <h1>Blog</h1>
-  {% for post in posts %}
-    <article class="blog-summary">
-      <p class="post-meta">
-        <time datetime="{{ post.publication_date|date:'c' }}">{{ post.publication_date|date:"F j, Y" }}</time>
-        {% if post.author_name %}<span> by {{ post.author_name }}</span>{% endif %}
-      </p>
-      <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-      {% if post.summary %}<p>{{ post.summary }}</p>{% endif %}
-    </article>
-  {% empty %}
-    <p>No articles have been published yet.</p>
-  {% endfor %}
-
-  {% if is_paginated %}
-    <nav class="pagination" aria-label="Blog pagination">
-      {% if page_obj.has_previous %}
-        <a rel="prev" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-      {% endif %}
-      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-      {% if page_obj.has_next %}
-        <a rel="next" href="?page={{ page_obj.next_page_number }}">Next</a>
-      {% endif %}
-    </nav>
+{% if current_category %}
+  {% include "site_core/_simple_hero.html" with heading=current_category.name eyebrow="Blog" %}
+{% else %}
+  {% include "site_core/_simple_hero.html" with heading="Insurance insights" eyebrow="Blog" lede="Guides and answers from our licensed agents." %}
+{% endif %}
+<div class="wrap" style="padding-top:var(--section-y); padding-bottom:var(--section-y)">
+  {% if categories %}
+  <ul class="category-filter">
+    <li><a href="{% url 'blog-list' %}"{% if not current_category %} aria-current="page"{% endif %}>All</a></li>
+    {% for c in categories %}<li><a href="{% url 'blog_category' c.slug %}"{% if c == current_category %} aria-current="page"{% endif %}>{{ c.name }}</a></li>{% endfor %}
+  </ul>
   {% endif %}
-</section>
+  <div class="blog-grid">
+    {% for post in posts %}
+    <a class="post-card" href="{{ post.get_absolute_url }}">
+      {% if post.featured_image_src %}<img src="{{ post.featured_image_src }}" alt="" loading="lazy">{% endif %}
+      <div class="post-card-body">
+        <time datetime="{{ post.publication_date|date:'c' }}">{{ post.publication_date|date:"F j, Y" }}</time>
+        {% if post.author_name %}<span class="post-author"> by {{ post.author_name }}</span>{% endif %}
+        <h2>{{ post.title }}</h2>
+        {% if post.summary %}<p>{{ post.summary|truncatewords:28 }}</p>{% endif %}
+      </div>
+    </a>
+    {% empty %}
+    <p>No articles have been published yet.</p>
+    {% endfor %}
+  </div>
+  {% if is_paginated %}
+  <nav class="pagination" aria-label="Blog pagination">
+    {% if page_obj.has_previous %}
+      <a class="btn btn-outline-dark" rel="prev" href="?page={{ page_obj.previous_page_number }}">← Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a class="btn btn-outline-dark" rel="next" href="?page={{ page_obj.next_page_number }}">Next →</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
 {% endblock %}

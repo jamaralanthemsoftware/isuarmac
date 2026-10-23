@@ -492,6 +492,23 @@ class Page(PublishableModel):
 
     show_in_navigation = models.BooleanField(default=False)
     navigation_order = models.PositiveSmallIntegerField(default=0)
+    path = models.CharField(
+        max_length=500,
+        blank=True,
+        db_index=True,
+        help_text="Optional full URL path (e.g. /insurance-center/service/...). Defaults to /<slug>/.",
+    )
+    parent = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="children",
+    )
+    menu_title = models.CharField(max_length=180, blank=True)
+    template_name = models.CharField(max_length=100, blank=True, default="detail.html")
+    hero_html = models.TextField(blank=True)
+    after_html = models.TextField(blank=True)
 
     class Meta:
         ordering = ["navigation_order", "title"]
@@ -508,7 +525,24 @@ class Page(PublishableModel):
             )
 
     def get_absolute_url(self):
+        if self.path and self.path != f"/{self.slug}/":
+            return self.path
         return reverse("page-detail", kwargs={"slug": self.slug})
+
+    @property
+    def breadcrumb_items(self):
+        crumbs = []
+        curr = self.parent
+        ancestors = []
+        visited = {self.pk} if self.pk else set()
+        while curr is not None and curr.pk not in visited:
+            visited.add(curr.pk)
+            if curr.slug != "home" and curr.path != "/":
+                ancestors.append((curr.menu_title or curr.title, curr.get_absolute_url()))
+            curr = curr.parent
+        crumbs.extend(reversed(ancestors))
+        crumbs.append((self.menu_title or self.title, None))
+        return crumbs
 
 
 class Service(PublishableModel):
@@ -622,6 +656,8 @@ class BlogPost(TimeStampedModel):
     original_published_at = models.DateTimeField(null=True, blank=True)
     original_modified_at = models.DateTimeField(null=True, blank=True)
     featured_image = models.FileField(upload_to="blog-posts/%Y/%m/", blank=True)
+    featured_image_url = models.CharField(max_length=500, blank=True)
+    wp_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     is_published = models.BooleanField(default=False, db_index=True)
     topics = models.ManyToManyField(
         BlogTopic,
@@ -672,6 +708,31 @@ class BlogPost(TimeStampedModel):
     @property
     def publication_date(self):
         return self.original_published_at or self.created_at
+
+    @property
+    def published(self):
+        return self.publication_date
+
+    @property
+    def excerpt(self):
+        return self.summary
+
+    @property
+    def content(self):
+        return self.body
+
+    @property
+    def categories(self):
+        return self.topics
+
+    @property
+    def featured_image_src(self):
+        if self.featured_image:
+            try:
+                return self.featured_image.url
+            except Exception:
+                pass
+        return self.featured_image_url
 
     @property
     def seo_title(self):
@@ -786,3 +847,69 @@ class BlogImportItem(TimeStampedModel):
 
     def __str__(self):
         return f"{self.status}: {self.title or self.source_url or 'item'}"
+
+
+class TeamMember(TimeStampedModel):
+    name = models.CharField(max_length=120)
+    title = models.CharField(max_length=160, blank=True)
+    photo = models.FileField(upload_to="team/", blank=True)
+    photo_url = models.CharField(max_length=500, blank=True)
+    bio = models.TextField(blank=True)
+    order = models.PositiveSmallIntegerField(default=100)
+    featured = models.BooleanField("Show on homepage", default=False)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def photo_src(self):
+        if self.photo:
+            try:
+                return self.photo.url
+            except Exception:
+                pass
+        return self.photo_url
+
+
+class QuoteRequest(TimeStampedModel):
+    form_type = models.CharField(max_length=20)
+    page_url = models.CharField(max_length=500, blank=True)
+    name = models.CharField(max_length=200)
+    company = models.CharField(max_length=200, blank=True)
+    email = models.EmailField()
+    phone = models.CharField(max_length=40, blank=True)
+    state = models.CharField(max_length=60, blank=True)
+    details = models.JSONField(default=dict, blank=True)
+    message = models.TextField(blank=True)
+    handled = models.BooleanField(default=False)
+    lead = models.ForeignKey(
+        Lead,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="quote_requests",
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.form_type}, {self.created_at:%Y-%m-%d})"
+
+    def get_admin_url(self):
+        return reverse("admin:core_quoterequest_change", args=[self.pk])
+
+
+class LegacyRedirect(TimeStampedModel):
+    old_path = models.CharField(max_length=500, unique=True, db_index=True)
+    new_path = models.CharField(max_length=500)
+
+    class Meta:
+        ordering = ["old_path"]
+
+    def __str__(self):
+        return f"{self.old_path} -> {self.new_path}"
+

@@ -1,14 +1,32 @@
+{% load static %}
 <footer class="site-footer">
-  <div>
-    <strong>{{ site_settings.site_name|default:"Client Website" }}</strong>
-    {% if site_settings.tagline %}<p>{{ site_settings.tagline }}</p>{% endif %}
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-logo" src="{% static 'img/logo.webp' %}" alt="{{ site_settings.site_name|default:'ISU-ARMAC Insurance Services' }}" width="236" height="120">
+        <span>{% for line in site.address_lines %}{{ line }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</span>
+        <a href="tel:{{ site.phone_ca_tel }}">California {{ site.phone_ca }}</a>
+        <a href="tel:{{ site.phone_nv_tel }}">Nevada {{ site.phone_nv }}</a>
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      </div>
+      {% for heading, links in footer_columns %}
+      <div class="footer-col">
+        <h2>{{ heading }}</h2>
+        <ul>{% for label, url in links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}</ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% if site_settings.footer_disclaimer %}<p class="footer-disclaimer">{{ site_settings.footer_disclaimer }}</p>{% endif %}
+    <div class="footer-bottom">
+      <span>© {% now "Y" %} {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}. All rights reserved.</span>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About us</a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+        <li><a href="{% url 'faq' %}">FAQ</a></li>
+        <li><a href="{% url 'contact' %}">Contact us</a></li>
+        {% for label, url in legal_links %}<li><a href="{{ url }}">{{ label }}</a></li>{% endfor %}
+      </ul>
+    </div>
   </div>
-  <nav aria-label="Footer navigation">
-    <a href="{% url 'about' %}">About us</a>
-    <a href="{% url 'services' %}">Services</a>
-    <a href="{% url 'blog-list' %}">Blog</a>
-    <a href="{% url 'faq' %}">FAQ</a>
-    <a href="{% url 'contact' %}">Contact us</a>
-  </nav>
-  {% if site_settings.footer_disclaimer %}<p>{{ site_settings.footer_disclaimer }}</p>{% endif %}
 </footer>

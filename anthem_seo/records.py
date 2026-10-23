@@ -56,7 +56,8 @@ def _blog_reverse_id(post: BlogPost) -> str:
 
 def _record_from_page(page: Page, *, cms_path: Optional[str] = None, reverse_id: Optional[str] = None) -> SeoRecord:
     rev_id = reverse_id or f"page-{page.slug}"
-    path = cms_path or ("/about/" if page.slug == "about" else f"/{page.slug}/")
+    page_path = getattr(page, "path", "") or ""
+    path = cms_path or ("/about/" if page.slug == "about" else (page_path or f"/{page.slug}/"))
     og_img = ""
     try:
         if page.open_graph_image:
@@ -71,7 +72,7 @@ def _record_from_page(page: Page, *, cms_path: Optional[str] = None, reverse_id:
         page_title=page.seo_title,
         meta_description=page.seo_description,
         body_html=page.body or "",
-        is_home=False,
+        is_home=(path == "/"),
         is_public=bool(page.is_published),
         changed_date=getattr(page, "updated_at", None),
         og_image_url=og_img,
@@ -111,6 +112,8 @@ def _record_from_blog_post(post: BlogPost) -> SeoRecord:
     try:
         if post.featured_image:
             og_img = post.featured_image.url
+        elif getattr(post, "featured_image_url", ""):
+            og_img = post.featured_image_url
     except Exception:
         og_img = ""
     return SeoRecord(
@@ -133,6 +136,12 @@ def _record_from_blog_post(post: BlogPost) -> SeoRecord:
 
 def _static_record(reverse_id: str, cms_path: str, title: str, default_desc: str, *, site_name: Optional[str] = None) -> SeoRecord:
     resolved_site_name = site_name or _site_name()
+    if reverse_id == "page-home":
+        home_page = Page.objects.filter(slug="home").first()
+        if home_page is not None:
+            rec = _record_from_page(home_page, cms_path="/", reverse_id="page-home")
+            rec.is_public = True
+            return rec
     if reverse_id == "page-about":
         about_page = Page.objects.filter(slug="about").first()
         if about_page is not None:

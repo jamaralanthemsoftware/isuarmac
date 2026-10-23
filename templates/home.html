@@ -1,25 +1,55 @@
 {% extends "base.html" %}
-{% block open_graph_title %}{{ site_settings.default_open_graph_title|default:site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block open_graph_description %}{{ site_settings.default_open_graph_description|default:site_settings.default_meta_description|default:"" }}{% endblock %}
+{% block title %}{% if page and page.meta_title %}{{ page.meta_title }}{% else %}Insurance Agency in Victorville, CA | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endif %}{% endblock %}
+{% block meta_description %}{% if page and page.meta_description %}{{ page.meta_description }}{% else %}{{ site_settings.default_meta_description|default:"ISU-ARMAC shops 300+ carriers for families, businesses and employers. Personal, commercial and employee benefits, all under one roof." }}{% endif %}{% endblock %}
 {% block content %}
-<section class="hero">
-  <p class="eyebrow">Reusable Django foundation</p>
-  <h1>{{ site_settings.tagline|default:"Replace this starter content with the client’s story." }}</h1>
-  <p>Content, leads, downloads, search metadata, and site settings are managed through Django admin.</p>
-  <a class="button" href="{% url 'contact' %}">Contact us</a>
-</section>
+{% if page and page.body %}
+  {% if page.hero_html %}{{ page.hero_html|safe }}{% endif %}
+  {{ page.body|safe }}
+  {% if page.after_html %}{{ page.after_html|safe }}{% endif %}
+{% else %}
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <span class="badge-pill"><span class="dot"></span>Independent agency · 60+ years</span>
+        <h1>Coverage that fits.<br>Carriers that compete for you.</h1>
+        <p class="lede">ISU-ARMAC shops 300+ carriers for families, businesses and employers. Personal, commercial and employee benefits, all under one roof.</p>
+        <div class="btn-row">
+          <a class="btn btn-bright" href="/get-a-quote/">Get a Quote</a>
+          <a class="btn btn-outline-light" href="tel:{{ site.phone_ca_tel }}">Call {{ site.phone_ca }}</a>
+        </div>
+      </div>
+      <div class="quote-card">
+        <h2>Start a quote</h2>
+        <p>A licensed agent follows up within one business day.</p>
+        {% include "site_core/_quick_quote.html" %}
+      </div>
+    </div>
+  </section>
+  <section class="stats">
+    <div class="wrap stats-grid">
+      <div><div class="stat-value">60+</div><div class="stat-label">years serving clients</div></div>
+      <div><div class="stat-value">300+</div><div class="stat-label">carriers compared</div></div>
+      <div><div class="stat-value">80+</div><div class="stat-label">policy types</div></div>
+      <div><div class="stat-value">All states</div><div class="stat-label">licensed nationwide</div></div>
+    </div>
+  </section>
+{% endif %}
 {% if services %}
-<section>
-  <h2>Services</h2>
-  <div class="grid">
-    {% for service in services %}
-      <article>
+<section class="section compact">
+  <div class="wrap">
+    <div class="section-head with-link">
+      <div><h2>Featured services</h2></div>
+      <a class="text-link" href="{% url 'services' %}">All services →</a>
+    </div>
+    <div class="grid cols-3 style-plain">
+      {% for service in services %}
+      <div class="card">
         <h3><a href="{{ service.get_absolute_url }}">{{ service.title }}</a></h3>
-        <p>{{ service.summary }}</p>
-      </article>
-    {% endfor %}
+        {% if service.summary %}<p>{{ service.summary }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
   </div>
-  <p><a href="{% url 'services' %}">View all services</a></p>
 </section>
 {% endif %}
 {% endblock %}

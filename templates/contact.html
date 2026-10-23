@@ -1,21 +1,93 @@
 {% extends "base.html" %}
-{% block title %}Contact | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block meta_description %}Contact {{ site_settings.site_name|default:"our team" }} to ask a question or discuss your needs.{% endblock %}
-{% block open_graph_title %}Contact us | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block open_graph_description %}Contact {{ site_settings.site_name|default:"our team" }} to ask a question or discuss your needs.{% endblock %}
-{% block twitter_title %}Contact us | {{ site_settings.site_name|default:"Client Website" }}{% endblock %}
-{% block twitter_description %}Contact {{ site_settings.site_name|default:"our team" }} to ask a question or discuss your needs.{% endblock %}
+{% block title %}Contact | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block meta_description %}Contact {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }} to ask a question, request a quote, or discuss your coverage needs.{% endblock %}
+{% block open_graph_title %}Contact us | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block open_graph_description %}Contact {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }} to ask a question, request a quote, or discuss your coverage needs.{% endblock %}
+{% block twitter_title %}Contact us | {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }}{% endblock %}
+{% block twitter_description %}Contact {{ site_settings.site_name|default:"ISU-ARMAC Insurance Services" }} to ask a question, request a quote, or discuss your coverage needs.{% endblock %}
 {% block content %}
-<section class="prose">
-  <p class="eyebrow">Contact</p>
-  <h1>Start a conversation</h1>
-  <form method="post"{% if recaptcha_enabled %} data-recaptcha-site-key="{{ recaptcha_site_key }}"{% endif %}>
-    {% csrf_token %}
-    {% if recaptcha_enabled %}<input type="hidden" name="recaptcha_token" value="">{% endif %}
-    {{ form.as_p }}
-    <button class="button" type="submit">Send message</button>
-    {% if recaptcha_enabled %}<p class="recaptcha-error" role="alert" hidden>We could not verify this submission. Please try again.</p>{% endif %}
-  </form>
+<section class="hero page-hero">
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Contact</span></li></ol></nav></div>
+  <div class="wrap hero-inner">
+    <div>
+      <h1>Contact ISU-ARMAC</h1>
+      <p class="lede">Call, email or send us a message. We answer within one business day.</p>
+      <div class="btn-row">
+        <a class="btn btn-outline-light" href="tel:{{ site.phone_ca_tel }}">Call {{ site.phone_ca }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid cols-3 style-soft">
+      <div class="card">
+        <h3>Victorville office</h3>
+        <p>17177 &amp; 17171 Yuma Street, Victorville, CA 92395</p>
+        <a class="text-link" href="https://maps.google.com/?q=17177+Yuma+Street+Victorville+CA+92395">Get directions →</a>
+      </div>
+      <div class="card">
+        <h3>Phone</h3>
+        <ul class="card-links">
+          <li><a href="tel:{{ site.phone_ca_tel }}">California {{ site.phone_ca }}</a></li>
+          <li><a href="tel:{{ site.phone_nv_tel }}">Nevada {{ site.phone_nv }}</a></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Email and claims</h3>
+        <ul class="card-links">
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li><a href="/claim-contacts/">Claim contacts</a></li>
+          <li><a href="{{ site.pay_online }}">Pay online</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-pale compact">
+  <div class="wrap">
+    <div class="form-panel light" id="quote">
+      <h2>Send us a message</h2>
+      <p>We'll get back to you within one business day.</p>
+      <form class="lead-form" method="post"{% if recaptcha_enabled %} data-recaptcha-site-key="{{ recaptcha_site_key }}"{% endif %}>
+        {% csrf_token %}
+        {% if recaptcha_enabled %}<input type="hidden" name="recaptcha_token" value="">{% endif %}
+        {{ form.website }}
+        {% if form.non_field_errors %}<p class="form-note" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+        <div class="field-grid">
+          <div>
+            {{ form.first_name.label_tag }}{{ form.first_name }}
+            {% if form.first_name.errors %}<p class="form-note">{{ form.first_name.errors|join:" " }}</p>{% endif %}
+          </div>
+          <div>
+            {{ form.last_name.label_tag }}{{ form.last_name }}
+            {% if form.last_name.errors %}<p class="form-note">{{ form.last_name.errors|join:" " }}</p>{% endif %}
+          </div>
+          <div>
+            {{ form.email.label_tag }}{{ form.email }}
+            {% if form.email.errors %}<p class="form-note">{{ form.email.errors|join:" " }}</p>{% endif %}
+          </div>
+          <div>
+            {{ form.phone.label_tag }}{{ form.phone }}
+            {% if form.phone.errors %}<p class="form-note">{{ form.phone.errors|join:" " }}</p>{% endif %}
+          </div>
+          <div class="span-2">
+            {{ form.message.label_tag }}{{ form.message }}
+            {% if form.message.errors %}<p class="form-note">{{ form.message.errors|join:" " }}</p>{% endif %}
+          </div>
+          <div class="span-2">
+            <label style="display:flex;align-items:center;gap:.5rem">{{ form.consent_to_contact }} {{ form.consent_to_contact.label }}</label>
+            {% if form.consent_to_contact.errors %}<p class="form-note">{{ form.consent_to_contact.errors|join:" " }}</p>{% endif %}
+          </div>
+        </div>
+        <button class="btn btn-bright" type="submit">Send Message</button>
+        {% if recaptcha_enabled %}<p class="recaptcha-error form-note" role="alert" hidden>We could not verify this submission. Please try again.</p>{% endif %}
+        <p class="form-note">Prefer to talk? Call <a href="tel:{{ site.phone_ca_tel }}">{{ site.phone_ca }}</a>.</p>
+      </form>
+    </div>
+  </div>
 </section>
 {% if recaptcha_enabled %}
 <script async defer src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key|urlencode }}"></script>

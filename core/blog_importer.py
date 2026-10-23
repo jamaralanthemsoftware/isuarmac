@@ -58,10 +58,11 @@ ALLOWED_IMAGE_TYPES = {
 }
 ALLOWED_HTML_TAGS = {
     "a", "abbr", "blockquote", "br", "code", "em", "figcaption", "figure",
-    "h2", "h3", "h4", "hr", "i", "img", "li", "ol", "p", "pre", "strong", "ul",
+    "h2", "h3", "h4", "hr", "i", "img", "li", "ol", "p", "pre", "strong",
+    "table", "tbody", "td", "th", "thead", "tr", "ul",
 }
 ALLOWED_HTML_ATTRS = {
-    "a": {"href", "title", "rel"},
+    "a": {"href", "title", "rel", "target"},
     "figure": {"class"},
     "img": {"src", "alt", "title", "width", "height", "loading"},
 }

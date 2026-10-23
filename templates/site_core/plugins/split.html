@@ -1,0 +1,11 @@
+{% load site_tags %}
+<div class="split">
+  <div class="split-text">
+    {% if instance.image_src %}<img class="split-photo" src="{{ instance.image_src }}" alt="{{ instance.image_alt }}" loading="lazy">{% endif %}
+    {% if instance.eyebrow %}<p class="eyebrow">{{ instance.eyebrow }}</p>{% endif %}
+    <h2>{{ instance.heading }}</h2>
+    {% if instance.text %}<p class="lede">{{ instance.text }}</p>{% endif %}
+    {% if instance.button_text %}<a class="btn btn-primary" href="{{ instance.button_url }}">{{ instance.button_text }}</a>{% endif %}
+  </div>
+  <div class="grid style-soft">{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% endfor %}</div>
+</div>

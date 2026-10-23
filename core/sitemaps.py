@@ -25,7 +25,9 @@ class PublishedContentSitemap(Sitemap):
 
 class PageSitemap(PublishedContentSitemap):
     def items(self):
-        return Page.objects.filter(is_published=True).exclude(slug="about")
+        return Page.objects.filter(is_published=True).exclude(
+            slug__in=("about", "home", "thank-you")
+        )
 
 
 class ServiceSitemap(PublishedContentSitemap):

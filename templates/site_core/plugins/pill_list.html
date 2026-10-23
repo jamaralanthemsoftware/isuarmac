@@ -1,0 +1,5 @@
+<div>
+  {% if instance.heading %}<h2>{{ instance.heading }}</h2>{% endif %}
+  {% if instance.intro %}<p class="lede">{{ instance.intro }}</p>{% endif %}
+  <ul class="pills">{% for label, url in instance.item_list %}<li>{% if url and url != "#" %}<a href="{{ url }}">{{ label }}</a>{% else %}<span>{{ label }}</span>{% endif %}</li>{% endfor %}</ul>
+</div>

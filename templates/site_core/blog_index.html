@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{% if current_category %}{{ current_category.name }} | {% endif %}Insurance Blog | ISU-ARMAC Insurance Services{% endblock %}
+{% block meta %}<meta name="description" content="Insurance guides and news from ISU-ARMAC: home, auto, business, benefits, health and more.">{% if page_obj.number > 1 %}<link rel="canonical" href="{{ request.path }}?page={{ page_obj.number }}">{% endif %}{% endblock %}
+{% block content %}
+{% if current_category %}{% include "site_core/_simple_hero.html" with heading=current_category.name eyebrow="Blog" %}{% else %}{% include "site_core/_simple_hero.html" with heading="Insurance insights" eyebrow="Blog" lede="Guides and answers from our licensed agents." %}{% endif %}
+<div class="wrap" style="padding-top:var(--section-y); padding-bottom:var(--section-y)">
+  <ul class="category-filter">
+    <li><a href="/blog/"{% if not current_category %} aria-current="page"{% endif %}>All</a></li>
+    {% for c in categories %}<li><a href="{% url 'blog_category' c.slug %}"{% if c == current_category %} aria-current="page"{% endif %}>{{ c.name }}</a></li>{% endfor %}
+  </ul>
+  <div class="blog-grid">
+    {% for post in page_obj %}
+    <a class="post-card" href="{{ post.get_absolute_url }}">
+      {% if post.featured_image_url %}<img src="{{ post.featured_image_url }}" alt="" loading="lazy">{% endif %}
+      <div class="post-card-body"><time datetime="{{ post.published|date:'c' }}">{{ post.published|date:"F j, Y" }}</time><h2>{{ post.title }}</h2>{% if post.excerpt %}<p>{{ post.excerpt|truncatewords:28 }}</p>{% endif %}</div>
+    </a>
+    {% endfor %}
+  </div>
+  <nav class="pagination" aria-label="Blog pages">
+    {% if page_obj.has_previous %}<a class="btn btn-outline-dark" href="?page={{ page_obj.previous_page_number }}">← Newer</a>{% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a class="btn btn-outline-dark" href="?page={{ page_obj.next_page_number }}">Older →</a>{% endif %}
+  </nav>
+</div>
+{% endblock %}

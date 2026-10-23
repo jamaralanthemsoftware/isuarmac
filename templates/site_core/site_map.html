@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Site Map | ISU-ARMAC Insurance Services{% endblock %}
+{% block meta %}<meta name="description" content="Every page on the ISU-ARMAC Insurance Services website.">{% endblock %}
+{% block content %}
+{% include "site_core/_simple_hero.html" with heading="Site map" %}
+<div class="wrap" style="padding-top:var(--section-y); padding-bottom:var(--section-y)">
+  <ul class="sitemap-list">
+    {% for e in entries %}<li class="d{{ e.depth }}"><a href="{{ e.url }}">{{ e.title }}</a></li>{% endfor %}
+    <li class="d1"><a href="/blog/">Blog ({{ post_count }} articles)</a></li>
+  </ul>
+</div>
+{% endblock %}

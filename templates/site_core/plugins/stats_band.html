@@ -1,0 +1,2 @@
+{% load site_tags %}
+<section class="stats"><div class="wrap stats-grid">{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% endfor %}</div></section>

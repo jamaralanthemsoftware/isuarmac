@@ -1,0 +1,16 @@
+{% load site_tags %}
+<section class="section bg-{{ instance.background }}{% if instance.compact %} compact{% endif %}"{% if instance.anchor %} id="{{ instance.anchor }}"{% endif %}>
+  <div class="wrap">
+    {% if instance.heading or instance.eyebrow %}
+    <div class="section-head{% if instance.link_text %} with-link{% endif %}">
+      <div>
+        {% if instance.eyebrow %}<p class="eyebrow">{{ instance.eyebrow }}</p>{% endif %}
+        {% if instance.heading %}<h2>{{ instance.heading }}</h2>{% endif %}
+        {% if instance.intro %}<p class="lede">{{ instance.intro }}</p>{% endif %}
+      </div>
+      {% if instance.link_text %}<a class="text-link" href="{{ instance.link_url }}">{{ instance.link_text }}</a>{% endif %}
+    </div>
+    {% endif %}
+    {% if instance.prose %}<div class="prose section-prose">{% elif instance.two_columns %}<div class="pair">{% endif %}{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% endfor %}{% if instance.prose or instance.two_columns %}</div>{% endif %}
+  </div>
+</section>

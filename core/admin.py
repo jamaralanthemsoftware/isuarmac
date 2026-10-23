@@ -14,11 +14,14 @@ from .models import (
     FAQ,
     GoogleServicesIntegration,
     Lead,
+    LegacyRedirect,
     Page,
     PostmarkIntegration,
+    QuoteRequest,
     RecaptchaIntegration,
     Service,
     SiteSettings,
+    TeamMember,
 )
 from .blog_importer import MAX_UPLOAD_BYTES, run_import
 
@@ -501,13 +504,30 @@ class PublishableModelAdminMixin:
 
 @admin.register(Page)
 class PageAdmin(PublishableModelAdminMixin, admin.ModelAdmin):
-    list_display = ["title", "slug", "is_published", "show_in_navigation", "updated_at"]
-    list_filter = ["is_published", "show_in_navigation"]
-    search_fields = ["title", "summary", "body"]
+    list_display = ["title", "slug", "path", "template_name", "is_published", "show_in_navigation", "updated_at"]
+    list_filter = ["is_published", "show_in_navigation", "template_name"]
+    search_fields = ["title", "slug", "path", "summary", "body"]
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ["word_count"]
     fieldsets = [
-        ("Content", {"fields": ["title", "slug", "summary", "body", "word_count"]}),
+        (
+            "Content",
+            {
+                "fields": [
+                    "title",
+                    "slug",
+                    "path",
+                    "parent",
+                    "menu_title",
+                    "template_name",
+                    "summary",
+                    "hero_html",
+                    "body",
+                    "after_html",
+                    "word_count",
+                ]
+            },
+        ),
         (
             "Search and social sharing",
             {
@@ -607,3 +627,27 @@ class DownloadableAssetAdmin(admin.ModelAdmin):
     list_display = ["title", "slug", "is_published", "updated_at"]
     list_filter = ["is_published"]
     prepopulated_fields = {"slug": ("title",)}
+
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ["name", "title", "order", "featured", "updated_at"]
+    list_editable = ["order", "featured"]
+    list_filter = ["featured"]
+    search_fields = ["name", "title", "bio"]
+
+
+@admin.register(QuoteRequest)
+class QuoteRequestAdmin(admin.ModelAdmin):
+    list_display = ["created_at", "form_type", "name", "company", "email", "phone", "state", "handled"]
+    list_filter = ["form_type", "handled", "state", "created_at"]
+    list_editable = ["handled"]
+    search_fields = ["name", "company", "email", "phone", "message"]
+    readonly_fields = ["created_at", "updated_at", "page_url", "details", "lead"]
+
+
+@admin.register(LegacyRedirect)
+class LegacyRedirectAdmin(admin.ModelAdmin):
+    list_display = ["old_path", "new_path", "updated_at"]
+    search_fields = ["old_path", "new_path"]
+

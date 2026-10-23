@@ -1,0 +1,13 @@
+{% load site_tags %}
+<section class="hero page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>{% page_breadcrumb %}</ol></nav>
+  </div>
+  <div class="wrap hero-inner">
+    <div>
+      {% if eyebrow %}<span class="badge-pill teal">{{ eyebrow }}</span>{% endif %}
+      <h1>{% if heading %}{{ heading }}{% elif object %}{{ object.title }}{% elif page %}{{ page.title }}{% endif %}</h1>
+      {% if lede %}<p class="lede">{{ lede }}</p>{% endif %}
+    </div>
+  </div>
+</section>

@@ -16,13 +16,20 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-<article class="prose">
-  <p class="eyebrow">Service</p>
-  <h1>{{ object.title }}</h1>
-  {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
-  {{ object.body|linebreaks }}
-  {% if object.call_to_action_url %}
-    <a class="button" href="{{ object.call_to_action_url }}">{{ object.call_to_action_label|default:"Learn more" }}</a>
-  {% endif %}
-</article>
+{% include "site_core/_simple_hero.html" with heading=object.title eyebrow="Service" lede=object.summary %}
+<div class="wrap page-layout">
+  <article class="prose">
+    {% if "<" in object.body %}
+      {{ object.body|safe }}
+    {% else %}
+      {{ object.body|linebreaks }}
+    {% endif %}
+    {% if object.call_to_action_url %}
+      <p><a class="btn btn-primary" href="{{ object.call_to_action_url }}">{{ object.call_to_action_label|default:"Learn more" }}</a></p>
+    {% endif %}
+  </article>
+  <aside class="page-sidebar">
+    {% include "_sidebar_quote.html" %}
+  </aside>
+</div>
 {% endblock %}

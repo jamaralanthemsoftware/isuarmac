@@ -8,39 +8,56 @@
 {% block open_graph_description %}{{ object.seo_description }}{% endblock %}
 {% block twitter_title %}{{ object.seo_title }}{% endblock %}
 {% block twitter_description %}{{ object.seo_description }}{% endblock %}
-{% block twitter_card %}{% if object.featured_image %}summary_large_image{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block twitter_card %}{% if object.featured_image or object.featured_image_url %}summary_large_image{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block open_graph_image %}
   {% if object.featured_image %}
     <meta property="og:image" content="{{ object.featured_image.url|absolute_url:request }}">
+    <meta property="og:image:alt" content="{{ object.title }}">
+  {% elif object.featured_image_url %}
+    <meta property="og:image" content="{{ object.featured_image_url|absolute_url:request }}">
     <meta property="og:image:alt" content="{{ object.title }}">
   {% else %}
     {{ block.super }}
   {% endif %}
 {% endblock %}
 {% block content %}
-<article class="prose blog-post">
-  <header>
-    <p class="post-meta">
-      <time datetime="{{ object.publication_date|date:'c' }}">{{ object.publication_date|date:"F j, Y" }}</time>
-      {% if object.author_name %}<span> by {{ object.author_name }}</span>{% endif %}
-    </p>
-    <h1>{{ object.title }}</h1>
-    {% if object.summary %}<p class="lead">{{ object.summary }}</p>{% endif %}
-  </header>
-  <div class="post-body">{{ object.body|safe }}</div>
-</article>
+<section class="hero page-hero">
+  <div class="wrap"><nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="{% url 'blog-list' %}">Blog</a></li><li><span aria-current="page">{{ object.title|truncatewords:8 }}</span></li></ol></nav></div>
+  <div class="wrap hero-inner">
+    <div>
+      <span class="badge-pill teal">
+        <time datetime="{{ object.publication_date|date:'c' }}">{{ object.publication_date|date:"F j, Y" }}</time>
+        {% if object.author_name %}<span> · {{ object.author_name }}</span>{% endif %}
+      </span>
+      <h1>{{ object.title }}</h1>
+      {% if object.summary %}<p class="lede">{{ object.summary }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+<div class="wrap page-layout">
+  <article class="prose blog-post">
+    {% if object.featured_image_src %}<img class="post-header-image" src="{{ object.featured_image_src }}" alt="{{ object.title }}">{% endif %}
+    <div class="post-body">{{ object.body|safe }}</div>
+  </article>
+  <aside class="page-sidebar">{% include "_sidebar_quote.html" %}</aside>
+</div>
 {% if related_articles %}
-  <aside class="prose blog-related" aria-labelledby="related-articles-heading">
-    <h2 id="related-articles-heading">Related reading</h2>
-    {% for post in related_articles %}
-      <article class="blog-summary">
-        <p class="post-meta">
+<section class="section bg-pale compact" aria-labelledby="related-articles-heading">
+  <div class="wrap">
+    <div class="section-head with-link"><h2 id="related-articles-heading">Keep reading</h2><a class="text-link" href="{% url 'blog-list' %}">All articles →</a></div>
+    <div class="blog-grid">
+      {% for post in related_articles %}
+      <a class="post-card" href="{{ post.get_absolute_url }}">
+        {% if post.featured_image_src %}<img src="{{ post.featured_image_src }}" alt="" loading="lazy">{% endif %}
+        <div class="post-card-body">
           <time datetime="{{ post.publication_date|date:'c' }}">{{ post.publication_date|date:"F j, Y" }}</time>
-        </p>
-        <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-        {% if post.summary %}<p>{{ post.summary }}</p>{% endif %}
-      </article>
-    {% endfor %}
-  </aside>
+          <h3>{{ post.title }}</h3>
+          {% if post.summary %}<p>{{ post.summary|truncatewords:20 }}</p>{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endif %}
 {% endblock %}

@@ -1,4 +1,48 @@
 from django.conf import settings
+from django.http import HttpResponsePermanentRedirect
+
+LEGACY_WORDPRESS_REDIRECTS = {
+    "/staff/": "/our-team/",
+    "/tell-a-friend/": "/refer-a-friend/",
+    "/welcome-to-insurance-company/": "/",
+    "/service/": "/insurance-center/service/",
+    "/service/flood-insurance/": "/insurance-center/service/personal-lines-insurance/flood-insurance/",
+    "/service/vacant-land-insurance/": "/insurance-center/service/commercial-insurance/vacant-land-insurance/",
+    "/service/boat-insurance/": "/insurance-center/service/personal-lines-insurance/boat-insurance/",
+    "/service/motorcycle-insurance/": "/insurance-center/service/personal-lines-insurance/motorcycle-insurance/",
+    "/service/annuities/": "/annuities/",
+    "/service/high-fire-risk-insurance/": "/insurance-center/service/private-client-insurance/high-fire-risk-insurance/",
+    "/service/watercraft-insurance/": "/insurance-center/service/personal-lines-insurance/boat-insurance/",
+    "/service/umbrella-insurance/": "/insurance-center/service/private-client-insurance/umbrella-insurance/",
+    "/service/valuable-possessions-insurance/": "/insurance-center/service/private-client-insurance/valuable-possessions-insurance/",
+    "/service/secondary-home-insurance/": "/insurance-center/service/private-client-insurance/secondary-home-insurance/",
+    "/service/renters-insurance/": "/insurance-center/service/private-client-insurance/renters-insurance/",
+    "/service/individual-life-insurance/": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+    "/service/high-net-worth-insurance/": "/insurance-center/service/private-client-insurance/high-net-worth-insurance/",
+    "/service/life-insurance/": "/insurance-center/service/private-client-insurance/individual-life-insurance/",
+    "/service/business-insurance/": "/insurance-center/service/commercial-insurance/",
+    "/service/home-insurance/": "/insurance-center/service/personal-lines-insurance/home-insurance/",
+    "/service/health-insurance/": "/insurance-center/products/health-insurance/",
+}
+
+
+class LegacyUploadsRedirectMiddleware:
+    """Old WordPress image links (/wp-content/uploads/...) and retired paths keep working."""
+
+    PREFIX = "/wp-content/uploads/"
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path.startswith(self.PREFIX):
+            return HttpResponsePermanentRedirect(
+                "/media/uploads/" + request.path[len(self.PREFIX):]
+            )
+        target = LEGACY_WORDPRESS_REDIRECTS.get(request.path)
+        if target:
+            return HttpResponsePermanentRedirect(target)
+        return self.get_response(request)
 
 
 class PublicPageCacheMiddleware:

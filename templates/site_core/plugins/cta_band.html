@@ -1,0 +1,7 @@
+<section class="cta-band"><div class="wrap">
+  <div><h2>{{ instance.heading }}</h2>{% if instance.text %}<p>{{ instance.text }}</p>{% endif %}</div>
+  <div class="btn-row">
+    {% if instance.primary_text %}<a class="btn btn-white" href="{{ instance.primary_url }}">{{ instance.primary_text }}</a>{% endif %}
+    {% if instance.secondary_text %}<a class="btn btn-outline-white" href="{{ instance.secondary_url }}">{{ instance.secondary_text }}</a>{% endif %}
+  </div>
+</div></section>
